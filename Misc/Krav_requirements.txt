@@ -1,34 +1,18 @@
 Krav/requirements
 •	Skal være lavet til mindst 50 arbejdere og 30 projekter
-
 •	Hvert projekt skal have én projektleder som kan opdele i aktiviteter
-
 •	Et projekt skal kunne have op til 100 aktiviteter
-
 •	Aktiviteter skal angives start og sluttidspunkter
-
 •	Aktiviteter skal kunne planlægges inden de påbegyndes og ligeledes blive ændret nemt efter de er påbegyndt.
-
 •	Projektleder skal opdele projektet i aktiviteter
-
 •	Projektleder skal kunne anføre forventet antal arbejdstimer til hver aktivitet
-
 •	Tid opgivet i ugenummer?
-
 •	Medarbejdere skal hurtigt og enkelt kunne registrere brugt tid på aktiviteterne dagligt
-
-•	En medarbejder skal kunne søge assistance hos en kollega til en aktivitet. Kollegaen skal så også kunne registrere 	brugt tid på aktiviteten selvom han ikke er direkte tilordnet af aktiviteten
-
-•	Systemet skal give projektlederen overblik over hvilke medarbejdere der burde være ledige det tidspunkt at 		aktiviteten skal udføres
-
+•	En medarbejder skal kunne søge assistance hos en kollega til en aktivitet. Kollegaen skal så også kunne registrere brugt tid på aktiviteten selvom han ikke er direkte tilordnet af aktiviteten
+•	Systemet skal give projektlederen overblik over hvilke medarbejdere der burde være ledige det tidspunkt at aktiviteten skal udføres
 •	En medarbejder skal typisk arbejde på mindre end 10 aktiviteter af gangen
-
 •	Medarbejderen skal kunne se om han/hun har registreret alle timer som man har arbejdet på dagen.
-
 •	Det skal være muligt at ændre i registreret timeforbrug, samt registrere fremtidige timeforbrug
-
 •	Der skal være faste aktiviteter mht. ferie, sygdom osv.
-
 •	Projektlederen skal kunne bruge systemet til opfølgning. Det betyder, at projektlederen let skal kunne se, hvordan 	timeforbruget udvikler sig per aktivitet og for hele projektet.
-
 •	Der skal kunne laves rapporter til brug ved Softwarehuset A/s’ ugentlige projektmøder. Ved disse møder skal 	projektlederen endvidere se det forventede restarbejde p˚a projektet.
