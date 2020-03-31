@@ -4,9 +4,17 @@ import project.management.domain.User;
 import java.util.ArrayList;
 
 public class ManagementApp {
-	ArrayList<User> userList = new ArrayList<User>();
+	private static ArrayList<User> userList = new ArrayList<User>();
 	
-//	public static void createUser(User) {
-//		if (managerLoggedIn)
-//	}
+	public static void createUser(String name, int ID, String password) {
+		User user = new User(name, ID, password);
+		userList.add(user);
+	}
+	
+	public static boolean isRegisteredUser(User user) {
+		for (User registeredUser : userList) {
+			if ( registeredUser == user ) return true;
+		}
+		return false;
+	}
 }

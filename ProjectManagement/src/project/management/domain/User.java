@@ -1,17 +1,23 @@
 package project.management.domain;
 
+
 public class User {
-	private boolean isAdmin;
+	private boolean isLoggedIn;
+	private String password, name;
 	private int ID;
-	private String name;
 	
-	public User(int ID, String name) {
-		this.ID = ID;
+	public User(String name, int ID, String password) {
 		this.name = name;
+		this.ID = ID;
+		this.password = password;
 	}
 	
-	public void setManager(boolean val) {
-		if ( val ) isAdmin = true;
-		else isAdmin = false;
+	public void logOn(String password) {
+		if ( this.password == password ) isLoggedIn = true;
+		
+	}
+	
+	public boolean isLoggedIn() {
+		return true;
 	}
 }
