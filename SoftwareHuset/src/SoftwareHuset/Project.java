@@ -9,10 +9,12 @@ public class Project {
 	
 	private TaskList taskList;
 	private WorkerList workerList;
-		
+	private TimeManager timeManager;
 	private Worker projectLeader;
-	
 	//set gets
+	public TimeManager getTimeManager() {
+		return timeManager;
+	}
 	public void setProjectLeader(Worker projectLeader) {
 		this.projectLeader = projectLeader;
 	}
@@ -32,6 +34,7 @@ public class Project {
 		
 		this.taskList = new TaskList();
 		this.workerList = new WorkerList();
+		this.timeManager = new TimeManager(); 
 	}
 	public Project (String name, String ID, Worker projectLeader) {
 		this.name = name;
@@ -40,6 +43,7 @@ public class Project {
 		
 		this.taskList = new TaskList();
 		this.workerList = new WorkerList();
+		this.timeManager = new TimeManager(); 
 	}
 	//methods
 	

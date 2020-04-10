@@ -3,10 +3,13 @@ package SoftwareHuset;
 import java.util.ArrayList;
 
 public class WorkerList {
-	ArrayList<Worker> workers = new ArrayList<Worker>();
+	private ArrayList<Worker> workers = new ArrayList<Worker>();
 	
 	public void addWorker(Worker worker) {
 		workers.add(worker);
+	}
+	public ArrayList<Worker> Workers(){
+		return workers;
 	}
 
 }

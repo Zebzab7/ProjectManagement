@@ -14,5 +14,11 @@ public class Time {
 	public void setTime(float time) {
 		this.time = time;
 	}
+	public Task getTask() {
+		return task;
+	}
+	public Worker getWorker() {
+		return worker;
+	}
 	
 }
