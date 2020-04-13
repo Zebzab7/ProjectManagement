@@ -1,4 +1,4 @@
-package SoftwareHuset;
+package softwareHuset;
 
 import java.util.ArrayList;
 

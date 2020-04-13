@@ -1,4 +1,4 @@
-package SoftwareHuset;
+package softwareHuset;
 
 import java.util.ArrayList;
 
@@ -11,6 +11,7 @@ public class Project {
 	private WorkerList workerList;
 	private TimeManager timeManager;
 	private Worker projectLeader;
+	
 	//set gets
 	public TimeManager getTimeManager() {
 		return timeManager;
@@ -27,6 +28,7 @@ public class Project {
 	public WorkerList getWorkerList() {
 		return workerList;
 	}
+	
 	//Constructor
 	public Project (String name, String ID) {
 		this.name = name;
@@ -36,14 +38,15 @@ public class Project {
 		this.workerList = new WorkerList();
 		this.timeManager = new TimeManager(); 
 	}
+	
 	public Project (String name, String ID, Worker projectLeader) {
 		this.name = name;
 		this.ID = ID;
 		this.projectLeader = projectLeader;
-		
 		this.taskList = new TaskList();
 		this.workerList = new WorkerList();
 		this.timeManager = new TimeManager(); 
+		projectLeader.project = this;
 	}
 	//methods
 	

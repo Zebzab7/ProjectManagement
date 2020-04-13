@@ -1,4 +1,4 @@
-package SoftwareHuset;
+package softwareHuset;
 
 import java.util.ArrayList;
 
@@ -10,5 +10,11 @@ public class TaskList {
 	}
 	public ArrayList<Task> Tasks(){
 		return tasks;
+	}
+	public boolean containsTask(Task task) {
+		if (tasks.contains(task)) {
+			return true;
+		}
+		return false;
 	}
 }

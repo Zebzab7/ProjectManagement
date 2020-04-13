@@ -1,52 +1,32 @@
-$(document).ready(function() {var formatter = new CucumberHTML.DOMFormatter($('.cucumber-report'));formatter.uri("file:use_cases/test.feature");
+$(document).ready(function() {var formatter = new CucumberHTML.DOMFormatter($('.cucumber-report'));formatter.uri("file:use_cases/LoginLogout.feature");
 formatter.feature({
-  "name": "Add Task",
-  "description": "\tDescription: Add a new task\n\tActors: Worker",
+  "name": "LoginLogout",
+  "description": "\tDescription: Log a worker in and out\n\tActors: Worker",
   "keyword": "Feature"
 });
 formatter.scenario({
-  "name": "Add a task successfully",
+  "name": "Log in",
   "description": "",
   "keyword": "Scenario"
 });
 formatter.step({
-  "name": "that the worker is a project leader",
+  "name": "that the worker is logged in",
   "keyword": "Given "
 });
-formatter.match({});
+formatter.match({
+  "location": "acceptance_tests.LoginLogoutSteps.thatTheWorkerIsLoggedIn()"
+});
 formatter.result({
-  "status": "undefined"
+  "status": "passed"
 });
 formatter.step({
-  "name": "there is a task with name \"Programming 101\"",
-  "keyword": "And "
-});
-formatter.match({});
-formatter.result({
-  "status": "undefined"
-});
-formatter.step({
-  "name": "the task is not in the project",
-  "keyword": "And "
-});
-formatter.match({});
-formatter.result({
-  "status": "undefined"
-});
-formatter.step({
-  "name": "the task is added to the project",
-  "keyword": "When "
-});
-formatter.match({});
-formatter.result({
-  "status": "undefined"
-});
-formatter.step({
-  "name": "the task with name \"Programming 101\" is contained in the project",
+  "name": "the worker is logged in",
   "keyword": "Then "
 });
-formatter.match({});
+formatter.match({
+  "location": "acceptance_tests.LoginLogoutSteps.theWorkerIsLoggedIn()"
+});
 formatter.result({
-  "status": "undefined"
+  "status": "passed"
 });
 });

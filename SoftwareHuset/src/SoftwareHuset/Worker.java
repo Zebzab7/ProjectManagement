@@ -1,6 +1,6 @@
-package SoftwareHuset;
+package softwareHuset;
 public class Worker {
-	String username;
+	private String username;
 	
 	Project project;
 	
@@ -10,6 +10,11 @@ public class Worker {
 		this.username = username;
 		this.project = project;
 	}
+	// set get
+	public String getUsername() {
+		return username;
+	}
+	
 	// new task
 	public boolean newTask(String name, int ET) {
 		return project.getTaskList().Tasks().add(new Task(name, ET, project));

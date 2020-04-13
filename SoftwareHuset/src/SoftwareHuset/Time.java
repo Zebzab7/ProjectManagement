@@ -1,4 +1,4 @@
-package SoftwareHuset;
+package softwareHuset;
 
 public class Time {
 	private Task task;
