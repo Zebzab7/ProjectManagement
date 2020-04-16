@@ -1,9 +1,13 @@
 package softwareHuset;
+
+import java.util.ArrayList;
+
 public class Worker {
 	private String username;
 	
 	Project project;
 	String password;
+	private ArrayList<Task> tasks = new ArrayList<Task>();
 	
 	public Worker(String username, String password) {
 		this.username = username;
@@ -19,7 +23,7 @@ public class Worker {
 	
 	// new task
 	public boolean newTask(String name, int ET) {
-		return project.getTaskList().Tasks().add(new Task(name, ET, project));
+		return project.getTaskList().add(new Task(name, ET, project));
 	}
 	//set time
 	public boolean setTime(Task task, float time) {

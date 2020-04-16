@@ -13,7 +13,7 @@ public class Task {
 	private WorkerList workers;
 	
 	public Task(String name, double ET, Project project) {
-		int ID = project.getTaskList().Tasks().size()+1;
+		int ID = project.getTaskList().size()+1;
 		this.name = name;
 		this.ET = ET;
 		this.project = project;

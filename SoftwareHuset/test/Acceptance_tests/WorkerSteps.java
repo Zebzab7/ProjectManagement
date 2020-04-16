@@ -24,7 +24,6 @@ public class WorkerSteps {
 		this.managementApp = managementApp;
 		this.errorMessage = errorMessage;
 	}
-	
 	@Given("that worker {string} with password {string} exist")
 	public void thatWorkerWithPasswordExist(String name, String password) throws Exception {
 		user = name;
@@ -34,7 +33,7 @@ public class WorkerSteps {
 	
 	@Given("that worker {string} with password {string} does not exist")
 	public void thatWorkerWithPasswordDoesNotExist(String name, String password) {
-		assertTrue(managementApp.removeUser(name));
+		managementApp.removeUser(managementApp.findWorker(name));
 	}
 	
 	@When("creation of worker named {string} with password {string}")

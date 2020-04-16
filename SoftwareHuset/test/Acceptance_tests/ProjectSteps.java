@@ -26,7 +26,7 @@ public class ProjectSteps {
 	
 	@Given("the project with name {string} does not exist")
 	public void theProjectWithNameDoesNotExist(String name) {
-		assertTrue(managementApp.removeProject(name));
+		managementApp.removeProject(managementApp.findProject(name));
 	}
 	@Given("the project with name {string} does exist")
 	public void theProjectWithNameDoesExist(String name) {
@@ -40,7 +40,7 @@ public class ProjectSteps {
 	@When("worker adds new project named {string} with {string} as projectleader")
 	public void workerAddsNewProjectNamedWithAsProjectleader(String projectName, String projectLeader) {
 	    this.projectName =  projectName;
-	    managementApp.createProjectWithLeader(projectName, projectLeader);
+	    managementApp.createProjectWithLeader(projectName, managementApp.findWorker(projectLeader));
 	    
 	}
 
@@ -48,4 +48,6 @@ public class ProjectSteps {
 	public void theProjectIsContainedInTheApp() {
 	    assertTrue(managementApp.containsProject(projectName));
 	}
+
+
 }

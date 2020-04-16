@@ -33,29 +33,11 @@ public class ManagementApp {
 		}
 		return false;
 	}
-	public boolean removeUser(String name) {
-		if (!containsUser(name)) {
-			return true;
-		}
-		for (Worker worker : users) {
-			if (worker.getUsername().equals(name)){
-				users.remove(name);
-				return true;
-			}
-		}
-		return false;
+	public void removeUser(Worker worker) {
+			users.remove(worker);
 	}
-	public boolean removeProject(String name) {
-		if (!containsProject(name)) {
-			return true;
-		}
-		for (Project p : projects) {
-			if (p.getName().equals(name)){
-				projects.remove(name);
-				return true;
-			}
-		}
-		return false;
+	public void removeProject(Project project) {
+			projects.remove(project);
 	}
 	public boolean containsUser(String name) {
 		for (Worker worker : users) {
@@ -73,15 +55,14 @@ public class ManagementApp {
 		}
 		return false;
 	}
-	public boolean CreateUser(String name, String password) {
-		if (!containsUser(name)) {
-			if (users.add(new Worker(name, password))) {
+	public boolean CreateUser(String username, String password) {
+		if (!containsUser(username)) {
+			if (users.add(new Worker(username, password))) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
 	public Worker findWorker(String user) {
 		for (Worker worker : users) {
 			if (worker.getUsername().equals(user)){
@@ -90,20 +71,17 @@ public class ManagementApp {
 		}
 		return null;
 	}
-	public boolean addUserToProject(String user, String project) {
-		Worker worker =findWorker(user);
-		if (this.user == null) {
-			return false;
-		}
-			if (worker != null) {
-				for (Project p : projects) {
-					if (p.getName().equals(project)) {
-						p.getWorkerList().addWorker(worker);
-						return true;
-					}
-				}
+	public Project findProject(String projectName) {
+		for (Project project : projects) {
+			if (project.getName().equals(projectName)){
+				return project;
 			}
-		return false;
+		}
+		return null;
+	}
+	public void addUserToProject(Worker user, Project project) {
+		project.getWorkerList().add(user);
+
 	}
 	public boolean createProject(String name) {
 		if (user == null) {
@@ -119,21 +97,10 @@ public class ManagementApp {
 		}
 		return false;
 	}
-	public boolean createProjectWithLeader(String projectName, String projectLeader) {
-		if (user == null) {
-			return false;
-		}
-		for (Worker w : users) {
-			if (w.getUsername().equals(projectLeader)) {
-				for (Project p : projects) {
-					if (p.getName().equals(projectName)) {
-						return false;
-					}
-				}
-				if (projects.add(new Project(projectName, generateProjectId(), w))) {
-					return true;
-				}
-			}
+	public boolean createProjectWithLeader(String projectName, Worker leader) {
+		if (!containsProject(projectName)) {
+			projects.add(new Project(projectName, generateProjectId(), leader));
+			return true;
 		}
 		return false;
 	}
