@@ -1,6 +1,10 @@
 Feature: Create projects
 	Description: Create projects to app
 	Actors: Worker
+
+Background:
+	Given that worker "PEPE" with password "1234" exist
+	
 Scenario: Add project successfully with no leader
 	Given that the worker is logged in
 	And the project with name "Programming 101" does not exist

@@ -24,6 +24,7 @@ public class WorkerSteps {
 		this.managementApp = managementApp;
 		this.errorMessage = errorMessage;
 	}
+	
 	@Given("that worker {string} with password {string} exist")
 	public void thatWorkerWithPasswordExist(String name, String password) throws Exception {
 		user = name;

@@ -48,6 +48,4 @@ public class ProjectSteps {
 	public void theProjectIsContainedInTheApp() {
 	    assertTrue(managementApp.containsProject(projectName));
 	}
-
-
 }

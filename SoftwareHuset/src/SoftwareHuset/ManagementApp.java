@@ -73,14 +73,15 @@ public class ManagementApp {
 		}
 		return false;
 	}
-	public boolean CreateUser(String username, String password) {
-		if (!containsUser(username)) {
-			if (users.add(new Worker(username, password))) {
+	public boolean CreateUser(String name, String password) {
+		if (!containsUser(name)) {
+			if (users.add(new Worker(name, password))) {
 				return true;
 			}
 		}
 		return false;
 	}
+	
 	public Worker findWorker(String user) {
 		for (Worker worker : users) {
 			if (worker.getUsername().equals(user)){

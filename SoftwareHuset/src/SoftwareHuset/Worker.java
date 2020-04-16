@@ -4,7 +4,6 @@ public class Worker {
 	
 	Project project;
 	String password;
-	TaskList taskList;
 	
 	public Worker(String username, String password) {
 		this.username = username;

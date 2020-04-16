@@ -1,6 +1,7 @@
 Feature: LoginLogout
 	Description: Log a worker in and out
 	Actors: Worker
+	
 Background:
 	Given that worker "PEPE" with password "1234" exist
 	
