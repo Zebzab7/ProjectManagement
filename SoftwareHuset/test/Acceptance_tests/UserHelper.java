@@ -20,7 +20,7 @@ public class UserHelper {
 	}
 	
 	private Project exampleProject() {
-		project = new Project("Programming 101", "",user);
+		project = new Project("Programming 101", "11",user);
 		return project;
 	}
 	

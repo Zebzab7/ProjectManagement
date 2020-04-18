@@ -35,6 +35,7 @@ public class LoginLogoutSteps {
 	}
 	@Given("that no one is logged in")
 	public void thatNoOneIsLoggedIn()throws Exception {
+		managementApp.Logout();
 	    assertFalse(managementApp.LoggedIn());
 	}
 	@Then("the worker login succeeds")
@@ -56,7 +57,9 @@ public class LoginLogoutSteps {
 	
 	@Given("that the worker is logged in")
 	public void thatTheWorkerIsLoggedIn()throws Exception {
-		assertTrue(managementApp.CreateUser(userHelper.getWorker().getUsername(), userHelper.getWorker().getPassword()));
+		if (!managementApp.containsUser(userHelper.getWorker().getUsername())) {
+			assertTrue(managementApp.CreateUser(userHelper.getWorker().getUsername(), userHelper.getWorker().getPassword()));
+		}
 	    assertTrue(managementApp.Login(userHelper.getWorker().getUsername(), userHelper.getWorker().getPassword()));
 	}
 

@@ -20,14 +20,17 @@ public class TaskSteps {
 	private UserHelper userHelper;
 
 	private ManagementApp managementApp;
-	
-	public TaskSteps(ManagementApp managementApp, UserHelper userHelper) {
+	private ErrorMessageHolder errorMessage;
+	public TaskSteps(ManagementApp managementApp, UserHelper userHelper, ErrorMessageHolder errorMessage) {
 		this.managementApp = managementApp;
 		this.userHelper = new UserHelper(managementApp.getUser());
+		this.errorMessage = errorMessage;
 	}
 	@Given("the worker is working on a project")
 	public void theWorkerIsWorkingOnAProject() throws Exception{
-	    managementApp.createProject(userHelper.getProject().getName());
+	    if (!managementApp.containsProject(userHelper.getProject().getName())) {
+	    	managementApp.createProject(userHelper.getProject().getName());
+	    }
 	    managementApp.addWorkerToProject(userHelper.getWorker(), userHelper.getProject());
 	}
 
@@ -37,24 +40,36 @@ public class TaskSteps {
 	}
 
 	@Given("the task with name {string} is not in the project")
-	public void theTaskWithNameIsNotInTheProject(String task) {
+	public void theTaskWithNameIsNotInTheProject(String task) throws OperationNotAllowedException {
 	    assertFalse(userHelper.getProject().containsTask(task));
 	}
 	
 	@Given("the task with name {string} is in the project")
-	public void theTaskWithNameIsInTheProject(String task) {
+	public void theTaskWithNameIsInTheProject(String task) throws OperationNotAllowedException {
+		   try {
+			   	userHelper.getProject().createTask(task, "1");
+				assertTrue(userHelper.getProject().containsTask(task));
+		    }catch (OperationNotAllowedException e) {
+				 errorMessage.setErrorMessage(e.getMessage());
+			}
 		userHelper.getProject().createTask(task, "0");
 		assertTrue(userHelper.getProject().containsTask(task));
 	}
 
 	@When("worker creates new task  with name {string} and ET {string} hours")
-	public void workerCreatesNewTaskWithNameAndETHours(String name, String ET) {
-		taskName = name;
-		userHelper.getProject().createTask(name, ET);
+	public void workerCreatesNewTaskWithNameAndETHours(String name, String ET)throws Exception {
+		try {
+			taskName = name;
+			userHelper.getProject().createTask(name, ET);
+		}
+		catch (Exception e) {
+	    	errorMessage.setErrorMessage(e.getMessage());
+	    }
+		
 	}
 
 	@Then("the task is contained in the project")
-	public void theTaskIsContainedInTheProject() {
+	public void theTaskIsContainedInTheProject() throws OperationNotAllowedException {
 	    assertTrue(userHelper.getProject().containsTask(taskName));
 	}
 }

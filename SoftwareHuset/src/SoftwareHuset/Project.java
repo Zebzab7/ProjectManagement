@@ -42,6 +42,7 @@ public class Project {
 		this.name = name;
 		this.ID = ID;
 		this.timeManager = new TimeManager(); 
+		this.user = user;
 	}
 	
 	public Project (String name, String ID, Worker projectLeader, User user) {
@@ -50,9 +51,10 @@ public class Project {
 		this.projectLeader = projectLeader;
 		this.timeManager = new TimeManager(); 
 		projectLeader.project = this;
+		this.user = user;
 	}
 	//methods
-	public Worker findWorker (String name) {
+	public Worker findWorker (String name) throws OperationNotAllowedException {
 		for (Worker w : workers) {
 			if (w.getUsername() == name) {
 				return w;
@@ -60,7 +62,7 @@ public class Project {
 		}
 		return null;
 	}
-	public boolean containsTask(String taskName) {
+	public boolean containsTask(String taskName) throws OperationNotAllowedException {
 		for (Task task : tasks) {
 			if (task.name.equals(taskName)) {
 				return true;
@@ -68,14 +70,12 @@ public class Project {
 		}
 		return false;
 	}
-	public void createTask(String name, String Estimate) {
-		try {
+	public void createTask(String name, String Estimate) throws OperationNotAllowedException {
+		if (user.currentUser() == null) {
+			throw new OperationNotAllowedException("User login required");
+		}
 			double ET = Integer.parseInt(Estimate);
 			tasks.add(new Task (name, ET, this));
-		}
-		catch (Exception e) {
-			
-		}
 		
 	}
 	

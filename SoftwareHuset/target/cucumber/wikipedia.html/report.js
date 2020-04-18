@@ -632,16 +632,6 @@ formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "the project with name \"Programming 101\" does exist",
-  "keyword": "And "
-});
-formatter.match({
-  "location": "acceptance_tests.ProjectSteps.theProjectWithNameDoesExist(java.lang.String)"
-});
-formatter.result({
-  "status": "passed"
-});
-formatter.step({
   "name": "the task with name \"Loops\" is not in the project",
   "keyword": "And "
 });
@@ -662,7 +652,7 @@ formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "the error message \"You have to be logged in\" is given",
+  "name": "the error message \"User login requiredasd\" is given",
   "keyword": "Then "
 });
 formatter.match({
