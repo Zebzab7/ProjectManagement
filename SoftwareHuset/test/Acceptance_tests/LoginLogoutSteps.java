@@ -23,10 +23,10 @@ public class LoginLogoutSteps {
 	Worker user;
 	
 	
-	WorkerHelper helper;
-	public LoginLogoutSteps(ManagementApp managementApp, WorkerHelper helper) {
+	UserHelper userHelper;
+	public LoginLogoutSteps(ManagementApp managementApp, UserHelper helper) {
 		this.managementApp = managementApp;
-	    this.helper = helper;
+		this.userHelper = helper;
 	}
 	@Given("the name is {string} and password is {string}")
 	public void theNameIsAndPasswordIs(String string, String string2) {
@@ -56,8 +56,8 @@ public class LoginLogoutSteps {
 	
 	@Given("that the worker is logged in")
 	public void thatTheWorkerIsLoggedIn()throws Exception {
-		assertTrue(managementApp.CreateUser(helper.getWorker().getUsername(), helper.getWorker().getPassword()));
-	    assertTrue(managementApp.Login(helper.getWorker().getUsername(), helper.getWorker().getPassword()));
+		assertTrue(managementApp.CreateUser(userHelper.getWorker().getUsername(), userHelper.getWorker().getPassword()));
+	    assertTrue(managementApp.Login(userHelper.getWorker().getUsername(), userHelper.getWorker().getPassword()));
 	}
 
 

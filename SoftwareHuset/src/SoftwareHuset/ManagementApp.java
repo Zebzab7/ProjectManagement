@@ -34,10 +34,16 @@ public class ManagementApp {
 		}
 		return false;
 	}
-	public void removeUser(Worker worker) {
+	public void removeUser(Worker worker) throws OperationNotAllowedException {
+		if (user.currentUser() == null) {
+			throw new OperationNotAllowedException("User login required");
+		}
 			users.remove(worker);
 	}
-	public void removeProject(Project project) {
+	public void removeProject(Project project) throws OperationNotAllowedException {
+		if (user.currentUser() == null) {
+			throw new OperationNotAllowedException("User login required");
+		}
 			projects.remove(project);
 	}
 	public boolean containsUser(String name) {
@@ -48,7 +54,7 @@ public class ManagementApp {
 		}
 		return false;
 	}
-	public boolean containsProject(String name) {
+	public boolean containsProject(String name) throws OperationNotAllowedException {
 		for (Project p : projects) {
 			if (p.getName().equals(name)) {
 				return true;
@@ -56,23 +62,30 @@ public class ManagementApp {
 		}
 		return false;
 	}
-	public boolean CreateUser(String username, String password) {
+	public boolean CreateUser(String username, String password) throws Exception {
 		if (!containsUser(username)) {
 			if (users.add(new Worker(username, password))) {
 				return true;
 			}
 		}
+		else throw new Exception("User already exist");
 		return false;
 	}
-	public Worker findWorker(String user) {
-		for (Worker worker : users) {
-			if (worker.getUsername().equals(user)){
-				return worker;
+	public Worker findWorker(String worker) throws Exception {
+		if (user.currentUser() == null) {
+			throw new OperationNotAllowedException("User login required");
+		}
+		for (Worker w : users) {
+			if (w.getUsername().equals(worker)){
+				return w;
 			}
 		}
 		return null;
 	}
-	public Project findProject(String projectName) {
+	public Project findProject(String projectName) throws Exception{
+		if (user.currentUser() == null) {
+			throw new OperationNotAllowedException("User login required");
+		}
 		for (Project project : projects) {
 			if (project.getName().equals(projectName)){
 				return project;
@@ -80,13 +93,16 @@ public class ManagementApp {
 		}
 		return null;
 	}
-	public void addUserToProject(Worker user, Project project) {
-		project.getWorkerList().add(user);
+	public void addWorkerToProject(Worker worker, Project project) throws Exception{
+		if (user.currentUser() == null) {
+			throw new OperationNotAllowedException("User login required");
+		}
+		project.getWorkerList().add(worker);
 
 	}
-	public boolean createProject(String name) {
-		if (user == null) {
-			return false;
+	public boolean createProject(String name) throws Exception {
+		if (user.currentUser() == null) {
+			throw new OperationNotAllowedException("User login required");
 		}
 		for (Project p : projects) {
 			if (p.getName().equals(name)) {
@@ -98,7 +114,10 @@ public class ManagementApp {
 		}
 		return false;
 	}
-	public boolean createProjectWithLeader(String projectName, Worker leader) {
+	public boolean createProjectWithLeader(String projectName, Worker leader) throws Exception {
+		if (user.currentUser() == null) {
+			throw new OperationNotAllowedException("User login required");
+		}
 		if (!containsProject(projectName)) {
 			projects.add(new Project(projectName, generateProjectId(), leader, user));
 			return true;

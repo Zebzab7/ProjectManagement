@@ -19,7 +19,7 @@ import softwareHuset.*;
 public class WorkerSteps {
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
-	String user;
+	String userName;
 	public WorkerSteps(ManagementApp managementApp, ErrorMessageHolder errorMessage) {
 		this.managementApp = managementApp;
 		this.errorMessage = errorMessage;
@@ -27,20 +27,26 @@ public class WorkerSteps {
 	
 	@Given("that worker {string} with password {string} exist")
 	public void thatWorkerWithPasswordExist(String name, String password) throws Exception {
-		user = name;
+		userName = name;
 	    managementApp.CreateUser(name, password);
 	    assertTrue(managementApp.containsUser(name));
 	}
 	
 	@Given("that worker {string} with password {string} does not exist")
-	public void thatWorkerWithPasswordDoesNotExist(String name, String password) {
-		managementApp.removeUser(managementApp.findWorker(name));
+	public void thatWorkerWithPasswordDoesNotExist(String name, String password) throws Exception {
+		//managementApp.removeUser(managementApp.findWorker(name));
+		assertFalse(managementApp.containsUser(name));
 	}
 	
 	@When("creation of worker named {string} with password {string}")
-	public void creationOfWorkerNamedWithPassword(String name, String password) {
-		user = name;
-	    managementApp.CreateUser(name, password);
+	public void creationOfWorkerNamedWithPassword(String name, String password) throws Exception {
+		try {
+			userName = name;
+		    managementApp.CreateUser(name, password);
+		} catch (Exception e) {
+			 errorMessage.setErrorMessage(e.getMessage());
+		}
+	
 	}
 	@Then("the error message {string} is given")
 	public void errorMessageIsProduced(String string) throws Exception {
@@ -49,7 +55,7 @@ public class WorkerSteps {
 
 	@Then("the worker is contained in app")
 	public void theWorkerIsContainedInApp() {
-	    assertTrue(managementApp.containsUser(user));
+	    assertTrue(managementApp.containsUser(userName));
 	}
 
 }

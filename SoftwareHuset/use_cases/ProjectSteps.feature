@@ -30,3 +30,9 @@ Scenario: Add project that already exists
 	And the project with name "Programming 101" does exist
 	When worker adds new project named "Programming 101"
 	Then the error message "Project already exist" is given
+
+Scenario: Worker not logged in
+	Given that no one is logged in
+	And the project with name "Programming 101" does not exist
+	When worker adds new project named "Programming 101"
+	Then the error message "User login required" is given

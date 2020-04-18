@@ -15,48 +15,46 @@ import io.cucumber.java.en.When;
 import softwareHuset.*;
 public class TaskSteps {
 	
-	private ProjectHelper projectHelper;
-	private Project project;
+	//private Project project;
 	private String taskName;
-	private WorkerHelper workerHelper;
+	private UserHelper userHelper;
+
 	private ManagementApp managementApp;
 	
-	public TaskSteps(ManagementApp managementApp, WorkerHelper workerhelper) {
+	public TaskSteps(ManagementApp managementApp, UserHelper userHelper) {
 		this.managementApp = managementApp;
-		this.workerHelper = workerhelper;
-		this.projectHelper = new ProjectHelper(managementApp.getUser());
+		this.userHelper = new UserHelper(managementApp.getUser());
 	}
 	@Given("the worker is working on a project")
-	public void theWorkerIsWorkingOnAProject() {
-	    managementApp.createProject(projectHelper.getProject().getName());
-	    project = managementApp.findProject(projectHelper.getProject().getName());
-	    managementApp.addUserToProject(workerHelper.getWorker(), project);
+	public void theWorkerIsWorkingOnAProject() throws Exception{
+	    managementApp.createProject(userHelper.getProject().getName());
+	    managementApp.addWorkerToProject(userHelper.getWorker(), userHelper.getProject());
 	}
 
 	@Given("the worker is the project leader")
 	public void theWorkerIsTheProjectLeader() {
-	    project.setProjectLeader(workerHelper.getWorker());
+	    userHelper.getProject().setProjectLeader(userHelper.getWorker());
 	}
 
 	@Given("the task with name {string} is not in the project")
 	public void theTaskWithNameIsNotInTheProject(String task) {
-	    assertFalse(project.containsTask(task));
+	    assertFalse(userHelper.getProject().containsTask(task));
 	}
 	
 	@Given("the task with name {string} is in the project")
 	public void theTaskWithNameIsInTheProject(String task) {
-		project.createTask(task, "0");
-		assertTrue(project.containsTask(task));
+		userHelper.getProject().createTask(task, "0");
+		assertTrue(userHelper.getProject().containsTask(task));
 	}
 
 	@When("worker creates new task  with name {string} and ET {string} hours")
 	public void workerCreatesNewTaskWithNameAndETHours(String name, String ET) {
 		taskName = name;
-	    project.createTask(name, ET);
+		userHelper.getProject().createTask(name, ET);
 	}
 
 	@Then("the task is contained in the project")
 	public void theTaskIsContainedInTheProject() {
-	    assertTrue(project.containsTask(taskName));
+	    assertTrue(userHelper.getProject().containsTask(taskName));
 	}
 }
