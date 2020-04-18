@@ -7,9 +7,11 @@ public class Project {
 	private String ID;
 	private String name;
 	
+	private User user;
 	private ArrayList<Task> tasks = new ArrayList<Task>();
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
 	private TimeManager timeManager;
+	
 	private Worker projectLeader;
 	
 	//set gets
@@ -36,13 +38,13 @@ public class Project {
 	}
 	
 	//Constructor
-	public Project (String name, String ID) {
+	public Project (String name, String ID, User user) {
 		this.name = name;
 		this.ID = ID;
 		this.timeManager = new TimeManager(); 
 	}
 	
-	public Project (String name, String ID, Worker projectLeader) {
+	public Project (String name, String ID, Worker projectLeader, User user) {
 		this.name = name;
 		this.ID = ID;
 		this.projectLeader = projectLeader;

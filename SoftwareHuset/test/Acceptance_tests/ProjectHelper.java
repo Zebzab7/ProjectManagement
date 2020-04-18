@@ -1,9 +1,14 @@
 package acceptance_tests;
 
 import softwareHuset.Project;
-
+import softwareHuset.User;
 public class ProjectHelper {
+	private User user;
 	private Project project;
+	
+	public ProjectHelper(User user) {
+		this.user = user;
+	}
 	
 	public Project getProject() {
 		if (project == null) {
@@ -13,7 +18,7 @@ public class ProjectHelper {
 	}
 	
 	private Project exampleProject() {
-		project = new Project("Programming 101", "");
+		project = new Project("Programming 101", "",user);
 		return project;
 	}
 }

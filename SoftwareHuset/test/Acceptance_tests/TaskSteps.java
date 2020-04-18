@@ -20,10 +20,11 @@ public class TaskSteps {
 	private String taskName;
 	private WorkerHelper workerHelper;
 	private ManagementApp managementApp;
-	public TaskSteps(ManagementApp managementApp, WorkerHelper workerhelper, ProjectHelper projectHelper) {
+	
+	public TaskSteps(ManagementApp managementApp, WorkerHelper workerhelper) {
 		this.managementApp = managementApp;
 		this.workerHelper = workerhelper;
-		this.projectHelper = projectHelper;
+		this.projectHelper = new ProjectHelper(managementApp.getUser());
 	}
 	@Given("the worker is working on a project")
 	public void theWorkerIsWorkingOnAProject() {
@@ -38,8 +39,14 @@ public class TaskSteps {
 	}
 
 	@Given("the task with name {string} is not in the project")
-	public void theTaskWithNameIsNotInTheProject(String taskName) {
-	    assertFalse(project.containsTask(taskName));
+	public void theTaskWithNameIsNotInTheProject(String task) {
+	    assertFalse(project.containsTask(task));
+	}
+	
+	@Given("the task with name {string} is in the project")
+	public void theTaskWithNameIsInTheProject(String task) {
+		project.createTask(task, "0");
+		assertTrue(project.containsTask(task));
 	}
 
 	@When("worker creates new task  with name {string} and ET {string} hours")

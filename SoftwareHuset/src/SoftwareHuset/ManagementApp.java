@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class ManagementApp {
-	ArrayList<Project> projects = new ArrayList<Project>();
-	ArrayList<Worker> users = new ArrayList<Worker>();
-	
-	private Worker user;
-	
+	private ArrayList<Project> projects = new ArrayList<Project>();
+	private ArrayList<Worker> users = new ArrayList<Worker>();
+	private User user = new User();
+	public User getUser() {
+		return user;
+	}
 	public boolean LoggedIn() {
-		if (user == null) {
+		if (user.currentUser() == null) {
 			return false;
 		}
 		return true;
@@ -20,15 +21,15 @@ public class ManagementApp {
 	public boolean Login(String name,String password) {
 		for (Worker worker : users) {
 			if (worker.password.equals(password)&& worker.getUsername().equals(name)) {
-				user = worker;
+				user.setUser(worker);
 				return true;
 			}
 		}
 		return false;
 	}
 	public boolean Logout() {
-		user = null;
-		if (user == null) {
+		user.setUser(null);
+		if (user.currentUser() == null) {
 			return true;
 		}
 		return false;
@@ -92,14 +93,14 @@ public class ManagementApp {
 				return false;
 			}
 		}
-		if (projects.add(new Project(name, generateProjectId()))) {
+		if (projects.add(new Project(name, generateProjectId(), user))) {
 			return true;
 		}
 		return false;
 	}
 	public boolean createProjectWithLeader(String projectName, Worker leader) {
 		if (!containsProject(projectName)) {
-			projects.add(new Project(projectName, generateProjectId(), leader));
+			projects.add(new Project(projectName, generateProjectId(), leader, user));
 			return true;
 		}
 		return false;

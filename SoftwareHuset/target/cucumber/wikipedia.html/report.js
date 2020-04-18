@@ -4,10 +4,45 @@ formatter.feature({
   "description": "\tDescription: Log a worker in and out\n\tActors: Worker",
   "keyword": "Feature"
 });
-formatter.background({
-  "name": "",
+formatter.scenario({
+  "name": "Worker doesnt exist",
   "description": "",
-  "keyword": "Background"
+  "keyword": "Scenario"
+});
+formatter.step({
+  "name": "that no one is logged in",
+  "keyword": "Given "
+});
+formatter.match({
+  "location": "acceptance_tests.LoginLogoutSteps.thatNoOneIsLoggedIn()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the name is \"PEPE\" and password is \"1234\"",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.LoginLogoutSteps.theNameIsAndPasswordIs(java.lang.String,java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the error message \"Worker already exist\" is given",
+  "keyword": "Then "
+});
+formatter.match({
+  "location": "acceptance_tests.WorkerSteps.errorMessageIsProduced(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.scenario({
+  "name": "Worker login successfully",
+  "description": "",
+  "keyword": "Scenario"
 });
 formatter.step({
   "name": "that worker \"PEPE\" with password \"1234\" exist",
@@ -19,14 +54,9 @@ formatter.match({
 formatter.result({
   "status": "passed"
 });
-formatter.scenario({
-  "name": "Worker login successfully",
-  "description": "",
-  "keyword": "Scenario"
-});
 formatter.step({
   "name": "that no one is logged in",
-  "keyword": "Given "
+  "keyword": "And "
 });
 formatter.match({
   "location": "acceptance_tests.LoginLogoutSteps.thatNoOneIsLoggedIn()"
@@ -64,10 +94,10 @@ formatter.match({
 formatter.result({
   "status": "passed"
 });
-formatter.background({
-  "name": "",
+formatter.scenario({
+  "name": "Worker has wrong password",
   "description": "",
-  "keyword": "Background"
+  "keyword": "Scenario"
 });
 formatter.step({
   "name": "that worker \"PEPE\" with password \"1234\" exist",
@@ -79,14 +109,9 @@ formatter.match({
 formatter.result({
   "status": "passed"
 });
-formatter.scenario({
-  "name": "Worker has wrong password",
-  "description": "",
-  "keyword": "Scenario"
-});
 formatter.step({
   "name": "that no one is logged in",
-  "keyword": "Given "
+  "keyword": "And "
 });
 formatter.match({
   "location": "acceptance_tests.LoginLogoutSteps.thatNoOneIsLoggedIn()"
@@ -124,10 +149,10 @@ formatter.match({
 formatter.result({
   "status": "passed"
 });
-formatter.background({
-  "name": "",
+formatter.scenario({
+  "name": "Worker has wrong name",
   "description": "",
-  "keyword": "Background"
+  "keyword": "Scenario"
 });
 formatter.step({
   "name": "that worker \"PEPE\" with password \"1234\" exist",
@@ -139,14 +164,9 @@ formatter.match({
 formatter.result({
   "status": "passed"
 });
-formatter.scenario({
-  "name": "Worker has wrong name",
-  "description": "",
-  "keyword": "Scenario"
-});
 formatter.step({
   "name": "that no one is logged in",
-  "keyword": "Given "
+  "keyword": "And "
 });
 formatter.match({
   "location": "acceptance_tests.LoginLogoutSteps.thatNoOneIsLoggedIn()"
@@ -482,6 +502,71 @@ formatter.step({
 });
 formatter.match({
   "location": "acceptance_tests.TaskSteps.theTaskIsContainedInTheProject()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.scenario({
+  "name": "Create task successfully",
+  "description": "",
+  "keyword": "Scenario"
+});
+formatter.step({
+  "name": "that the worker is logged in",
+  "keyword": "Given "
+});
+formatter.match({
+  "location": "acceptance_tests.LoginLogoutSteps.thatTheWorkerIsLoggedIn()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker is working on a project",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.TaskSteps.theWorkerIsWorkingOnAProject()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker is the project leader",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.TaskSteps.theWorkerIsTheProjectLeader()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the task with name \"Loops\" is in the project",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.TaskSteps.theTaskWithNameIsInTheProject(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "worker creates new task  with name \"Loops\" and ET \"10\" hours",
+  "keyword": "When "
+});
+formatter.match({
+  "location": "acceptance_tests.TaskSteps.workerCreatesNewTaskWithNameAndETHours(java.lang.String,java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the error message \"The Task already exist in the project\" is given",
+  "keyword": "Then "
+});
+formatter.match({
+  "location": "acceptance_tests.WorkerSteps.errorMessageIsProduced(java.lang.String)"
 });
 formatter.result({
   "status": "passed"

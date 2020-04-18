@@ -21,6 +21,8 @@ public class LoginLogoutSteps {
 	private String password;
 	private String name;
 	Worker user;
+	
+	
 	WorkerHelper helper;
 	public LoginLogoutSteps(ManagementApp managementApp, WorkerHelper helper) {
 		this.managementApp = managementApp;
