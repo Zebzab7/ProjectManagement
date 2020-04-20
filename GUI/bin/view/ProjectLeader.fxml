@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="500.0" prefWidth="740.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProjectLeaderController">
+   <children>
+      <Label layoutX="33.0" layoutY="36.0" prefHeight="21.0" prefWidth="200.0" text="Welcome back project leader:" />
+      <Label fx:id="projectLeaderID" layoutX="231.0" layoutY="38.0" prefHeight="21.0" prefWidth="45.0" text="XXXX" />
+      <ListView fx:id="listView1" layoutX="31.0" layoutY="129.0" prefHeight="252.0" prefWidth="319.0" />
+      <Label layoutX="33.0" layoutY="66.0" prefHeight="21.0" prefWidth="237.0" text="You're currently supervising project:" />
+      <Button layoutX="31.0" layoutY="409.0" mnemonicParsing="false" onAction="#viewTask" text="View task information" />
+      <Label fx:id="projectID" layoutX="275.0" layoutY="66.0" prefHeight="21.0" prefWidth="75.0" text="XXXXXX" />
+      <Text layoutX="33.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You have created following tasks" wrappingWidth="346.99999851733446" />
+      <ListView fx:id="listView2" layoutX="380.0" layoutY="129.0" prefHeight="252.0" prefWidth="319.0" />
+      <Button layoutX="400.0" layoutY="409.0" mnemonicParsing="false" onAction="#viewWorkerProfile" text="View selected worker" />
+      <Text layoutX="380.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="These workers are at your disposal. Green means they are free and red means they are working on a task." wrappingWidth="318.9999927598983" />
+   </children>
+</AnchorPane>
