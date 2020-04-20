@@ -45,7 +45,7 @@ formatter.scenario({
   "keyword": "Scenario"
 });
 formatter.step({
-  "name": "that worker \"PEPE\" with password \"1234\" exist",
+  "name": "that worker \"PEPX\" with password \"1234\" exist",
   "keyword": "Given "
 });
 formatter.match({
@@ -65,7 +65,7 @@ formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "the name is \"PEPE\" and password is \"1234\"",
+  "name": "the name is \"PEPX\" and password is \"1234\"",
   "keyword": "And "
 });
 formatter.match({

@@ -8,6 +8,7 @@ public class ManagementApp {
 	private ArrayList<Project> projects = new ArrayList<Project>();
 	private ArrayList<Worker> users = new ArrayList<Worker>();
 	private User user = new User();
+	
 	public User getUser() {
 		return user;
 	}
