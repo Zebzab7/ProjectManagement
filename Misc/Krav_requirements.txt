@@ -14,5 +14,5 @@ Krav/requirements
 •	Medarbejderen skal kunne se om han/hun har registreret alle timer som man har arbejdet på dagen.
 •	Det skal være muligt at ændre i registreret timeforbrug, samt registrere fremtidige timeforbrug
 •	Der skal være faste aktiviteter mht. ferie, sygdom osv.
-•	Projektlederen skal kunne bruge systemet til opfølgning. Det betyder, at projektlederen let skal kunne se, hvordan 	timeforbruget udvikler sig per aktivitet og for hele projektet.
-•	Der skal kunne laves rapporter til brug ved Softwarehuset A/s’ ugentlige projektmøder. Ved disse møder skal 	projektlederen endvidere se det forventede restarbejde p˚a projektet.
+•	Projektlederen skal kunne bruge systemet til opfølgning. Det betyder, at projektlederen let skal kunne se, hvordan timeforbruget udvikler sig per aktivitet og for hele projektet.
+•	Der skal kunne laves rapporter til brug ved Softwarehuset A/s’ ugentlige projektmøder. Ved disse møder skal projektlederen endvidere se det forventede restarbejde p˚a projektet.
