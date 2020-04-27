@@ -17,6 +17,10 @@ public class ManagementApp {
 		return users;
 	}
 	
+	public ArrayList<Project> getProjects() {
+		return projects;
+	}
+	
 	public boolean LoggedIn() {
 		if (user.currentUser() == null) {
 			return false;
