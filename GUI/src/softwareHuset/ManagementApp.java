@@ -108,7 +108,6 @@ public class ManagementApp {
 			throw new OperationNotAllowedException("User login required");
 		}
 		project.getWorkerList().add(worker);
-
 	}
 	public boolean createProject(String name) throws Exception {
 		if (user.currentUser() == null) {

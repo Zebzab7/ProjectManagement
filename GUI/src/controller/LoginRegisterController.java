@@ -53,7 +53,7 @@ public class LoginRegisterController implements Initializable {
 					primaryStage.setTitle("Worker");
 					FXMLLoader loader = new FXMLLoader();
 					Parent root = loader.load(getClass().getResource("../view/Worker.fxml").openStream());
-					Scene scene = new Scene(root,785,600);
+					Scene scene = new Scene(root,530,500);
 					scene.getStylesheets().add(getClass().getResource("../application/application.css").toExternalForm());
 					primaryStage.setScene(scene);
 					primaryStage.show();
@@ -65,7 +65,9 @@ public class LoginRegisterController implements Initializable {
 			}
 		} else {
 			if(managementApp.CreateUser(txtUsername.getText(), txtPassword.getText())) {
+				reset();
 				lblStatus1.setText("User registeret successfully");
+				
 			} else {
 				lblStatus1.setText("There was an error. Try again!");
 			}
@@ -76,14 +78,20 @@ public class LoginRegisterController implements Initializable {
 	public void radioSelect(ActionEvent e) {
 		if(rb1.isSelected()) {
 			lblStatus.setText("Login");
-			lblStatus1.setText("");
+			reset();
 			loginRegister = true;
 		}
 		if(rb2.isSelected()) {
 			lblStatus.setText("Register");
-			lblStatus1.setText("");
+			reset();
 			loginRegister = false;
 		}
+	}
+	
+	public void reset() {
+		lblStatus1.setText("");
+		txtUsername.setText("");
+		txtPassword.setText("");
 	}
 
 	public void setManagementApp(ManagementApp managementApp) {

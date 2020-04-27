@@ -19,13 +19,13 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		managementApp = new ManagementApp();
+		managementApp.CreateUser("user", "1234");
 		
 		primaryStage.setTitle("Login");
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			Parent root = loader.load(getClass().getResource("/view/LoginRegister.fxml").openStream());
 			Scene scene = new Scene(root,400,400);
-			LoginRegisterController loginController = new LoginRegisterController();
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();

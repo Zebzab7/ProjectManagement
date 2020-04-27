@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="500.0" prefWidth="530.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="controller.ProjectController">
+   <children>
+      <Label fx:id="lblProjectName" layoutX="14.0" layoutY="14.0" text="Project #" />
+      <Label fx:id="lblWorkerCounter" layoutX="14.0" layoutY="35.0" text="Counter #" />
+      <ListView fx:id="listView1" layoutX="14.0" layoutY="126.0" prefHeight="244.0" prefWidth="241.0" />
+      <Label layoutX="14.0" layoutY="99.0" text="Available tasks" />
+      <Label fx:id="lblProjectLeader" layoutX="14.0" layoutY="56.0" text="Project Leader #" />
+      <Label layoutX="269.0" layoutY="99.0" text="People working on this project" />
+      <ListView fx:id="listView2" layoutX="269.0" layoutY="126.0" prefHeight="244.0" prefWidth="241.0" />
+   </children>
+</AnchorPane>
