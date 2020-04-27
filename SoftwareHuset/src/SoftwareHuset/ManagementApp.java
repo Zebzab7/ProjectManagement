@@ -12,6 +12,11 @@ public class ManagementApp {
 	public User getUser() {
 		return user;
 	}
+	
+	public ArrayList<Worker> getUsers() {
+		return users;
+	}
+	
 	public boolean LoggedIn() {
 		if (user.currentUser() == null) {
 			return false;
