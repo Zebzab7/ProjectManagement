@@ -1,20 +1,31 @@
 package application;
 	
+import controller.LoginRegisterController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import softwareHuset.ManagementApp;
 
 
 public class Main extends Application {
+	private static ManagementApp managementApp;
+	
+	public static ManagementApp getManagementApp() {
+		return managementApp;
+	}
+	
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(Stage primaryStage) throws Exception {
+		managementApp = new ManagementApp();
+		
 		primaryStage.setTitle("Login");
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
+			FXMLLoader loader = new FXMLLoader();
+			Parent root = loader.load(getClass().getResource("/view/LoginRegister.fxml").openStream());
 			Scene scene = new Scene(root,400,400);
+			LoginRegisterController loginController = new LoginRegisterController();
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
