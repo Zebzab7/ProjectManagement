@@ -12,7 +12,7 @@ import java.util.List;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import softwareHuset.*;
+import project_management.*;
 public class TaskSteps {
 	
 	//private Project project;

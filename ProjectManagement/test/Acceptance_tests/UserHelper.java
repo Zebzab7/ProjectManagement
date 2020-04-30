@@ -1,8 +1,8 @@
 package acceptance_tests;
 
-import softwareHuset.Project;
-import softwareHuset.User;
-import softwareHuset.Worker;
+import project_management.Project;
+import project_management.User;
+import project_management.Worker;
 
 public class UserHelper {
 	private User user;

@@ -1,5 +1,5 @@
 package acceptance_tests;
-import softwareHuset.Worker;
+import project_management.Worker;
 public class WorkerHelper {
 	private Worker worker;
 	
