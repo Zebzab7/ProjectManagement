@@ -3,7 +3,7 @@ package project_management;
 public class State {
 	private Worker cUser;
 	private Project cProject;
-	private Task cTask;
+	private Activity cTask;
 	
 	public Worker currentUser() {
 		return cUser;
@@ -11,7 +11,7 @@ public class State {
 	public Project currentProject() {
 		return cProject;
 	}
-	public Task currentTask() {
+	public Activity currentTask() {
 		return cTask;
 	}
 	public void setUser(Worker user) {
@@ -20,7 +20,7 @@ public class State {
 	public void setProject(Project project) {
 		cProject = project;
 	}
-	public void setTask(Task task) {
+	public void setTask(Activity task) {
 		cTask = task;
 	}
 
