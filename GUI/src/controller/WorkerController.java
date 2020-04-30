@@ -40,7 +40,11 @@ public class WorkerController implements Initializable {
 	private Label lblStatus;
 	
 	private ManagementApp managementApp;
-
+	private Project selectedProject;
+	private Worker selectedWorker;
+	private String lastProjectName;
+	
+//	Initialize
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		managementApp = Main.getManagementApp();
@@ -49,20 +53,39 @@ public class WorkerController implements Initializable {
 		updateUserList();
 		
 		listView1.getSelectionModel().selectedItemProperty().addListener((v, oldVal, newVal) -> {
-			lblProject.setText("Project: "+newVal);
-			textField1.setText(newVal);
+			try {
+				selectedProject = managementApp.findProject(newVal);
+				if(selectedProject != null) {
+					lastProjectName = selectedProject.getName();
+				} else {
+					lastProjectName = "";
+				}
+				
+				if(!lastProjectName.equals("")) {
+					lblProject.setText("Project: "+lastProjectName);
+				} else {
+					lblProject.setText("");
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		});
 		
 		listView2.getSelectionModel().selectedItemProperty().addListener((v, oldVal, newVal) -> {
-			lblUser.setText("User: "+newVal);
+			try {
+				selectedWorker = managementApp.findWorker(newVal);
+				lblUser.setText("User: "+selectedWorker.getUsername());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		});
 	}
 	
+//	ActionEvents
 	public void ViewProject(ActionEvent event) throws Exception {
-		String projectName = listView1.getSelectionModel().getSelectedItem();
-		Project p = managementApp.findProject(projectName);
-		
-		if(p != null) {
+		if(selectedProject != null) {
 			((Node) event.getSource()).getScene().getWindow().hide();
 			
 			try {
@@ -71,7 +94,7 @@ public class WorkerController implements Initializable {
 				FXMLLoader loader = new FXMLLoader();
 				Parent root = loader.load(getClass().getResource("../view/Project.fxml").openStream());
 				ProjectController projectController = (ProjectController) loader.getController();
-				projectController.setProject(p);
+				projectController.setProject(selectedProject);
 				Scene scene = new Scene(root,530,500);
 				scene.getStylesheets().add(getClass().getResource("../application/application.css").toExternalForm());
 				primaryStage.setScene(scene);
@@ -84,52 +107,84 @@ public class WorkerController implements Initializable {
 	}
 	
 	public void addProject(ActionEvent e) throws Exception {
-		if(managementApp.createProject(textField1.getText())) {
-			Project p = managementApp.findProject(textField1.getText());
-			listView1.getItems().add(p.getName());
-			reset();
-		}
+		String name = textField1.getText();
 		
+		if(managementApp.LoggedIn()) {
+			if(managementApp.createProject(name)) {
+				Project p = managementApp.findProject(textField1.getText());
+				listView1.getItems().add(p.getName());
+				textField1.setText("");
+			}
+		}
 	}
 	
-	public void reset() {
-		textField1.setText("");
+	public void SetAsProjectLeader(ActionEvent e) throws Exception {
+		if(selectedProject != null && selectedWorker != null) {
+			selectedProject.setProjectLeader(selectedWorker);
+			addUserToProject(selectedProject, selectedWorker);
+			
+			lblStatus.setText("Worker: "+selectedWorker.getUsername()+" is now project leader in project: "+selectedProject.getName());
+			
+		}
 	}
 	
 	public void AddUserToProject(ActionEvent e) throws Exception {
-		String projectName = listView1.getSelectionModel().getSelectedItem();
-		String workerName = listView2.getSelectionModel().getSelectedItem();
-		Project p = managementApp.findProject(projectName);
-		Worker w = managementApp.findWorker(workerName);
+		if(selectedProject != null && selectedWorker != null) {
+			if(addUserToProject(selectedProject,selectedWorker)) {
+				lblStatus.setText("Worker: "+selectedWorker.getUsername()+" have been added to project: "+selectedProject.getName());
+			}
+		}
 		
-		if(p != null && w != null) {
-			managementApp.addWorkerToProject(w, p);
-			lblStatus.setText("Worker: "+w.getUsername()+" have been added to project: "+p.getName());
+	}
+		
+	public void removeProject(ActionEvent e) throws Exception {
+		if(selectedProject != null ) {
+			lblStatus.setText("Project: "+lastProjectName+" was succesfully removed");
+			managementApp.removeProject(selectedProject);
+			updateProjectList();
 		}
 	}
 	
-	public void removeProject(ActionEvent e) throws Exception {
-		Project p = managementApp.findProject(textField1.getText());
-		
-		if(p != null) {
-			managementApp.removeProject(p);
-			listView1.getItems().remove(p.getName());
-			lblStatus.setText("Project: "+p.getName()+" have been deleted");
+	public void LogOut(ActionEvent event) {
+		try {
+			if(managementApp.Logout()) {
+				((Node) event.getSource()).getScene().getWindow().hide();
+				Stage primaryStage = new Stage();
+				primaryStage.setTitle("Worker");
+				FXMLLoader loader = new FXMLLoader();
+				Parent root = loader.load(getClass().getResource("../view/LoginRegister.fxml").openStream());
+				Scene scene = new Scene(root,400,400);
+				scene.getStylesheets().add(getClass().getResource("../application/application.css").toExternalForm());
+				primaryStage.setScene(scene);
+				primaryStage.show();
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
+	}
+//	Methods
+	public boolean addUserToProject(Project p, Worker w) throws Exception {
+		for(Worker worker : p.getWorkerList()) {
+			if(worker.getUsername() == w.getUsername()) {
+				return false;
+			}
+		}
+		managementApp.addWorkerToProject(w, p);
 		
+		return true;
 	}
 	
 	public void updateProjectList() {
+		listView1.getItems().clear();
 		ArrayList<Project> projects = managementApp.getProjects();
-		
 		for(Project p : projects) {
 			listView1.getItems().add(p.getName());
 		}
 	}
 	
 	public void updateUserList() {
+		listView2.getItems().clear();
 		ArrayList<Worker> users = managementApp.getUsers();
-		
 		for(Worker w : users) {
 			listView2.getItems().add(w.getUsername());
 		}

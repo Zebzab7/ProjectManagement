@@ -16,6 +16,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import softwareHuset.ManagementApp;
+import softwareHuset.User;
 
 public class LoginRegisterController implements Initializable {
 	@FXML
@@ -33,6 +34,9 @@ public class LoginRegisterController implements Initializable {
 	@FXML
 	private Label lblErrorMessage;
 	
+	private String username;
+	private String password;
+	private User user;
 	private ManagementApp managementApp;
 	private boolean loginRegister = true;
 	
@@ -42,36 +46,42 @@ public class LoginRegisterController implements Initializable {
 	}
 	
 	public void Login(ActionEvent event) throws Exception {
-		if(loginRegister) {
-			if(managementApp.Login(txtUsername.getText(), txtPassword.getText())) {
-				
-				lblStatus1.setText("Login succees");
-				((Node)event.getSource()).getScene().getWindow().hide();
-				
-				try {
-					Stage primaryStage = new Stage();
-					primaryStage.setTitle("Worker");
-					FXMLLoader loader = new FXMLLoader();
-					Parent root = loader.load(getClass().getResource("../view/Worker.fxml").openStream());
-					Scene scene = new Scene(root,530,500);
-					scene.getStylesheets().add(getClass().getResource("../application/application.css").toExternalForm());
-					primaryStage.setScene(scene);
-					primaryStage.show();
-				} catch(Exception e) {
-					e.printStackTrace();
+		this.username = txtUsername.getText();
+		this.password = txtPassword.getText();
+		
+		managementApp.Logout();
+		if(!managementApp.LoggedIn()) {
+			if(loginRegister) {
+				if(managementApp.Login(username, password)) {
+					
+					lblStatus1.setText("Login succees");
+					((Node)event.getSource()).getScene().getWindow().hide();
+					
+					try {
+						Stage primaryStage = new Stage();
+						primaryStage.setTitle("Worker");
+						FXMLLoader loader = new FXMLLoader();
+						Parent root = loader.load(getClass().getResource("../view/Worker.fxml").openStream());
+						Scene scene = new Scene(root,530,500);
+						scene.getStylesheets().add(getClass().getResource("../application/application.css").toExternalForm());
+						primaryStage.setScene(scene);
+						primaryStage.show();
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					lblStatus1.setText("Login failed");
 				}
 			} else {
-				lblStatus1.setText("Login failed");
-			}
-		} else {
-			if(managementApp.CreateUser(txtUsername.getText(), txtPassword.getText())) {
-				reset();
-				lblStatus1.setText("User registeret successfully");
+				if(managementApp.CreateUser(txtUsername.getText(), txtPassword.getText())) {
+					reset();
+					lblStatus1.setText("User registeret successfully");
+					
+				} else {
+					lblStatus1.setText("There was an error. Try again!");
+				}
 				
-			} else {
-				lblStatus1.setText("There was an error. Try again!");
 			}
-			
 		}
 	}
 	
@@ -92,9 +102,5 @@ public class LoginRegisterController implements Initializable {
 		lblStatus1.setText("");
 		txtUsername.setText("");
 		txtPassword.setText("");
-	}
-
-	public void setManagementApp(ManagementApp managementApp) {
-		this.managementApp = managementApp;
 	}
 }

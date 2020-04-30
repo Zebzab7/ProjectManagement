@@ -19,4 +19,8 @@ public class Task {
 		this.project = project;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 }
