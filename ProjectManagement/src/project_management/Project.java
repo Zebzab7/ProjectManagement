@@ -14,7 +14,7 @@ public class Project {
 	
 	private Worker projectLeader;
 	
-	//set gets
+	// Set gets
 	public String getName() {
 		return name;
 	}
@@ -53,7 +53,8 @@ public class Project {
 		projectLeader.project = this;
 		this.state = state;
 	}
-	//methods
+	
+	// Methods
 	public Worker findWorker (String name) throws OperationNotAllowedException {
 		for (Worker w : workers) {
 			if (w.getUsername() == name) {

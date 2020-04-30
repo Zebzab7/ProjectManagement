@@ -11,31 +11,32 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import helpers.ErrorMessageHolder;
-import helpers.UserHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import project_management.*;
+import test_helpers.ErrorMessageHolder;
+import test_helpers.StateHelper;
 
 public class LoginLogoutSteps {
 	private ManagementApp managementApp;
 	private String password;
 	private String name;
-	private ErrorMessageHolder errorMessage;
-	Worker user;
-	UserHelper userHelper;
 	
-	public LoginLogoutSteps(ManagementApp managementApp, UserHelper helper) {
+	Worker worker;
+	StateHelper stateHelper;
+	
+	public LoginLogoutSteps(ManagementApp managementApp, StateHelper helper) {
 		this.managementApp = managementApp;
-		this.userHelper = helper;
+		this.stateHelper = helper;
 	}
 	
 	@Given("the name is {string} and password is {string}")
-	public void theNameIsAndPasswordIs(String string, String string2) {
-		this.name = string;
-	    this.password = string2;
+	public void theNameIsAndPasswordIs(String name, String password) {
+		this.name = name;
+	    this.password = password;
 	}
+	
 	@Given("that no one is logged in")
 	public void thatNoOneIsLoggedIn()throws Exception {
 		managementApp.Logout();
@@ -50,12 +51,14 @@ public class LoginLogoutSteps {
 	    assertTrue(managementApp.Login(name, password));
 	}
 	@Then("the worker login fails")
-	public void theWorkerLoginFails()throws Exception {
+	public void theWorkerLoginFails() throws Exception {
 		assertFalse(managementApp.Login(name, password));
 	}
 	@Then("the worker is logged in")
 	public void theWorkerIsLoggedIn() throws Exception {
-	    assertTrue(managementApp.LoggedIn());
+		worker = managementApp.getUser().currentUser();
+		assertTrue(worker.getUsername().equals(name));
+		assertTrue(worker.getPassword().equals(password));
 	}
 	
 	@Then("the worker is not logged in")
@@ -64,11 +67,12 @@ public class LoginLogoutSteps {
 	}
 	
 	@Given("that the worker is logged in")
-	public void thatTheWorkerIsLoggedIn()throws Exception {
-		if (!managementApp.containsUser(userHelper.getWorker().getUsername())) {
-			assertTrue(managementApp.CreateUser(userHelper.getWorker().getUsername(), userHelper.getWorker().getPassword()));
+	public void thatTheWorkerIsLoggedIn() throws Exception {
+		worker = stateHelper.getWorker();
+		if (!managementApp.containsUser(worker.getUsername())) {
+			assertTrue(managementApp.CreateUser(worker.getUsername(), worker.getPassword()));
 		}
-	    assertTrue(managementApp.Login(userHelper.getWorker().getUsername(), userHelper.getWorker().getPassword()));
+	    assertTrue(managementApp.Login(worker.getUsername(), worker.getPassword()));
 	}
 
 

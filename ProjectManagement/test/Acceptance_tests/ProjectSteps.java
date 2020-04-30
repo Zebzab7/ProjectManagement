@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import helpers.ErrorMessageHolder;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import project_management.*;
+import test_helpers.ErrorMessageHolder;
 public class ProjectSteps {
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;

@@ -10,24 +10,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import helpers.ErrorMessageHolder;
-import helpers.UserHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import project_management.*;
+import test_helpers.ErrorMessageHolder;
+import test_helpers.StateHelper;
 public class TaskSteps {
 	
 	//private Project project;
 	private String taskName;
-	private UserHelper userHelper;
+	private StateHelper userHelper;
 
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
 	
-	public TaskSteps(ManagementApp managementApp, UserHelper userHelper, ErrorMessageHolder errorMessage) {
+	public TaskSteps(ManagementApp managementApp, StateHelper userHelper, ErrorMessageHolder errorMessage) {
 		this.managementApp = managementApp;
-		this.userHelper = new UserHelper(managementApp.getUser());
+		this.userHelper = new StateHelper(managementApp.getUser());
 		this.errorMessage = errorMessage;
 	}
 	

@@ -66,6 +66,7 @@ public class ManagementApp {
 		}
 		return false;
 	}
+	
 	public boolean CreateUser(String username, String password) throws Exception {
 		if (!containsUser(username)) {
 			if (users.add(new Worker(username, password))) {
