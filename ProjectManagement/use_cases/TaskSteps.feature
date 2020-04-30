@@ -22,4 +22,4 @@ Scenario: Worker not logged in
 	Given that no one is logged in
  	And the task with name "Loops" is not in the project
  	When worker creates new task  with name "Loops" and ET "10" hours
- 	Then the error message "User login requiredasd" is given
+ 	Then the error message "User login required" is given

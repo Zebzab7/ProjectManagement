@@ -12,6 +12,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import helpers.ErrorMessageHolder;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -20,6 +22,7 @@ public class WorkerSteps {
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
 	String userName;
+	
 	public WorkerSteps(ManagementApp managementApp, ErrorMessageHolder errorMessage) {
 		this.managementApp = managementApp;
 		this.errorMessage = errorMessage;
@@ -34,7 +37,6 @@ public class WorkerSteps {
 	
 	@Given("that worker {string} with password {string} does not exist")
 	public void thatWorkerWithPasswordDoesNotExist(String name, String password) throws Exception {
-		//managementApp.removeUser(managementApp.findWorker(name));
 		assertFalse(managementApp.containsUser(name));
 	}
 	
@@ -46,8 +48,8 @@ public class WorkerSteps {
 		} catch (Exception e) {
 			 errorMessage.setErrorMessage(e.getMessage());
 		}
-	
 	}
+	
 	@Then("the error message {string} is given")
 	public void errorMessageIsProduced(String string) throws Exception {
 		assertEquals(errorMessage, this.errorMessage);

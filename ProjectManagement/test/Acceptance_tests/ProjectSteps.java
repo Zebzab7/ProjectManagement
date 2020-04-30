@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import helpers.ErrorMessageHolder;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -18,6 +19,7 @@ public class ProjectSteps {
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
 	String projectName;
+	
 	public ProjectSteps(ManagementApp managementApp, ErrorMessageHolder errorMessage) {
 		this.managementApp = managementApp;
 		this.errorMessage = errorMessage;
@@ -27,6 +29,7 @@ public class ProjectSteps {
 	public void theProjectWithNameDoesNotExist(String name) throws Exception {
 		assertFalse(managementApp.containsProject(name));
 	}
+	
 	@Given("the project with name {string} does exist")
 	public void theProjectWithNameDoesExist(String name) throws Exception {
 	    try {
@@ -34,23 +37,22 @@ public class ProjectSteps {
 	    }catch (OperationNotAllowedException e) {
 			 errorMessage.setErrorMessage(e.getMessage());
 		}
-		
 	}
 	@When("worker adds new project named {string}")
-	public void workerAddsNewProject(String name)throws Exception {
+	public void workerAddsNewProject(String name) throws Exception {
+		projectName = name;
 		try {
-			projectName = name;
 		    managementApp.createProject(name);
 		} catch (OperationNotAllowedException e) {
-			 errorMessage.setErrorMessage(e.getMessage());
+			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
+	
 	@When("worker adds new project named {string} with {string} as projectleader")
 	public void workerAddsNewProjectNamedWithAsProjectleader(String projectName, String projectLeader) {
 	    try {
 	    	this.projectName =  projectName;
 	 	    managementApp.createProjectWithLeader(projectName, managementApp.findWorker(projectLeader));
-	 	    
 	    } catch (Exception e) {
 	    	errorMessage.setErrorMessage(e.getMessage());
 	    }
@@ -60,6 +62,4 @@ public class ProjectSteps {
 	public void theProjectIsContainedInTheApp() throws OperationNotAllowedException {
 	    assertTrue(managementApp.containsProject(projectName));
 	}
-
-
 }

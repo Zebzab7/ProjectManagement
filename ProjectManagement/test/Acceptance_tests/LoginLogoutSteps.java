@@ -10,27 +10,30 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import helpers.ErrorMessageHolder;
+import helpers.UserHelper;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import project_management.*;
 
-
 public class LoginLogoutSteps {
 	private ManagementApp managementApp;
 	private String password;
 	private String name;
+	private ErrorMessageHolder errorMessage;
 	Worker user;
-	
-	
 	UserHelper userHelper;
+	
 	public LoginLogoutSteps(ManagementApp managementApp, UserHelper helper) {
 		this.managementApp = managementApp;
 		this.userHelper = helper;
 	}
+	
 	@Given("the name is {string} and password is {string}")
 	public void theNameIsAndPasswordIs(String string, String string2) {
-	    this.name = string;
+		this.name = string;
 	    this.password = string2;
 	}
 	@Given("that no one is logged in")
@@ -38,18 +41,23 @@ public class LoginLogoutSteps {
 		managementApp.Logout();
 	    assertFalse(managementApp.LoggedIn());
 	}
+	@When("the worker logs in")
+	public void theWorkerLogsIn() {
+	    managementApp.Login(name, password);
+	}
 	@Then("the worker login succeeds")
 	public void theWorkerLoginSucceeds() throws Exception{
 	    assertTrue(managementApp.Login(name, password));
 	}
 	@Then("the worker login fails")
 	public void theWorkerLoginFails()throws Exception {
-		 assertFalse(managementApp.Login(name, password));
+		assertFalse(managementApp.Login(name, password));
 	}
 	@Then("the worker is logged in")
-	public void theWorkerIsLoggedIn()throws Exception {
+	public void theWorkerIsLoggedIn() throws Exception {
 	    assertTrue(managementApp.LoggedIn());
 	}
+	
 	@Then("the worker is not logged in")
 	public void theWorkerIsNotLoggedIn() throws Exception {
 		assertFalse(managementApp.LoggedIn());

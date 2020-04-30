@@ -3,11 +3,11 @@ package project_management;
 import java.util.ArrayList;
 
 public class Project {
-	
 	private String ID;
 	private String name;
 	
 	private User user;
+	
 	private ArrayList<Task> tasks = new ArrayList<Task>();
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
 	private TimeManager timeManager;
@@ -38,7 +38,7 @@ public class Project {
 	}
 	
 	//Constructor
-	public Project (String name, String ID, User user) {
+	public Project(String name, String ID, User user) {
 		this.name = name;
 		this.ID = ID;
 		this.timeManager = new TimeManager(); 
@@ -78,8 +78,6 @@ public class Project {
 			tasks.add(new Task (name, ET, this));
 		
 	}
-	
-	
 	
 //	public boolean setProjectleader(String newLeader) {
 //		Worker leader = findWorker(newLeader);

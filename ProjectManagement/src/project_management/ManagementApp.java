@@ -12,22 +12,25 @@ public class ManagementApp {
 	public User getUser() {
 		return user;
 	}
+	
 	public boolean LoggedIn() {
 		if (user.currentUser() == null) {
 			return false;
 		}
 		return true;
-		//return loggedIn;
 	}
-	public boolean Login(String name,String password) {
+	
+	// Returns true if login succeeds, false otherwise
+	public boolean Login(String name, String password) {
 		for (Worker worker : users) {
-			if (worker.password.equals(password) && worker.getUsername().equals(name)) {
+			if (worker.getPassword().equals(password) && worker.getUsername().equals(name)) {
 				user.setUser(worker);
 				return true;
 			}
 		}
 		return false;
 	}
+	
 	public boolean Logout() {
 		user.setUser(null);
 		if (user.currentUser() == null) {
@@ -69,9 +72,9 @@ public class ManagementApp {
 				return true;
 			}
 		}
-		else throw new Exception("User already exist");
-		return false;
+		throw new Exception("User already exist");
 	}
+	
 	public Worker findWorker(String worker) throws Exception {
 		if (user.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
