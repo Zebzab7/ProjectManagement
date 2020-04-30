@@ -7,14 +7,14 @@ import java.util.stream.Collectors;
 public class ManagementApp {
 	private ArrayList<Project> projects = new ArrayList<Project>();
 	private ArrayList<Worker> users = new ArrayList<Worker>();
-	private User user = new User();
+	private State state = new State();
 	
-	public User getUser() {
-		return user;
+	public State getUser() {
+		return state;
 	}
 	
 	public boolean LoggedIn() {
-		if (user.currentUser() == null) {
+		if (state.currentUser() == null) {
 			return false;
 		}
 		return true;
@@ -24,7 +24,7 @@ public class ManagementApp {
 	public boolean Login(String name, String password) {
 		for (Worker worker : users) {
 			if (worker.getPassword().equals(password) && worker.getUsername().equals(name)) {
-				user.setUser(worker);
+				state.setUser(worker);
 				return true;
 			}
 		}
@@ -32,20 +32,20 @@ public class ManagementApp {
 	}
 	
 	public boolean Logout() {
-		user.setUser(null);
-		if (user.currentUser() == null) {
+		state.setUser(null);
+		if (state.currentUser() == null) {
 			return true;
 		}
 		return false;
 	}
 	public void removeUser(Worker worker) throws OperationNotAllowedException {
-		if (user.currentUser() == null) {
+		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
 			users.remove(worker);
 	}
 	public void removeProject(Project project) throws OperationNotAllowedException {
-		if (user.currentUser() == null) {
+		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
 			projects.remove(project);
@@ -76,7 +76,7 @@ public class ManagementApp {
 	}
 	
 	public Worker findWorker(String worker) throws Exception {
-		if (user.currentUser() == null) {
+		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
 		for (Worker w : users) {
@@ -87,7 +87,7 @@ public class ManagementApp {
 		return null;
 	}
 	public Project findProject(String projectName) throws Exception{
-		if (user.currentUser() == null) {
+		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
 		for (Project project : projects) {
@@ -98,14 +98,14 @@ public class ManagementApp {
 		return null;
 	}
 	public void addWorkerToProject(Worker worker, Project project) throws Exception{
-		if (user.currentUser() == null) {
+		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
 		project.getWorkerList().add(worker);
 
 	}
 	public boolean createProject(String name) throws Exception {
-		if (user.currentUser() == null) {
+		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
 		for (Project p : projects) {
@@ -113,17 +113,17 @@ public class ManagementApp {
 				return false;
 			}
 		}
-		if (projects.add(new Project(name, generateProjectId(), user))) {
+		if (projects.add(new Project(name, generateProjectId(), state))) {
 			return true;
 		}
 		return false;
 	}
 	public boolean createProjectWithLeader(String projectName, Worker leader) throws Exception {
-		if (user.currentUser() == null) {
+		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
 		if (!containsProject(projectName)) {
-			projects.add(new Project(projectName, generateProjectId(), leader, user));
+			projects.add(new Project(projectName, generateProjectId(), leader, state));
 			return true;
 		}
 		return false;

@@ -6,7 +6,7 @@ public class Project {
 	private String ID;
 	private String name;
 	
-	private User user;
+	private State state;
 	
 	private ArrayList<Task> tasks = new ArrayList<Task>();
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
@@ -38,20 +38,20 @@ public class Project {
 	}
 	
 	//Constructor
-	public Project(String name, String ID, User user) {
+	public Project(String name, String ID, State state) {
 		this.name = name;
 		this.ID = ID;
 		this.timeManager = new TimeManager(); 
-		this.user = user;
+		this.state = state;
 	}
 	
-	public Project (String name, String ID, Worker projectLeader, User user) {
+	public Project (String name, String ID, Worker projectLeader, State state) {
 		this.name = name;
 		this.ID = ID;
 		this.projectLeader = projectLeader;
 		this.timeManager = new TimeManager(); 
 		projectLeader.project = this;
-		this.user = user;
+		this.state = state;
 	}
 	//methods
 	public Worker findWorker (String name) throws OperationNotAllowedException {
@@ -71,12 +71,11 @@ public class Project {
 		return false;
 	}
 	public void createTask(String name, String Estimate) throws OperationNotAllowedException {
-		if (user.currentUser() == null) {
+		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
 			double ET = Integer.parseInt(Estimate);
 			tasks.add(new Task (name, ET, this));
-		
 	}
 	
 //	public boolean setProjectleader(String newLeader) {

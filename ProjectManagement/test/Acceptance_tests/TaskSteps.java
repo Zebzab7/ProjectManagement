@@ -24,11 +24,13 @@ public class TaskSteps {
 
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
+	
 	public TaskSteps(ManagementApp managementApp, UserHelper userHelper, ErrorMessageHolder errorMessage) {
 		this.managementApp = managementApp;
 		this.userHelper = new UserHelper(managementApp.getUser());
 		this.errorMessage = errorMessage;
 	}
+	
 	@Given("the worker is working on a project")
 	public void theWorkerIsWorkingOnAProject() throws Exception{
 	    if (!managementApp.containsProject(userHelper.getProject().getName())) {

@@ -1,15 +1,15 @@
 package helpers;
 
 import project_management.Project;
-import project_management.User;
+import project_management.State;
 import project_management.Worker;
 
 public class UserHelper {
-	private User user;
+	private State user;
 	private Project project;
 	private Worker worker;
 	
-	public UserHelper (User user) {
+	public UserHelper (State user) {
 		this.user = user;
 	}
 	public Project getProject() {
@@ -20,7 +20,7 @@ public class UserHelper {
 	}
 	
 	private Project exampleProject() {
-		project = new Project("Programming 101", "11",user);
+		project = new Project("Programming 101", "11", user);
 		return project;
 	}
 	

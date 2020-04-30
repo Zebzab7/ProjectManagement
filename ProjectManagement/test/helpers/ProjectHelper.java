@@ -1,12 +1,12 @@
 package helpers;
 
 import project_management.Project;
-import project_management.User;
+import project_management.State;
 public class ProjectHelper {
-	private User user;
+	private State user;
 	private Project project;
 	
-	public ProjectHelper(User user) {
+	public ProjectHelper(State user) {
 		this.user = user;
 	}
 	
