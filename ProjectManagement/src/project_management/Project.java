@@ -4,26 +4,20 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 public class Project {
-	private String ID;
-	private String name;
-	
-	private State state;
-	
 	private ArrayList<Activity> tasks = new ArrayList<Activity>();
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
 	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
+
 	private TimeManager timeManager;
+	private String name, ID;
+	private State state;
 	
 	private int workedHours;
 	private int initialHours = 0;
 	
 	private Worker projectLeader;
+	private GregorianCalendar startTime, endTime, currentTime;
 	
-	private GregorianCalendar startTime;
-	private GregorianCalendar endTime;
-	private GregorianCalendar currentTime;
-	
-	// Set gets
 	public String getName() {
 		return name;
 	}
@@ -49,9 +43,8 @@ public class Project {
 		return accumulatedHours.get(workers.indexOf(worker));
 		
 	}
-	
-	public String getId() {
-		return ID;
+	public int workedHours() {
+		return workedHours;
 	}
 	public GregorianCalendar getStartTime() {
 		return startTime;
@@ -59,8 +52,7 @@ public class Project {
 	public GregorianCalendar getEndTime() {
 		return endTime;
 	}
-	
-	//Constructor
+
 	public Project(String name, String ID, State state) {
 		this.name = name;
 		this.ID = ID;
@@ -68,7 +60,6 @@ public class Project {
 		this.state = state;
 		workedHours = 0;
 	}
-	
 	public Project (String name, String ID, Worker projectLeader, State state) {
 		this.name = name;
 		this.ID = ID;
@@ -79,7 +70,6 @@ public class Project {
 		workedHours = 0;
 	}
 	
-	// Methods
 	public Worker findWorker (String name) throws OperationNotAllowedException {
 		for (Worker w : workers) {
 			if (w.getUsername() == name) {
@@ -88,7 +78,6 @@ public class Project {
 		}
 		return null;
 	}
-	
 	public boolean containsWorker(Worker worker) {
 		for (Worker w : workers) {
 			if (w.equals(worker)) {
@@ -126,6 +115,7 @@ public class Project {
 	}
 	//Time based methods
 	public boolean addHours(int hours) throws OperationNotAllowedException {
+		if ( state.currentUser() == null ) throw new OperationNotAllowedException("User login required");
 		if ( containsWorker(state.currentUser()) ) {
 			workedHours += hours;
 			accumulatedHours.set(workers.indexOf(state.currentUser()), + hours);
@@ -137,10 +127,6 @@ public class Project {
 	
 	public int workerHours(Worker worker) {
 		return 0;
-	}
-	
-	public int workedHours() {
-		return workedHours;
 	}
 	
 	public void setStartTime(int year, int month, int day) throws OperationNotAllowedException {

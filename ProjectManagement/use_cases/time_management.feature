@@ -64,6 +64,9 @@ Scenario: Worker adds hours while not working on project
 Scenario: Hours are added when no one is logged in
 	Given that no one is logged in
 	And the project with name "Programming 101" does exist
+	And the project has no work hours
+	When the worker adds 10 work hours unsuccesfully
+	Then the error message "User login required" is given
 
 Scenario: Hours are subtracted to a negative number
 	Given that worker with the name "PEPE" and password "1234" is logged in

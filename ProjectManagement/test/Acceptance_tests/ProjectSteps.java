@@ -39,11 +39,17 @@ public class ProjectSteps {
 	
 	@Given("the project with name {string} does exist")
 	public void theProjectWithNameDoesExist(String name) throws Exception {
+		Worker prev = managementApp.getState().currentUser();
+		Worker temp = new Worker("Temp", "1234");
 		try {
+			managementApp.getState().setUser(temp);
+			
 			managementApp.createProject(name);
 			project = managementApp.findProject(name);
 			this.projectName = name;
 			stateHelper.setProject(project);
+			
+			managementApp.getState().setUser(prev);
 	    	assertTrue(managementApp.containsProject(name));
 	    } catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
@@ -85,7 +91,6 @@ public class ProjectSteps {
 		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
-		
 	}
 	
 	@When("the worker adds {int} work hours succesfully")
@@ -95,7 +100,12 @@ public class ProjectSteps {
 	
 	@When("the worker adds {int} work hours unsuccesfully")
 	public void theWorkerAddsWorkHoursUnSuccesfully(int hours) throws OperationNotAllowedException {
-		assertFalse(project.addHours(hours));
+		try {
+			assertFalse(project.addHours(hours));
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+		
 	}
 
 	@When("worker adds new project named {string}")
