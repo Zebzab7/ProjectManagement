@@ -28,3 +28,9 @@ Scenario: Worker has wrong name
  	Then the worker login fails
  	And the worker is not logged in
  	
+Scenario: Admin login successfully
+	Given that worker "admin" with password "1234" exist
+ 	And that no one is logged in
+ 	And the name is "admin" and password is "1234"
+ 	Then the worker login succeeds
+ 	And the admin is logged in

@@ -62,6 +62,11 @@ public class LoginLogoutSteps {
 		}
 	    assertTrue(managementApp.Login(userHelper.getWorker().getUsername(), userHelper.getWorker().getPassword()));
 	}
-
+	
+	@Then("the admin is logged in")
+	public void theAdminIsLoggedIn() {
+		assertTrue(managementApp.LoggedIn());
+		assertTrue(managementApp.getUser().currentUser().isAdmin());
+	}
 
 }

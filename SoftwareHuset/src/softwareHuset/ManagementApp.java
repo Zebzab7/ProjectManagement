@@ -8,6 +8,7 @@ public class ManagementApp {
 	private ArrayList<Project> projects = new ArrayList<Project>();
 	private ArrayList<Worker> users = new ArrayList<Worker>();
 	private User user = new User();
+	private boolean adminLogin = false;
 	
 	public User getUser() {
 		return user;
@@ -28,9 +29,12 @@ public class ManagementApp {
 		return true;
 		//return loggedIn;
 	}
-	public boolean Login(String name,String password) {
+	public boolean Login(String name,String password) throws Exception {
 		for (Worker worker : users) {
 			if (worker.password.equals(password)&& worker.getUsername().equals(name)) {
+				if(name.equals("admin") && password.equals("1234")) {
+					worker.setAsAdmin(true);
+				}
 				user.setUser(worker);
 				return true;
 			}

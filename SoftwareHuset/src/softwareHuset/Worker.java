@@ -8,6 +8,7 @@ public class Worker {
 	Project project;
 	String password;
 	private ArrayList<Task> tasks = new ArrayList<Task>();
+	private boolean adminRights;
 	
 	public Worker(String username, String password) {
 		this.username = username;
@@ -46,5 +47,12 @@ public class Worker {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean isAdmin() {
+		return adminRights;
+	}
+	public void setAsAdmin(boolean b) {
+		adminRights = b;
 	}
 }
