@@ -13,13 +13,6 @@ public class StateHelper {
 		this.state = state;
 	}
 	
-	public Project getProject() {
-		if (project == null) {
-			project = exampleProject();
-		}
-		return project;
-	}
-	
 	private Project exampleProject() {
 		project = new Project("Programming 101", "11", state);
 		return project;
@@ -29,11 +22,22 @@ public class StateHelper {
 		this.worker = worker;
 	}
 	
+	public void setProject(Project project) {
+		this.project = project;
+	}
+	
 	public Worker getWorker() {
 		if (worker == null) {
 			worker = exampleWorker();
 		}
 		return worker;
+	}
+	
+	public Project getProject() {
+		if (project == null) {
+			project = exampleProject();
+		}
+		return project;
 	}
 	
 	private Worker exampleWorker() {

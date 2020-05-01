@@ -18,14 +18,20 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import project_management.*;
 import test_helpers.ErrorMessageHolder;
+import test_helpers.ProjectHelper;
+import test_helpers.StateHelper;
 public class WorkerSteps {
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
+	private StateHelper stateHelper;
+	private Worker worker;
+	private Project project;
 	String userName;
 	
-	public WorkerSteps(ManagementApp managementApp, ErrorMessageHolder errorMessage) {
+	public WorkerSteps(ManagementApp managementApp, ErrorMessageHolder errorMessage, StateHelper stateHelper) {
 		this.managementApp = managementApp;
 		this.errorMessage = errorMessage;
+		this.stateHelper = stateHelper;
 	}
 	
 	@Given("that worker {string} with password {string} exist")
@@ -59,5 +65,11 @@ public class WorkerSteps {
 	public void theWorkerIsContainedInApp() {
 	    assertTrue(managementApp.containsUser(userName));
 	}
-
+	
+//	@Then("the worker has a total of {int} work hours on project {string}")
+//	public void theWorkerHasATotalOfWorkHoursOnProject(int hours, String projectName) {
+//		worker = stateHelper.getWorker();
+//		project = stateHelper.getProject();
+//		assertTrue(project.workerHours(worker) == hours);
+//	}
 }
