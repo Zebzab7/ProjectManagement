@@ -11,9 +11,11 @@ public class Project {
 	
 	private ArrayList<Activity> tasks = new ArrayList<Activity>();
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
+	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
 	private TimeManager timeManager;
 	
 	private int workedHours;
+	private int initialHours = 0;
 	
 	private Worker projectLeader;
 	
@@ -40,6 +42,14 @@ public class Project {
 	public ArrayList<Worker> getWorkerList() {
 		return workers;
 	}
+	public ArrayList<Integer> getAccumulatedHoursList() {
+		return accumulatedHours;
+	}
+	public int getWorkersAccumulatedHours(Worker worker) {
+		return accumulatedHours.get(workers.indexOf(worker));
+		
+	}
+	
 	public String getId() {
 		return ID;
 	}
@@ -79,7 +89,7 @@ public class Project {
 		return null;
 	}
 	
-	public boolean containsWorker (Worker worker) throws OperationNotAllowedException {
+	public boolean containsWorker(Worker worker) {
 		for (Worker w : workers) {
 			if (w.equals(worker)) {
 				return true;
@@ -90,9 +100,11 @@ public class Project {
 	
 	public void addWorker(Worker worker) {
 		workers.add(worker);
+		accumulatedHours.add(initialHours);
 	}
 	
 	public void removeWorker(Worker worker) {
+		accumulatedHours.remove(workers.indexOf(worker));
 		workers.remove(worker);
 	}
 	
@@ -116,6 +128,7 @@ public class Project {
 	public boolean addHours(int hours) throws OperationNotAllowedException {
 		if ( containsWorker(state.currentUser()) ) {
 			workedHours += hours;
+			accumulatedHours.set(workers.indexOf(state.currentUser()), + hours);
 			if ( workedHours < 0 ) workedHours = 0;
 			return true;
 		}

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 public class ManagementApp {
 	private ArrayList<Project> projects = new ArrayList<Project>();
 	private ArrayList<Worker> users = new ArrayList<Worker>();
+	private ArrayList<String> workerHours = new ArrayList<String>();
 	private State state = new State();
 	
 	public State getState() {
@@ -129,7 +130,21 @@ public class ManagementApp {
 		}
 		return false;
 	}
+	
 	public String generateProjectId() {
 		return "" + projects.size() +1;
 	}
+	
+	public ArrayList<String> workerHoursCollected(Worker worker) {
+		workerHours.clear();
+		for(Project p : projects) {
+			if(p.containsWorker(worker)) {
+				workerHours.add("Project:" + p.getName() + ", hours accumulated:"
+										    + p.getWorkersAccumulatedHours(worker));
+			}
+			
+		}
+		return workerHours;
+	}
+	
 }

@@ -8,6 +8,7 @@ public class Worker {
 	private String username;
 	private Project leadingProject;
 	private String password;
+	private int registerHours;
 	
 	public Worker(String username, String password) {
 		this.username = username;
@@ -46,4 +47,5 @@ public class Worker {
 		}
 		return false;
 	}
+	
 }
