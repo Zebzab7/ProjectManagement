@@ -53,7 +53,7 @@ public class Project {
 		this.ID = ID;
 		this.projectLeader = projectLeader;
 		this.timeManager = new TimeManager(); 
-		projectLeader.project = this;
+		projectLeader.setLeadingProject(this);
 		this.state = state;
 		workedHours = 0;
 	}
@@ -105,9 +105,14 @@ public class Project {
 	public boolean addHours(int hours) throws OperationNotAllowedException {
 		if ( containsWorker(state.currentUser()) ) {
 			workedHours += hours;
+			if ( workedHours < 0 ) workedHours = 0;
 			return true;
 		}
 		return false;
+	}
+	
+	public int workerHours(Worker worker) {
+		return 0;
 	}
 	
 	public int workedHours() {

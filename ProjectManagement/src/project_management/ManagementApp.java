@@ -30,7 +30,6 @@ public class ManagementApp {
 		}
 		return false;
 	}
-	
 	public boolean Logout() {
 		state.setUser(null);
 		if (state.currentUser() == null) {

@@ -10,6 +10,10 @@ public class ProjectHelper {
 		this.user = user;
 	}
 	
+	public void setProject(Project project) {
+		this.project = project;
+	}
+	
 	public Project getProject() {
 		if (project == null) {
 			project = exampleProject();
@@ -18,7 +22,7 @@ public class ProjectHelper {
 	}
 	
 	private Project exampleProject() {
-		project = new Project("Programming 101", "",user);
+		project = new Project("Programming 101", "", user);
 		return project;
 	}
 }

@@ -42,6 +42,7 @@ public class ProjectSteps {
 		try {
 			managementApp.createProject(name);
 			project = managementApp.findProject(name);
+			stateHelper.setProject(project);
 	    	assertTrue(managementApp.containsProject(name));
 	    } catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
