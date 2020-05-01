@@ -1,6 +1,6 @@
 package project_management;
 
-public class State {
+public class User {
 	private Worker cUser;
 	private Project cProject;
 	private Task cTask;

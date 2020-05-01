@@ -1,8 +1,8 @@
-Feature: Activity
+Feature: Task
 	Description: Creation of task
 	Actors: Project leader
 	
-Scenario: Create activity successfully
+Scenario: Create task successfully
 	Given that the worker is logged in
 	And the worker is working on a project
  	And the worker is the project leader
@@ -10,7 +10,7 @@ Scenario: Create activity successfully
  	When worker creates new task  with name "Loops" and ET "10" hours
  	Then the task is contained in the project
 
-Scenario: Activity name exist
+Scenario: Task name exist
 	Given that the worker is logged in
 	And the worker is working on a project
  	And the worker is the project leader

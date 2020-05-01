@@ -1,11 +1,12 @@
 package project_management;
 
 public class Time {
-	private Activity task;
+	private Task task;
 	private Worker worker;
 	float time;
 	
-	public Time (Activity task, Worker worker, float time) {
+	
+	public Time (Task task, Worker worker, float time) {
 		this.task = task;
 		this.worker = worker;
 		this.time = time;
@@ -13,7 +14,7 @@ public class Time {
 	public void setTime(float time) {
 		this.time = time;
 	}
-	public Activity getTask() {
+	public Task getTask() {
 		return task;
 	}
 	public Worker getWorker() {

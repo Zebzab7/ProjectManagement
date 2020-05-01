@@ -8,11 +8,9 @@ public class Project {
 	
 	private State state;
 	
-	private ArrayList<Activity> tasks = new ArrayList<Activity>();
+	private ArrayList<Task> tasks = new ArrayList<Task>();
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
 	private TimeManager timeManager;
-	
-	private int workedHours;
 	
 	private Worker projectLeader;
 	
@@ -29,7 +27,7 @@ public class Project {
 	public Worker getProjectLeader() {
 		return projectLeader;
 	}
-	public ArrayList<Activity> getTaskList() {
+	public ArrayList<Task> getTaskList() {
 		return tasks;
 	}
 	public ArrayList<Worker> getWorkerList() {
@@ -45,7 +43,6 @@ public class Project {
 		this.ID = ID;
 		this.timeManager = new TimeManager(); 
 		this.state = state;
-		workedHours = 0;
 	}
 	
 	public Project (String name, String ID, Worker projectLeader, State state) {
@@ -55,7 +52,6 @@ public class Project {
 		this.timeManager = new TimeManager(); 
 		projectLeader.project = this;
 		this.state = state;
-		workedHours = 0;
 	}
 	
 	// Methods
@@ -67,51 +63,20 @@ public class Project {
 		}
 		return null;
 	}
-	
-	public boolean containsWorker (Worker worker) throws OperationNotAllowedException {
-		for (Worker w : workers) {
-			if (w.equals(worker)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public void addWorker(Worker worker) {
-		workers.add(worker);
-	}
-	
-	public void removeWorker(Worker worker) {
-		workers.remove(worker);
-	}
-	
 	public boolean containsTask(String taskName) throws OperationNotAllowedException {
-		for (Activity task : tasks) {
+		for (Task task : tasks) {
 			if (task.name.equals(taskName)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
 	public void createTask(String name, String Estimate) throws OperationNotAllowedException {
 		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
 			double ET = Integer.parseInt(Estimate);
-			tasks.add(new Activity (name, ET, this));
-	}
-	
-	public boolean addHours(int hours) throws OperationNotAllowedException {
-		if ( containsWorker(state.currentUser()) ) {
-			workedHours += hours;
-			return true;
-		}
-		return false;
-	}
-	
-	public int workedHours() {
-		return workedHours;
+			tasks.add(new Task (name, ET, this));
 	}
 	
 //	public boolean setProjectleader(String newLeader) {

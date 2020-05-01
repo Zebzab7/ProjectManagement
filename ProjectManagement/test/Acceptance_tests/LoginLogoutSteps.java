@@ -74,12 +74,6 @@ public class LoginLogoutSteps {
 		}
 	    assertTrue(managementApp.Login(worker.getUsername(), worker.getPassword()));
 	}
-	
-	@Given("that worker with the name {string} and password {string} is logged in")
-	public void thatWorkerWithTheNameAndPasswordIsLoggedIn(String name, String password) throws Exception {
-		stateHelper.setWorker(new Worker(name, password));
-		managementApp.CreateUser(name, password);
-		assertTrue(managementApp.Login(name, password));
-	}
+
 
 }
