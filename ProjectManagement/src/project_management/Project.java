@@ -1,6 +1,7 @@
 package project_management;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 public class Project {
 	private String ID;
@@ -15,6 +16,10 @@ public class Project {
 	private int workedHours;
 	
 	private Worker projectLeader;
+	
+	private GregorianCalendar startTime;
+	private GregorianCalendar endTime;
+	private GregorianCalendar currentTime;
 	
 	// Set gets
 	public String getName() {
@@ -37,6 +42,12 @@ public class Project {
 	}
 	public String getId() {
 		return ID;
+	}
+	public GregorianCalendar getStartTime() {
+		return startTime;
+	}
+	public GregorianCalendar getEndTime() {
+		return endTime;
 	}
 	
 	//Constructor
@@ -101,7 +112,7 @@ public class Project {
 			double ET = Integer.parseInt(Estimate);
 			tasks.add(new Activity (name, ET, this));
 	}
-	
+	//Time based methods
 	public boolean addHours(int hours) throws OperationNotAllowedException {
 		if ( containsWorker(state.currentUser()) ) {
 			workedHours += hours;
@@ -112,6 +123,66 @@ public class Project {
 	
 	public int workedHours() {
 		return workedHours;
+	}
+	
+	public void setStartTime(int year, int month, int day) throws OperationNotAllowedException {
+		
+		this.startTime = new GregorianCalendar();
+		this.startTime.set(GregorianCalendar.YEAR, year);
+		this.startTime.set(GregorianCalendar.MONTH, month);
+		this.startTime.set(GregorianCalendar.DAY_OF_MONTH, day);
+		
+		if(endTime != null && startTime.after(endTime)) {
+			startTime = null;
+			throw new OperationNotAllowedException("Deadline is invalid");
+		}
+		
+	}
+	public void setEndTime(int year, int month, int day) throws OperationNotAllowedException {
+		this.endTime = new GregorianCalendar();
+		this.endTime.set(GregorianCalendar.YEAR, year);
+		this.endTime.set(GregorianCalendar.MONTH, month);
+		this.endTime.set(GregorianCalendar.DAY_OF_MONTH, day);
+		
+		if(startTime != null && startTime.after(endTime)) {
+			endTime = null;
+			throw new OperationNotAllowedException("Deadline is invalid");
+		}
+		
+	}
+	public boolean containsTimeSpecifications() {
+		if(this.endTime != null && this.startTime != null) {
+			System.out.println(this.endTime.getTime());
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean startTimeSet() {
+		if(this.startTime != null) {
+			return true;
+		}
+		return false;
+	}
+	public boolean endTimeSet() {
+		if(this.endTime != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean deadlineOverdue() {
+		
+		if(this.startTime != null && this.endTime != null) {
+			this.currentTime = new GregorianCalendar();
+			if(endTime.after(currentTime)) {
+				return true;
+			}
+			return false;
+		}
+		else {
+			throw new IllegalArgumentException("Deadline must be instantiated");
+		}
 	}
 	
 //	public boolean setProjectleader(String newLeader) {

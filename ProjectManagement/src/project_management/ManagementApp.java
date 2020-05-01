@@ -9,7 +9,7 @@ public class ManagementApp {
 	private ArrayList<Worker> users = new ArrayList<Worker>();
 	private State state = new State();
 	
-	public State getUser() {
+	public State getState() {
 		return state;
 	}
 	
@@ -66,6 +66,7 @@ public class ManagementApp {
 		}
 		return false;
 	}
+	
 	
 	public boolean CreateUser(String username, String password) throws Exception {
 		if (!containsUser(username)) {

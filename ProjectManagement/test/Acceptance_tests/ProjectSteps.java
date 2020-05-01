@@ -42,6 +42,7 @@ public class ProjectSteps {
 		try {
 			managementApp.createProject(name);
 			project = managementApp.findProject(name);
+			this.projectName = name;
 	    	assertTrue(managementApp.containsProject(name));
 	    } catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
@@ -50,26 +51,40 @@ public class ProjectSteps {
 	
 	@Given("the worker is working on the project")
 	public void theWorkerIsWorkingOnTheProject() throws OperationNotAllowedException, Exception {
-		worker = managementApp.getUser().currentUser();
+		worker = managementApp.getState().currentUser();
 		project.addWorker(worker);
 		assertTrue(project.containsWorker(worker));
 	}
 	
 	@Given("the worker is not working on the project")
 	public void theWorkerIsNotWorkingOnTheProject() throws OperationNotAllowedException {
-		worker = managementApp.getUser().currentUser();
+		worker = managementApp.getState().currentUser();
 	    assertFalse(project.containsWorker(worker));
 	}
 	
 	@Given("the project has no work hours")
 	public void theProjectHasNoWorkHours() throws OperationNotAllowedException {
-		Worker cWorker = managementApp.getUser().currentUser();
+		Worker cWorker = managementApp.getState().currentUser();
 		Worker temp = new Worker("Temp", "1234");
-		managementApp.getUser().setUser(temp);
+		managementApp.getState().setUser(temp);
 		int hours = project.workedHours();
 		project.addHours((hours - hours));
-		managementApp.getUser().setUser(cWorker);
+		managementApp.getState().setUser(cWorker);
 		assertTrue(project.workedHours() == 0);
+	}
+	
+	@Given("the worker {string} is the projectleader")
+	public void workerEqualsProjectleader(String name) throws Exception {
+		try {
+			worker = stateHelper.getWorker();
+			if(worker.getUsername().equals(name) && managementApp.containsProject(projectName)) {
+				project.setProjectLeader(worker);
+				assertEquals(project.getProjectLeader(), worker);
+			}
+		} catch(Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+		
 	}
 	
 	@When("the worker adds {int} work hours succesfully")
@@ -102,6 +117,30 @@ public class ProjectSteps {
 	    }
 	}
 	
+	@When("the worker sets the start date of the project to the {int}-{int}-{int}")
+	public void workerSpecifiesStartingTime(int year, int month, int day) throws Exception {
+		try {
+			if(managementApp.containsProject(projectName) && managementApp.LoggedIn()
+			   && project.getProjectLeader() == worker) {
+				project.setStartTime(year, month, day);
+			}
+		} catch(Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@When("the worker sets the end date of the project to the {int}-{int}-{int}")
+	public void workerSpecifiesEndTime(int year, int month, int day) throws Exception {
+		try {
+			if(managementApp.containsProject(projectName) && managementApp.LoggedIn()
+			   && project.getProjectLeader() == worker) {
+				project.setEndTime(year, month, day);
+			}
+		} catch(Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
 	@Then("the project has a total of {int} work hours")
 	public void theProjectHasATotalOfWorkHours(int hours) {
 		assertTrue(project.workedHours() == hours);
@@ -111,4 +150,21 @@ public class ProjectSteps {
 	public void theProjectIsContainedInTheApp() throws OperationNotAllowedException {
 	    assertTrue(managementApp.containsProject(projectName));
 	}
+	
+	@Then("the start time is set for the project")
+	public void startTimeIsSet() throws Exception {
+		assertTrue(project.startTimeSet());
+	}
+	
+	@Then("the end time is set for the project")
+	public void endTimeIsSet() throws Exception {
+		assertTrue(project.endTimeSet());
+	}
+	
+	@Then("the time settings for the project are set")
+	public void theTimeIsSet() throws Exception {
+		assertTrue(project.containsTimeSpecifications());
+	}
+	
+	
 }

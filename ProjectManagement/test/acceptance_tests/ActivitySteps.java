@@ -27,7 +27,7 @@ public class ActivitySteps {
 	
 	public ActivitySteps(ManagementApp managementApp, StateHelper userHelper, ErrorMessageHolder errorMessage) {
 		this.managementApp = managementApp;
-		this.userHelper = new StateHelper(managementApp.getUser());
+		this.userHelper = new StateHelper(managementApp.getState());
 		this.errorMessage = errorMessage;
 	}
 	

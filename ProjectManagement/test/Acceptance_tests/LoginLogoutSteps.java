@@ -56,7 +56,7 @@ public class LoginLogoutSteps {
 	}
 	@Then("the worker is logged in")
 	public void theWorkerIsLoggedIn() throws Exception {
-		worker = managementApp.getUser().currentUser();
+		worker = managementApp.getState().currentUser();
 		assertTrue(worker.getUsername().equals(name));
 		assertTrue(worker.getPassword().equals(password));
 	}
