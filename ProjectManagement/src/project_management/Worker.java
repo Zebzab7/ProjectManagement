@@ -28,18 +28,6 @@ public class Worker {
 	public boolean newActivity(String name, int ET) {
 		return leadingProject.getActivityList().add(new Activity(name, ET, leadingProject));
 	}
-	public boolean setTime(Activity activity, float time) {
-		for (Time e : leadingProject.getTimeManager().getTimers()) {
-			if (e.getActivity() == activity && e.getWorker() == this) {
-				e.setTime(time);
-				return true;
-			}
-		}
-		if(leadingProject.getTimeManager().getTimers().add(new Time(activity, this, time))){
-			return true;
-		}
-		return false;
-	}
 	public boolean changeLeader(Worker newLeader) {
 		if(leadingProject.getProjectLeader() == this && newLeader != this) {
 			leadingProject.setProjectLeader(newLeader);
@@ -47,5 +35,4 @@ public class Worker {
 		}
 		return false;
 	}
-	
 }

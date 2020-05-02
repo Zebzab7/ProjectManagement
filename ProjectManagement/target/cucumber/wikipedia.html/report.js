@@ -40,31 +40,31 @@ formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "the task with name \"Loops\" is not in the project",
+  "name": "the activity with name \"Loops\" is not in the project",
   "keyword": "And "
 });
 formatter.match({
-  "location": "acceptance_tests.ActivitySteps.theTaskWithNameIsNotInTheProject(java.lang.String)"
+  "location": "acceptance_tests.ActivitySteps.theActivityWithNameIsNotInTheProject(java.lang.String)"
 });
 formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "worker creates new task  with name \"Loops\" and ET \"10\" hours",
+  "name": "worker creates new activity with name \"Loops\" and ET 10 hours",
   "keyword": "When "
 });
 formatter.match({
-  "location": "acceptance_tests.ActivitySteps.workerCreatesNewTaskWithNameAndETHours(java.lang.String,java.lang.String)"
+  "location": "acceptance_tests.ActivitySteps.workerCreatesNewActivityWithNameAndETHours(java.lang.String,int)"
 });
 formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "the task is contained in the project",
+  "name": "the activity is contained in the project",
   "keyword": "Then "
 });
 formatter.match({
-  "location": "acceptance_tests.ActivitySteps.theTaskIsContainedInTheProject()"
+  "location": "acceptance_tests.ActivitySteps.theActivityIsContainedInTheProject()"
 });
 formatter.result({
   "status": "passed"
@@ -105,21 +105,21 @@ formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "the task with name \"Loops\" is in the project",
+  "name": "the activity with name \"Loops\" is in the project",
   "keyword": "And "
 });
 formatter.match({
-  "location": "acceptance_tests.ActivitySteps.theTaskWithNameIsInTheProject(java.lang.String)"
+  "location": "acceptance_tests.ActivitySteps.theActivityWithNameIsInTheProject(java.lang.String)"
 });
 formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "worker creates new task  with name \"Loops\" and ET \"10\" hours",
+  "name": "worker creates new activity with name \"Loops\" and ET 10 hours",
   "keyword": "When "
 });
 formatter.match({
-  "location": "acceptance_tests.ActivitySteps.workerCreatesNewTaskWithNameAndETHours(java.lang.String,java.lang.String)"
+  "location": "acceptance_tests.ActivitySteps.workerCreatesNewActivityWithNameAndETHours(java.lang.String,int)"
 });
 formatter.result({
   "status": "passed"
@@ -129,7 +129,7 @@ formatter.step({
   "keyword": "Then "
 });
 formatter.match({
-  "location": "acceptance_tests.WorkerSteps.errorMessageIsProduced(java.lang.String)"
+  "location": "acceptance_tests.WorkerSteps.TheErrorMessageIsGiven(java.lang.String)"
 });
 formatter.result({
   "status": "passed"
@@ -150,21 +150,21 @@ formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "the task with name \"Loops\" is not in the project",
+  "name": "the activity with name \"Loops\" is not in the project",
   "keyword": "And "
 });
 formatter.match({
-  "location": "acceptance_tests.ActivitySteps.theTaskWithNameIsNotInTheProject(java.lang.String)"
+  "location": "acceptance_tests.ActivitySteps.theActivityWithNameIsNotInTheProject(java.lang.String)"
 });
 formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "worker creates new task  with name \"Loops\" and ET \"10\" hours",
+  "name": "worker creates new activity with name \"Loops\" and ET 10 hours",
   "keyword": "When "
 });
 formatter.match({
-  "location": "acceptance_tests.ActivitySteps.workerCreatesNewTaskWithNameAndETHours(java.lang.String,java.lang.String)"
+  "location": "acceptance_tests.ActivitySteps.workerCreatesNewActivityWithNameAndETHours(java.lang.String,int)"
 });
 formatter.result({
   "status": "passed"
@@ -174,7 +174,7 @@ formatter.step({
   "keyword": "Then "
 });
 formatter.match({
-  "location": "acceptance_tests.WorkerSteps.errorMessageIsProduced(java.lang.String)"
+  "location": "acceptance_tests.WorkerSteps.TheErrorMessageIsGiven(java.lang.String)"
 });
 formatter.result({
   "status": "passed"
@@ -235,7 +235,7 @@ formatter.step({
   "keyword": "And "
 });
 formatter.match({
-  "location": "acceptance_tests.WorkerSteps.errorMessageIsProduced(java.lang.String)"
+  "location": "acceptance_tests.WorkerSteps.TheErrorMessageIsGiven(java.lang.String)"
 });
 formatter.result({
   "status": "passed"
@@ -502,7 +502,7 @@ formatter.result({
   "status": "passed"
 });
 formatter.scenario({
-  "name": "Add project with leader that already exists",
+  "name": "Add project that already exists with leader",
   "description": "",
   "keyword": "Scenario"
 });
@@ -537,11 +537,11 @@ formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "the error message \"Project already exist or user does not exist\" is given",
+  "name": "the error message \"Project already exist\" is given",
   "keyword": "Then "
 });
 formatter.match({
-  "location": "acceptance_tests.WorkerSteps.errorMessageIsProduced(java.lang.String)"
+  "location": "acceptance_tests.WorkerSteps.TheErrorMessageIsGiven(java.lang.String)"
 });
 formatter.result({
   "status": "passed"
@@ -586,7 +586,7 @@ formatter.step({
   "keyword": "Then "
 });
 formatter.match({
-  "location": "acceptance_tests.WorkerSteps.errorMessageIsProduced(java.lang.String)"
+  "location": "acceptance_tests.WorkerSteps.TheErrorMessageIsGiven(java.lang.String)"
 });
 formatter.result({
   "status": "passed"
@@ -631,7 +631,7 @@ formatter.step({
   "keyword": "Then "
 });
 formatter.match({
-  "location": "acceptance_tests.WorkerSteps.errorMessageIsProduced(java.lang.String)"
+  "location": "acceptance_tests.WorkerSteps.TheErrorMessageIsGiven(java.lang.String)"
 });
 formatter.result({
   "status": "passed"
@@ -668,11 +668,11 @@ formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "creation of worker named \"PEPE\" with password \"1234\"",
+  "name": "the worker named \"PEPE\" with password \"1234\" is created",
   "keyword": "When "
 });
 formatter.match({
-  "location": "acceptance_tests.WorkerSteps.creationOfWorkerNamedWithPassword(java.lang.String,java.lang.String)"
+  "location": "acceptance_tests.WorkerSteps.theWorkerNamedWithPasswordIsCreated(java.lang.String,java.lang.String)"
 });
 formatter.result({
   "status": "passed"
@@ -682,7 +682,7 @@ formatter.step({
   "keyword": "Then "
 });
 formatter.match({
-  "location": "acceptance_tests.WorkerSteps.errorMessageIsProduced(java.lang.String)"
+  "location": "acceptance_tests.WorkerSteps.TheErrorMessageIsGiven(java.lang.String)"
 });
 formatter.result({
   "status": "passed"
@@ -713,11 +713,11 @@ formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "creation of worker named \"PEPE\" with password \"1234\"",
+  "name": "the worker named \"PEPE\" with password \"1234\" is created",
   "keyword": "When "
 });
 formatter.match({
-  "location": "acceptance_tests.WorkerSteps.creationOfWorkerNamedWithPassword(java.lang.String,java.lang.String)"
+  "location": "acceptance_tests.WorkerSteps.theWorkerNamedWithPasswordIsCreated(java.lang.String,java.lang.String)"
 });
 formatter.result({
   "status": "passed"
@@ -739,16 +739,366 @@ formatter.feature({
   "keyword": "Feature"
 });
 formatter.scenario({
+  "name": "Set start date for project",
+  "description": "",
+  "keyword": "Scenario"
+});
+formatter.step({
+  "name": "that the worker is logged in",
+  "keyword": "Given "
+});
+formatter.match({
+  "location": "acceptance_tests.LoginLogoutSteps.thatTheWorkerIsLoggedIn()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the project with name \"Programming 101\" does exist",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theProjectWithNameDoesExist(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker is the projectleader",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerIsTheProjectleader()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker sets the start date of the project to the 2020-6-22",
+  "keyword": "When "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerSetsTheStartDateOfTheProjectToThe(int,int,int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the start time is set for the project",
+  "keyword": "Then "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.startTimeIsSet()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.scenario({
+  "name": "Set deadline successfully",
+  "description": "",
+  "keyword": "Scenario"
+});
+formatter.step({
+  "name": "that the worker is logged in",
+  "keyword": "Given "
+});
+formatter.match({
+  "location": "acceptance_tests.LoginLogoutSteps.thatTheWorkerIsLoggedIn()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the project with name \"Programming 101\" does exist",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theProjectWithNameDoesExist(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker is the projectleader",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerIsTheProjectleader()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker sets the start date of the project to the 2020-5-12",
+  "keyword": "When "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerSetsTheStartDateOfTheProjectToThe(int,int,int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker sets the end date of the project to the 2020-6-22",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerSetsTheEndDateOfTheProjectTo(int,int,int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the time settings for the project are set",
+  "keyword": "Then "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theTimeIsSet()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.scenario({
+  "name": "Set faulty deadline",
+  "description": "",
+  "keyword": "Scenario"
+});
+formatter.step({
+  "name": "that the worker is logged in",
+  "keyword": "Given "
+});
+formatter.match({
+  "location": "acceptance_tests.LoginLogoutSteps.thatTheWorkerIsLoggedIn()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the project with name \"Programming 101\" does exist",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theProjectWithNameDoesExist(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker is the projectleader",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerIsTheProjectleader()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker sets the start date of the project to the 2020-6-22",
+  "keyword": "When "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerSetsTheStartDateOfTheProjectToThe(int,int,int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker sets the end date of the project to the 2020-5-12",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerSetsTheEndDateOfTheProjectTo(int,int,int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the error message \"Deadline is invalid\" is given",
+  "keyword": "Then "
+});
+formatter.match({
+  "location": "acceptance_tests.WorkerSteps.TheErrorMessageIsGiven(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.scenario({
+  "name": "Set deadline when logged out",
+  "description": "",
+  "keyword": "Scenario"
+});
+formatter.step({
+  "name": "that no one is logged in",
+  "keyword": "Given "
+});
+formatter.match({
+  "location": "acceptance_tests.LoginLogoutSteps.thatNoOneIsLoggedIn()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the project with name \"Programming 101\" does exist",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theProjectWithNameDoesExist(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker is the projectleader",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerIsTheProjectleader()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker sets the end date of the project to the 2020-5-12",
+  "keyword": "When "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerSetsTheEndDateOfTheProjectTo(int,int,int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the error message \"User login required\" is given",
+  "keyword": "Then "
+});
+formatter.match({
+  "location": "acceptance_tests.WorkerSteps.TheErrorMessageIsGiven(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.scenario({
+  "name": "Non-project leader sets deadline",
+  "description": "",
+  "keyword": "Scenario"
+});
+formatter.step({
+  "name": "that the worker is logged in",
+  "keyword": "Given "
+});
+formatter.match({
+  "location": "acceptance_tests.LoginLogoutSteps.thatTheWorkerIsLoggedIn()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the project with name \"Programming 101\" does exist",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theProjectWithNameDoesExist(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker is working on the project",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerIsWorkingOnTheProject()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker sets the end date of the project to the 2020-5-12",
+  "keyword": "When "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerSetsTheEndDateOfTheProjectTo(int,int,int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the error message \"User is not the project leader\" is given",
+  "keyword": "Then "
+});
+formatter.match({
+  "location": "acceptance_tests.WorkerSteps.TheErrorMessageIsGiven(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.scenario({
+  "name": "worker sets deadline when he is not assigned to project",
+  "description": "",
+  "keyword": "Scenario"
+});
+formatter.step({
+  "name": "that the worker is logged in",
+  "keyword": "Given "
+});
+formatter.match({
+  "location": "acceptance_tests.LoginLogoutSteps.thatTheWorkerIsLoggedIn()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the project with name \"Programming 101\" does exist",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theProjectWithNameDoesExist(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker is not working on the project",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerIsNotWorkingOnTheProject()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker sets the end date of the project to the 2020-5-12",
+  "keyword": "When "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerSetsTheEndDateOfTheProjectTo(int,int,int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the error message \"User is not assigned to the project\" is given",
+  "keyword": "Then "
+});
+formatter.match({
+  "location": "acceptance_tests.WorkerSteps.TheErrorMessageIsGiven(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.scenario({
   "name": "Worker adds hours while working on project",
   "description": "",
   "keyword": "Scenario"
 });
 formatter.step({
-  "name": "that worker with the name \"PEPE\" and password \"1234\" is logged in",
+  "name": "that the worker is logged in",
   "keyword": "Given "
 });
 formatter.match({
-  "location": "acceptance_tests.LoginLogoutSteps.thatWorkerWithTheNameAndPasswordIsLoggedIn(java.lang.String,java.lang.String)"
+  "location": "acceptance_tests.LoginLogoutSteps.thatTheWorkerIsLoggedIn()"
 });
 formatter.result({
   "status": "passed"
@@ -889,6 +1239,36 @@ formatter.step({
 });
 formatter.match({
   "location": "acceptance_tests.ProjectSteps.theProjectWithNameDoesExist(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the project has no work hours",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theProjectHasNoWorkHours()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker adds 10 work hours unsuccesfully",
+  "keyword": "When "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerAddsWorkHoursUnSuccesfully(int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the error message \"User login required\" is given",
+  "keyword": "Then "
+});
+formatter.match({
+  "location": "acceptance_tests.WorkerSteps.TheErrorMessageIsGiven(java.lang.String)"
 });
 formatter.result({
   "status": "passed"
