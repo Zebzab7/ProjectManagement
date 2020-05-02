@@ -1,6 +1,5 @@
 package application;
 	
-import controller.LoginRegisterController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,6 +19,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		managementApp = new ManagementApp();
 		managementApp.CreateUser("user", "1234");
+		managementApp.CreateUser("jacob", "1234");
+		managementApp.CreateUser("bob", "1234");
 		
 		primaryStage.setTitle("Login");
 		try {
