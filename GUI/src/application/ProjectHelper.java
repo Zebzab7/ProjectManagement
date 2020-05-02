@@ -1,13 +1,13 @@
 package application;
 
 import softwareHuset.Project;
-import softwareHuset.User;
+import softwareHuset.State;
 public class ProjectHelper {
-	private User user;
+	private State state;
 	private Project project;
 	
-	public ProjectHelper(User user) {
-		this.user = user;
+	public ProjectHelper(State state) {
+		this.state = state;
 	}
 	
 	public Project getProject() {
@@ -18,7 +18,7 @@ public class ProjectHelper {
 	}
 	
 	private Project exampleProject() {
-		project = new Project("Programming 101", "",user);
+		project = new Project("Programming 101", "",state);
 		return project;
 	}
 }

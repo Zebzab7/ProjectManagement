@@ -3,48 +3,49 @@ package softwareHuset;
 import java.util.ArrayList;
 
 public class Worker {
-	private String username;
+	private ArrayList<Activity> activities = new ArrayList<Activity>();
 	
-	Project project;
-	String password;
-	private ArrayList<Task> tasks = new ArrayList<Task>();
+	private String username;
+	private Project leadingProject;
+	private String password;
+	private int registerHours;
 	
 	public Worker(String username, String password) {
 		this.username = username;
 		this.password = password;
 	}
-	// set get
+	
+	public void setLeadingProject(Project project) {
+		leadingProject = project;
+	}
+
 	public String getUsername() {
 		return username;
 	}
 	public String getPassword() {
 		return password;
 	}
-	
-	// new task
-	public boolean newTask(String name, int ET) {
-		return project.getTaskList().add(new Task(name, ET, project));
+	public boolean newActivity(String name, int ET) {
+		return leadingProject.getActivityList().add(new Activity(name, ET, leadingProject));
 	}
-	//set time
-	public boolean setTime(Task task, float time) {
-		for (Time e : project.getTimeManager().getTimers()) {
-			if (e.getTask() == task && e.getWorker() == this) {
+	public boolean setTime(Activity activity, float time) {
+		for (Time e : leadingProject.getTimeManager().getTimers()) {
+			if (e.getActivity() == activity && e.getWorker() == this) {
 				e.setTime(time);
 				return true;
 			}
 		}
-		if(project.getTimeManager().getTimers().add(new Time(task, this, time))){
+		if(leadingProject.getTimeManager().getTimers().add(new Time(activity, this, time))){
+			return true;
+		}
+		return false;
+	}
+	public boolean changeLeader(Worker newLeader) {
+		if(leadingProject.getProjectLeader() == this && newLeader != this) {
+			leadingProject.setProjectLeader(newLeader);
 			return true;
 		}
 		return false;
 	}
 	
-	//change leader
-	public boolean changeLeader(Worker newLeader) {
-		if(project.getProjectLeader() == this && newLeader != this) {
-			project.setProjectLeader(newLeader);
-			return true;
-		}
-		return false;
-	}
 }

@@ -1,20 +1,23 @@
 package softwareHuset;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 public class Project {
-	
-	private String ID;
-	private String name;
-	
-	private User user;
-	private ArrayList<Task> tasks = new ArrayList<Task>();
+	private ArrayList<Activity> activities = new ArrayList<Activity>();
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
+	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
+
 	private TimeManager timeManager;
+	private String name, ID;
+	private State state;
+	
+	private int workedHours;
+	private int initialHours = 0;
 	
 	private Worker projectLeader;
+	private GregorianCalendar startTime, endTime, currentTime;
 	
-	//set gets
 	public String getName() {
 		return name;
 	}
@@ -27,33 +30,46 @@ public class Project {
 	public Worker getProjectLeader() {
 		return projectLeader;
 	}
-	public ArrayList<Task> getTaskList() {
-		return tasks;
+	public ArrayList<Activity> getActivityList() {
+		return activities;
 	}
 	public ArrayList<Worker> getWorkerList() {
 		return workers;
 	}
-	public String getId() {
-		return ID;
+	public ArrayList<Integer> getAccumulatedHoursList() {
+		return accumulatedHours;
 	}
-	
-	//Constructor
-	public Project (String name, String ID, User user) {
+	public int getWorkersAccumulatedHours(Worker worker) {
+		return accumulatedHours.get(workers.indexOf(worker));
+		
+	}
+	public int workedHours() {
+		return workedHours;
+	}
+	public GregorianCalendar getStartTime() {
+		return startTime;
+	}
+	public GregorianCalendar getEndTime() {
+		return endTime;
+	}
+
+	public Project(String name, String ID, State state) {
 		this.name = name;
 		this.ID = ID;
 		this.timeManager = new TimeManager(); 
-		this.user = user;
+		this.state = state;
+		workedHours = 0;
 	}
-	
-	public Project (String name, String ID, Worker projectLeader, User user) {
+	public Project (String name, String ID, Worker projectLeader, State state) {
 		this.name = name;
 		this.ID = ID;
 		this.projectLeader = projectLeader;
 		this.timeManager = new TimeManager(); 
-		projectLeader.project = this;
-		this.user = user;
+		projectLeader.setLeadingProject(this);
+		this.state = state;
+		workedHours = 0;
 	}
-	//methods
+	
 	public Worker findWorker (String name) throws OperationNotAllowedException {
 		for (Worker w : workers) {
 			if (w.getUsername() == name) {
@@ -62,24 +78,116 @@ public class Project {
 		}
 		return null;
 	}
-	public boolean containsTask(String taskName) throws OperationNotAllowedException {
-		for (Task task : tasks) {
-			if (task.name.equals(taskName)) {
+	public boolean containsWorker(Worker worker) {
+		for (Worker w : workers) {
+			if (w.equals(worker)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	public void createTask(String name, String Estimate) throws OperationNotAllowedException {
-		if (user.currentUser() == null) {
+	
+	public void addWorker(Worker worker) {
+		workers.add(worker);
+		accumulatedHours.add(initialHours);
+	}
+	
+	public void removeWorker(Worker worker) {
+		accumulatedHours.remove(workers.indexOf(worker));
+		workers.remove(worker);
+	}
+	
+	public boolean containsActivity(String activityName) throws OperationNotAllowedException {
+		for (Activity activity : activities ) {
+			if (activity.getName().equals(activityName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void createActivity(String name, String Estimate) throws OperationNotAllowedException {
+		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
 			double ET = Integer.parseInt(Estimate);
-			tasks.add(new Task (name, ET, this));
-		
+			activities.add(new Activity (name, ET, this));
+	}
+	//Time based methods
+	public boolean addHours(int hours) throws OperationNotAllowedException {
+		if ( state.currentUser() == null ) throw new OperationNotAllowedException("User login required");
+		if ( containsWorker(state.currentUser()) ) {
+			workedHours += hours;
+			accumulatedHours.set(workers.indexOf(state.currentUser()), + hours);
+			if ( workedHours < 0 ) workedHours = 0;
+			return true;
+		}
+		return false;
 	}
 	
+	public int workerHours(Worker worker) {
+		return 0;
+	}
 	
+	public void setStartTime(int year, int month, int day) throws OperationNotAllowedException {
+		
+		this.startTime = new GregorianCalendar();
+		this.startTime.set(GregorianCalendar.YEAR, year);
+		this.startTime.set(GregorianCalendar.MONTH, month);
+		this.startTime.set(GregorianCalendar.DAY_OF_MONTH, day);
+		
+		if(endTime != null && startTime.after(endTime)) {
+			startTime = null;
+			throw new OperationNotAllowedException("Deadline is invalid");
+		}
+		
+	}
+	public void setEndTime(int year, int month, int day) throws OperationNotAllowedException {
+		this.endTime = new GregorianCalendar();
+		this.endTime.set(GregorianCalendar.YEAR, year);
+		this.endTime.set(GregorianCalendar.MONTH, month);
+		this.endTime.set(GregorianCalendar.DAY_OF_MONTH, day);
+		
+		if(startTime != null && startTime.after(endTime)) {
+			endTime = null;
+			throw new OperationNotAllowedException("Deadline is invalid");
+		}
+		
+	}
+	public boolean containsTimeSpecifications() {
+		if(this.endTime != null && this.startTime != null) {
+			System.out.println(this.endTime.getTime());
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean startTimeSet() {
+		if(this.startTime != null) {
+			return true;
+		}
+		return false;
+	}
+	public boolean endTimeSet() {
+		if(this.endTime != null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean deadlineOverdue() {
+		
+		if(this.startTime != null && this.endTime != null) {
+			this.currentTime = new GregorianCalendar();
+			if(endTime.after(currentTime)) {
+				return true;
+			}
+			return false;
+		}
+		else {
+			throw new IllegalArgumentException("Deadline must be instantiated");
+		}
+	}
 	
 //	public boolean setProjectleader(String newLeader) {
 //		Worker leader = findWorker(newLeader);
