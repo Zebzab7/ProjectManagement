@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 public class ManagementApp {
 	private ArrayList<Project> projects = new ArrayList<Project>();
+	private ArrayList<Project> assignedProjects = new ArrayList<Project>();
 	private ArrayList<Worker> users = new ArrayList<Worker>();
 	private ArrayList<String> workerHours = new ArrayList<String>();
 	private State state = new State();
@@ -144,6 +145,9 @@ public class ManagementApp {
 	public String generateProjectId() {
 		return "" + projects.size() + 1;
 	}
+	/*
+	 * The following two methods return statistics of a given worker
+	 */
 	
 	public ArrayList<String> workerHoursCollected(Worker worker) {
 		workerHours.clear();
@@ -154,5 +158,15 @@ public class ManagementApp {
 			}
 		}
 		return workerHours;
+	}
+	public ArrayList<Project> currentAssignedProjects(Worker worker) throws Exception {
+		assignedProjects.clear();
+		for(Project p : projects) {
+			if(p.containsWorker(state.currentUser())) {
+				assignedProjects.add(p);
+			}
+		}
+		if(assignedProjects.isEmpty()) throw new Exception("Worker isn't assigned to a project");
+		return assignedProjects;
 	}
 }

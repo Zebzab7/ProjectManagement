@@ -119,6 +119,12 @@ public class ProjectSteps {
 	    }
 	}
 	
+	@When("the worker is added to the project")
+	public void the_worker_is_added_to_the_project() {
+	    project.addWorker(managementApp.getState().currentUser());
+	    assertTrue(project.containsWorker(managementApp.getState().currentUser()));
+	}
+	
 	@When("the worker sets the start date of the project to the {int}-{int}-{int}")
 	public void theWorkerSetsTheStartDateOfTheProjectToThe(int year, int month, int day) throws Exception {
 		try {
@@ -135,6 +141,21 @@ public class ProjectSteps {
 		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
+	}
+	@When("another worker {string} with password {string} adds {int} work hours successfully")
+	public void anotherWorkerAddsWorkHoursSuccessfully(String name, String password, Integer hours) {
+		managementApp.Logout();
+		Worker john = new Worker(name,password);
+		
+		try {
+		managementApp.CreateUser(name, password);
+		managementApp.Login(name, password);
+		project.addWorker(managementApp.getState().currentUser());
+		project.addHours(hours);
+			
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}	
 	}
 	
 	@Then("the project has a total of {int} work hours")
@@ -156,6 +177,33 @@ public class ProjectSteps {
 	@Then("the time settings for the project are set")
 	public void theTimeIsSet() throws Exception {
 		assertTrue(project.containsTimeSpecifications());
+	}
+	@Then("the workers AH-list will hold {int} hours for {string} and {int} hours for {string}")
+	public void AccumulatedHoursListCheck(Integer hours1, String projectName1, Integer hours2, String projectName2) {
+	    
+		try {
+			assertTrue(managementApp.workerHoursCollected(managementApp.getState().currentUser()).get(0).contains("" + hours1));
+			assertTrue(managementApp.workerHoursCollected(managementApp.getState().currentUser()).get(1).contains("" + hours2));
+			
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	@Then("the workers AssignedProjects list will hold {string} and {string}")
+	public void the_workers_AssignedProjects_list_will_hold_and(String projectName1, String projectName2) {
+	    try {
+			assertEquals(managementApp.currentAssignedProjects(managementApp.getState().currentUser()).get(0).getName(),
+																											projectName1);
+			assertEquals(managementApp.currentAssignedProjects(managementApp.getState().currentUser()).get(1).getName(),
+																											projectName2);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	@Then("the start and end week of the given month of the project are week {int} and week {int}")
+	public void weekRepresentation(int startWeek, int endWeek) {
+	    assertEquals(project.getStartWeek(),startWeek);
+	    assertEquals(project.getEndWeek(),endWeek);
 	}
 	
 	/*

@@ -47,6 +47,12 @@ public class Project {
 	public GregorianCalendar getEndTime() {
 		return endTime;
 	}
+	public int getStartWeek() {
+		return this.startTime.get(GregorianCalendar.WEEK_OF_MONTH);
+	}
+	public int getEndWeek() {
+		return this.endTime.get(GregorianCalendar.WEEK_OF_MONTH);
+	}
 	public int workerHours(Worker worker) {
 		return 0;
 	}
@@ -153,7 +159,8 @@ public class Project {
 		
 		if ( containsWorker(state.currentUser()) ) {
 			workedHours += hours;
-//			accumulatedHours.get(workers.indexOf(state.currentUser())) += hours;
+			int incValue = accumulatedHours.get(workers.indexOf(state.currentUser()));
+			accumulatedHours.set(workers.indexOf(state.currentUser()), incValue + hours);
 			if ( workedHours < 0 ) workedHours = 0;
 			return true;
 		}
