@@ -16,6 +16,8 @@ public class Project {
 	
 	private Worker projectLeader;
 	private GregorianCalendar startTime, endTime, currentTime;
+	private ProjectTimeManager projectTimeManager;
+	private FixedActivities fixedActivities;
 	
 	public String getName() {
 		return name;
@@ -32,7 +34,7 @@ public class Project {
 	public Worker getProjectLeader() {
 		return projectLeader;
 	}
-	public ArrayList<Integer> getAccumulatedHoursList() {
+	public ArrayList<Integer> getAHList() {
 		return accumulatedHours;
 	}
 	public int getWorkersAccumulatedHours(Worker worker) {
@@ -41,20 +43,11 @@ public class Project {
 	public int workedHours() {
 		return workedHours;
 	}
-	public GregorianCalendar getStartTime() {
-		return startTime;
-	}
-	public GregorianCalendar getEndTime() {
-		return endTime;
-	}
-	public int getStartWeek() {
-		return this.startTime.get(GregorianCalendar.WEEK_OF_MONTH);
-	}
-	public int getEndWeek() {
-		return this.endTime.get(GregorianCalendar.WEEK_OF_MONTH);
-	}
 	public int workerHours(Worker worker) {
 		return 0;
+	}
+	public ProjectTimeManager getPTM() {
+		return projectTimeManager;
 	}
 	
 	/*
@@ -64,6 +57,8 @@ public class Project {
 		this.name = name;
 		this.ID = ID;
 		this.state = state;
+		this.projectTimeManager = new ProjectTimeManager(this, this.state);
+		fixedActivities = new FixedActivities(this);
 		workedHours = 0;
 	}
 	public Project (String name, String ID, Worker projectLeader, State state) {
@@ -72,6 +67,7 @@ public class Project {
 		this.projectLeader = projectLeader;
 		projectLeader.setLeadingProject(this);
 		this.state = state;
+		this.projectTimeManager = new ProjectTimeManager(this, this.state);
 		workedHours = 0;
 	}
 	
@@ -111,7 +107,10 @@ public class Project {
 	/*
 	 * Adds the given worker as a worker on the project
 	 */
-	public void addWorker(Worker worker) {
+	public void addWorker(Worker worker) throws Exception {
+		if(absenceAnounced()) {
+			throw new Exception("Worker is absent");
+		}
 		workers.add(worker);
 		accumulatedHours.add(initialHours);
 	}
@@ -135,18 +134,26 @@ public class Project {
 		}
 		return false;
 	}
+	public Activity findActivity(String name) {
+		for (Activity a : activities) {
+			if (a.getName().equals(name)) {
+				return a;
+			}
+		}
+		return null;
+	}
 	
 	/*
 	 * Creates an activity for the project with the given name, and estimated time (ET)
 	 */
-	public void createActivity(String name, int Estimate) throws OperationNotAllowedException {
+	public void createActivity(String name) throws OperationNotAllowedException {
 		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
 		if ( containsActivity(name) ) throw new OperationNotAllowedException("The Task already exist in the project");
-		double ET = Estimate;
-		activities.add(new Activity(name, ET, this));
+		activities.add(new Activity(name, this, state));
 	}
+	
 	
 	/*
 	 * Adds the given integer parameter from the projects total work hours
@@ -157,7 +164,7 @@ public class Project {
 	public boolean addHours(int hours) throws OperationNotAllowedException {
 		if ( state.currentUser() == null ) throw new OperationNotAllowedException("User login required");
 		
-		if ( containsWorker(state.currentUser()) ) {
+		if ( containsWorker(state.currentUser()) && !absenceAnounced() ) {
 			workedHours += hours;
 			int incValue = accumulatedHours.get(workers.indexOf(state.currentUser()));
 			accumulatedHours.set(workers.indexOf(state.currentUser()), incValue + hours);
@@ -166,98 +173,11 @@ public class Project {
 		}
 		return false;
 	}
-	
-	/* 
-	 * Following 2 methods sets start and end time, respectively, of project to the given parameters
-	 *  Requirements to not cause an exception:
-	 *  	- User must be logged in
-	 *  	- User must be working on the project
-	 *  	- User must project leader
-	 *  	- Time must be valid 
-	 */ 
-	public void setStartTime(int year, int month, int day) throws OperationNotAllowedException {
-		this.startTime = new GregorianCalendar();
-		this.startTime.set(GregorianCalendar.YEAR, year);
-		this.startTime.set(GregorianCalendar.MONTH, month);
-		this.startTime.set(GregorianCalendar.DAY_OF_MONTH, day);
-		
-		if (state.currentUser() == null) throw new OperationNotAllowedException("User login required");
-		if ( !containsWorker(state.currentUser()) ) throw new OperationNotAllowedException("User is not assigned to the project");
-		if( !hasProjectLeader() || !state.currentUser().getUsername().equals(projectLeader.getUsername()) || 
-				!state.currentUser().getPassword().equals(projectLeader.getPassword()) ) {
-			throw new OperationNotAllowedException("User is not the project leader");
-		}
-		
-		if(endTime != null && startTime.after(endTime)) {
-			startTime = null;
-			throw new OperationNotAllowedException("Deadline is invalid");
-		}
-	}
-	public void setEndTime(int year, int month, int day) throws OperationNotAllowedException {
-		this.endTime = new GregorianCalendar();
-		this.endTime.set(GregorianCalendar.YEAR, year);
-		this.endTime.set(GregorianCalendar.MONTH, month);
-		this.endTime.set(GregorianCalendar.DAY_OF_MONTH, day);
-		
-		if(state.currentUser() == null) {
-			
-			throw new OperationNotAllowedException("User login required");
-		}
-		if ( !containsWorker(state.currentUser()) ) throw new OperationNotAllowedException("User is not assigned to the project");
-		if( !hasProjectLeader() || !state.currentUser().getUsername().equals(projectLeader.getUsername()) || 
-				!state.currentUser().getPassword().equals(projectLeader.getPassword()) ) {
-			throw new OperationNotAllowedException("User is not the project leader");
-		}
-		
-		if(startTime != null && startTime.after(endTime)) {
-			endTime = null;
-			throw new OperationNotAllowedException("Deadline is invalid");
-		}
-	}
-	
-	/*
-	 * Returns true if start and end times have been specified, false otherwise
-	 */
-	public boolean containsTimeSpecifications() {
-		if(this.endTime != null && this.startTime != null) {
-			//System.out.println(this.endTime.getTime());
+	public boolean absenceAnounced() {
+		if(findActivity("Sickness").workerIsAbsent() || findActivity("Holiday").workerIsAbsent() ||
+		   findActivity("Courses").workerIsAbsent()) {
 			return true;
 		}
 		return false;
-	}
-	/*
-	 * Returns true if a start time for the project has been set, false otherwise
-	 */
-	public boolean startTimeSet() {
-		if(this.startTime != null) {
-			return true;
-		}
-		return false;
-	}
-	/*
-	 * Returns true if an end time for the project has been set, false otherwise
-	 */
-	public boolean endTimeSet() {
-		if(this.endTime != null) {
-			return true;
-		}
-		return false;
-	}
-	
-	/*
-	 * Returns true if the project is overdue, false otherwise
-	 * Will cause an exception if no deadline has been set
-	 */
-	public boolean deadlineOverdue() {
-		if(this.startTime != null && this.endTime != null) {
-			this.currentTime = new GregorianCalendar();
-			if(endTime.after(currentTime)) {
-				return true;
-			}
-			return false;
-		}
-		else {
-			throw new IllegalArgumentException("Deadline must be instantiated");
-		}
 	}
 }

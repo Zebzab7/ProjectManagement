@@ -31,6 +31,7 @@ public class ProjectSteps {
 		this.managementApp = managementApp;
 		this.errorMessage = errorMessage;
 		this.stateHelper = stateHelper;
+		this.stateHelper.setState(managementApp.getState());
 	}
 	
 	@Given("the project with name {string} does not exist")
@@ -40,13 +41,14 @@ public class ProjectSteps {
 	
 	@Given("the project with name {string} does exist")
 	public void theProjectWithNameDoesExist(String name) throws Exception {
+		
 		try {
-			logInTemp();
+			stateHelper.logInTemp();
 			managementApp.createProject(name);
 			project = managementApp.findProject(name);
 			this.projectName = name;
 			stateHelper.setProject(project);
-			logOutTemp();
+			stateHelper.logOutTemp();
 			
 	    	assertTrue(managementApp.containsProject(name));
 	    } catch (OperationNotAllowedException e) {
@@ -71,16 +73,22 @@ public class ProjectSteps {
 	
 	@Given("the project has no work hours")
 	public void theProjectHasNoWorkHours() throws OperationNotAllowedException {
-		logInTemp();
+		stateHelper.logInTemp();
 		int hours = project.workedHours();
 		project.addHours( -hours );
-		logOutTemp();
+		stateHelper.logOutTemp();
 		assertTrue(project.workedHours() == 0);
 	}
 	
 	@Given("the worker is the projectleader")
 	public void theWorkerIsTheProjectleader() throws Exception {
 		worker = stateHelper.getWorker();
+		System.out.println(1);
+		System.out.println(2);
+		System.out.println(3);
+		System.out.println(4);
+		System.out.println(5);
+		System.out.println(project.getName());
 		project.addWorker(worker);
 		project.setProjectLeader(worker);
 		assertEquals(project.getProjectLeader(), worker);
@@ -116,6 +124,7 @@ public class ProjectSteps {
 	    try {
 	    	this.projectName =  projectName;
 	 	    managementApp.createProjectWithLeader(projectName, managementApp.findWorker(projectLeader));
+	 	    project = managementApp.findProject(projectName);
 	    } catch (Exception e) {
 	    	errorMessage.setErrorMessage(e.getMessage());
 	    }
@@ -133,7 +142,7 @@ public class ProjectSteps {
 	@When("the worker sets the start date of the project to the {int}-{int}-{int}")
 	public void theWorkerSetsTheStartDateOfTheProjectToThe(int year, int month, int day) throws Exception {
 		try {
-			project.setStartTime(year, month, day);
+			project.getPTM().setStartTime(year, month, day);
 		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -142,7 +151,7 @@ public class ProjectSteps {
 	@When("the worker sets the end date of the project to the {int}-{int}-{int}")
 	public void theWorkerSetsTheEndDateOfTheProjectTo(int year, int month, int day) throws Exception {
 		try {
-			project.setEndTime(year, month, day);
+			project.getPTM().setEndTime(year, month, day);
 		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -150,10 +159,10 @@ public class ProjectSteps {
 	@When("another worker adds {int} work hours successfully")
 	public void anotherWorkerAddsWorkHoursSuccessfully(int hours) {
 		try {
-			logInTemp();
+			stateHelper.logInTemp();
 			project.addWorker(managementApp.getState().currentUser());
 			project.addHours(hours);
-			logOutTemp();
+			stateHelper.logOutTemp();
 			
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
@@ -175,15 +184,15 @@ public class ProjectSteps {
 	}
 	@Then("the start time is set for the project")
 	public void startTimeIsSet() throws Exception {
-		assertTrue(project.startTimeSet());
+		assertTrue(project.getPTM().startTimeSet());
 	}
 	@Then("the end time is set for the project")
 	public void endTimeIsSet() throws Exception {
-		assertTrue(project.endTimeSet());
+		assertTrue(project.getPTM().endTimeSet());
 	}
 	@Then("the time settings for the project are set")
 	public void theTimeIsSet() throws Exception {
-		assertTrue(project.containsTimeSpecifications());
+		assertTrue(project.getPTM().containsTimeSpecifications());
 	}
 	@Then("the workers AH-list will hold {int} hours for {string} and {int} hours for {string}")
 	public void AccumulatedHoursListCheck(Integer hours1, String projectName1, Integer hours2, String projectName2) {
@@ -209,21 +218,8 @@ public class ProjectSteps {
 	}
 	@Then("the start and end week of the given month of the project are week {int} and week {int}")
 	public void weekRepresentation(int startWeek, int endWeek) {
-	    assertEquals(project.getStartWeek(),startWeek);
-	    assertEquals(project.getEndWeek(),endWeek);
+	    assertEquals(project.getPTM().getStartWeek(),startWeek);
+	    assertEquals(project.getPTM().getEndWeek(),endWeek);
 	}
 	
-	/*
-	 * Methods used for logging a temporary user in order to
-	 * perform certain operations in the management app
-	 */
-	public void logInTemp() {
-		prev = managementApp.getState().currentUser();
-		temp = new Worker("Temp", "1234");
-		managementApp.getState().setUser(temp);
-	}
-	public void logOutTemp() {
-		managementApp.getState().setUser(prev);
-		temp = null;
-	}
 }

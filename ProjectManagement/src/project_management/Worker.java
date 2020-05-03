@@ -25,9 +25,9 @@ public class Worker {
 	public String getPassword() {
 		return password;
 	}
-	public boolean newActivity(String name, int ET) {
-		return leadingProject.getActivityList().add(new Activity(name, ET, leadingProject));
-	}
+	//public boolean newActivity(String name, int ET) {
+		//return leadingProject.getActivityList().add(new Activity(name, leadingProject));
+	//}
 	public boolean changeLeader(Worker newLeader) {
 		if(leadingProject.getProjectLeader() == this && newLeader != this) {
 			leadingProject.setProjectLeader(newLeader);

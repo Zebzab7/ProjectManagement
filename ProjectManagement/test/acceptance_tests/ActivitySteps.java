@@ -52,7 +52,7 @@ public class ActivitySteps {
 	@Given("the activity with name {string} is in the project")
 	public void theActivityWithNameIsInTheProject(String name) throws OperationNotAllowedException {
 	   try {
-		   	stateHelper.getProject().createActivity(name, 1);
+		   	stateHelper.getProject().createActivity(name);
 			assertTrue(stateHelper.getProject().containsActivity(name));
 	    } catch (OperationNotAllowedException e) {
 			 errorMessage.setErrorMessage(e.getMessage());
@@ -64,7 +64,7 @@ public class ActivitySteps {
 	public void workerCreatesNewActivityWithNameAndETHours(String name, int ET)throws Exception {
 		try {
 			activityName = name;
-			stateHelper.getProject().createActivity(name, ET);
+			stateHelper.getProject().createActivity(name);
 		}
 		catch (Exception e) {
 	    	errorMessage.setErrorMessage(e.getMessage());
