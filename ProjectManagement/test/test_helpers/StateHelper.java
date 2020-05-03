@@ -17,29 +17,24 @@ public class StateHelper {
 		project = new Project("Programming 101", "11", state);
 		return project;
 	}
-	
 	public void setWorker(Worker worker) {
 		this.worker = worker;
 	}
-	
 	public void setProject(Project project) {
 		this.project = project;
 	}
-	
 	public Worker getWorker() {
 		if (worker == null) {
 			worker = exampleWorker();
 		}
 		return worker;
 	}
-	
 	public Project getProject() {
 		if (project == null) {
 			project = exampleProject();
 		}
 		return project;
 	}
-	
 	private Worker exampleWorker() {
 		worker = new Worker("PEPE", "1234");
 		return worker;

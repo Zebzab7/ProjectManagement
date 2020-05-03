@@ -1,6 +1,7 @@
 package acceptance_tests;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -21,7 +22,7 @@ public class ProjectSteps {
 	private ErrorMessageHolder errorMessage;
 	
 	private StateHelper stateHelper;
-	private Worker worker;
+	private Worker worker, prev, temp;
 	private Project project;
 	
 	String projectName;
@@ -39,17 +40,14 @@ public class ProjectSteps {
 	
 	@Given("the project with name {string} does exist")
 	public void theProjectWithNameDoesExist(String name) throws Exception {
-		Worker prev = managementApp.getState().currentUser();
-		Worker temp = new Worker("Temp", "1234");
 		try {
-			managementApp.getState().setUser(temp);
-			
+			logInTemp();
 			managementApp.createProject(name);
 			project = managementApp.findProject(name);
 			this.projectName = name;
 			stateHelper.setProject(project);
+			logOutTemp();
 			
-			managementApp.getState().setUser(prev);
 	    	assertTrue(managementApp.containsProject(name));
 	    } catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
@@ -58,39 +56,34 @@ public class ProjectSteps {
 	
 	@Given("the worker is working on the project")
 	public void theWorkerIsWorkingOnTheProject() throws OperationNotAllowedException, Exception {
-		worker = managementApp.getState().currentUser();
-		project.addWorker(worker);
-		assertTrue(project.containsWorker(worker));
+		if(!project.containsWorker(managementApp.getState().currentUser())) {
+			project.addWorker(managementApp.getState().currentUser());
+		}
+		assertTrue(project.containsWorker(managementApp.getState().currentUser()));
 	}
 	
 	@Given("the worker is not working on the project")
 	public void theWorkerIsNotWorkingOnTheProject() throws OperationNotAllowedException {
-		worker = managementApp.getState().currentUser();
+		worker = stateHelper.getWorker();
+		if ( project.containsWorker(worker) ) project.removeWorker(worker);
 	    assertFalse(project.containsWorker(worker));
 	}
 	
 	@Given("the project has no work hours")
 	public void theProjectHasNoWorkHours() throws OperationNotAllowedException {
-		Worker cWorker = managementApp.getState().currentUser();
-		Worker temp = new Worker("Temp", "1234");
-		managementApp.getState().setUser(temp);
+		logInTemp();
 		int hours = project.workedHours();
-		project.addHours((hours - hours));
-		managementApp.getState().setUser(cWorker);
+		project.addHours( -hours );
+		logOutTemp();
 		assertTrue(project.workedHours() == 0);
 	}
 	
-	@Given("the worker {string} is the projectleader")
-	public void workerEqualsProjectleader(String name) throws Exception {
-		try {
-			worker = stateHelper.getWorker();
-			if(worker.getUsername().equals(name) && managementApp.containsProject(projectName)) {
-				project.setProjectLeader(worker);
-				assertEquals(project.getProjectLeader(), worker);
-			}
-		} catch(Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
+	@Given("the worker is the projectleader")
+	public void theWorkerIsTheProjectleader() throws Exception {
+		worker = stateHelper.getWorker();
+		project.addWorker(worker);
+		project.setProjectLeader(worker);
+		assertEquals(project.getProjectLeader(), worker);
 	}
 	
 	@When("the worker adds {int} work hours succesfully")
@@ -105,7 +98,6 @@ public class ProjectSteps {
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
-		
 	}
 
 	@When("worker adds new project named {string}")
@@ -114,7 +106,6 @@ public class ProjectSteps {
 		try {
 		    managementApp.createProject(name);
 		    project = managementApp.findProject(name);
-		    
 		} catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -132,80 +123,68 @@ public class ProjectSteps {
 	
 	@When("the worker is added to the project")
 	public void the_worker_is_added_to_the_project() {
-	    project.addWorker(managementApp.getState().currentUser());
+		if(!project.containsWorker(managementApp.getState().currentUser())) {
+			project.addWorker(managementApp.getState().currentUser());
+		}
+		
 	    assertTrue(project.containsWorker(managementApp.getState().currentUser()));
 	}
 	
 	@When("the worker sets the start date of the project to the {int}-{int}-{int}")
-	public void workerSpecifiesStartingTime(int year, int month, int day) throws Exception {
+	public void theWorkerSetsTheStartDateOfTheProjectToThe(int year, int month, int day) throws Exception {
 		try {
-			if(managementApp.containsProject(projectName) && managementApp.LoggedIn()
-			   && project.getProjectLeader() == worker) {
-				project.setStartTime(year, month, day);
-			}
+			project.setStartTime(year, month, day);
 		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
 	
 	@When("the worker sets the end date of the project to the {int}-{int}-{int}")
-	public void workerSpecifiesEndTime(int year, int month, int day) throws Exception {
+	public void theWorkerSetsTheEndDateOfTheProjectTo(int year, int month, int day) throws Exception {
 		try {
-			if(managementApp.containsProject(projectName) && managementApp.LoggedIn()
-			   && project.getProjectLeader() == worker) {
-				project.setEndTime(year, month, day);
-			}
+			project.setEndTime(year, month, day);
 		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-	
-	@When("another worker {string} with password {string} adds {int} work hours successfully")
-	public void anotherWorkerAddsWorkHoursSuccessfully(String name, String password, Integer hours) {
-		managementApp.Logout();
-		Worker john = new Worker(name,password);
-		
+	@When("another worker adds {int} work hours successfully")
+	public void anotherWorkerAddsWorkHoursSuccessfully(int hours) {
 		try {
-		managementApp.CreateUser(name, password);
-		managementApp.Login(name, password);
-		project.addWorker(managementApp.getState().currentUser());
-		project.addHours(hours);
+			logInTemp();
+			project.addWorker(managementApp.getState().currentUser());
+			project.addHours(hours);
+			logOutTemp();
 			
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}	
 	}
-
+	
 	@Then("the worker has a total of {int} individual work hours")
 	public void theWorkerHasATotalOfIndividualWorkHours(int hours) {
-	    assertEquals(project.getWorkersAccumulatedHours(worker), hours);
+	    assertEquals(project.getWorkersAccumulatedHours(managementApp.getState().currentUser()), hours);
 	}
 	
 	@Then("the project has a total of {int} work hours")
 	public void theProjectHasATotalOfWorkHours(int hours) {
 		assertTrue(project.workedHours() == hours);
 	}
-	
 	@Then("the project is contained in the app")
 	public void theProjectIsContainedInTheApp() throws OperationNotAllowedException {
 	    assertTrue(managementApp.containsProject(projectName));
 	}
-	
 	@Then("the start time is set for the project")
 	public void startTimeIsSet() throws Exception {
 		assertTrue(project.startTimeSet());
 	}
-	
 	@Then("the end time is set for the project")
 	public void endTimeIsSet() throws Exception {
 		assertTrue(project.endTimeSet());
 	}
-	
 	@Then("the time settings for the project are set")
 	public void theTimeIsSet() throws Exception {
 		assertTrue(project.containsTimeSpecifications());
 	}
-	
 	@Then("the workers AH-list will hold {int} hours for {string} and {int} hours for {string}")
 	public void AccumulatedHoursListCheck(Integer hours1, String projectName1, Integer hours2, String projectName2) {
 	    
@@ -217,7 +196,6 @@ public class ProjectSteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-	
 	@Then("the workers AssignedProjects list will hold {string} and {string}")
 	public void the_workers_AssignedProjects_list_will_hold_and(String projectName1, String projectName2) {
 	    try {
@@ -229,12 +207,23 @@ public class ProjectSteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-	
 	@Then("the start and end week of the given month of the project are week {int} and week {int}")
 	public void weekRepresentation(int startWeek, int endWeek) {
 	    assertEquals(project.getStartWeek(),startWeek);
 	    assertEquals(project.getEndWeek(),endWeek);
 	}
 	
-	
+	/*
+	 * Methods used for logging a temporary user in order to
+	 * perform certain operations in the management app
+	 */
+	public void logInTemp() {
+		prev = managementApp.getState().currentUser();
+		temp = new Worker("Temp", "1234");
+		managementApp.getState().setUser(temp);
+	}
+	public void logOutTemp() {
+		managementApp.getState().setUser(prev);
+		temp = null;
+	}
 }

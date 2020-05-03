@@ -14,11 +14,11 @@ Scenario: Add project successfully with leader
 	When worker adds new project named "Programming 101" with "PEPE" as projectleader
 	Then the project is contained in the app
 	
-Scenario: Add project with leader that already exists
+Scenario: Add project that already exists with leader
 	Given that the worker is logged in
 	And the project with name "Programming 101" does exist
 	When worker adds new project named "Programming 101" with "PEPE" as projectleader
-	Then the error message "Project already exist or user does not exist" is given
+	Then the error message "Project already exist" is given
 
 Scenario: Add project that already exists
 	Given that the worker is logged in

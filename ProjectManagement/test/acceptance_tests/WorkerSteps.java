@@ -24,9 +24,6 @@ public class WorkerSteps {
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
 	private StateHelper stateHelper;
-	private Worker worker;
-	private Project project;
-	String userName;
 	
 	public WorkerSteps(ManagementApp managementApp, ErrorMessageHolder errorMessage, StateHelper stateHelper) {
 		this.managementApp = managementApp;
@@ -36,8 +33,8 @@ public class WorkerSteps {
 	
 	@Given("that worker {string} with password {string} exist")
 	public void thatWorkerWithPasswordExist(String name, String password) throws Exception {
-		userName = name;
-	    managementApp.CreateUser(name, password);
+		stateHelper.setWorker(new Worker(name, password));
+		managementApp.addWorker(stateHelper.getWorker());
 	    assertTrue(managementApp.containsUser(name));
 	}
 	
@@ -46,30 +43,23 @@ public class WorkerSteps {
 		assertFalse(managementApp.containsUser(name));
 	}
 	
-	@When("creation of worker named {string} with password {string}")
-	public void creationOfWorkerNamedWithPassword(String name, String password) throws Exception {
+	@When("the worker named {string} with password {string} is created")
+	public void theWorkerNamedWithPasswordIsCreated(String name, String password) throws Exception {
 		try {
-			userName = name;
-		    managementApp.CreateUser(name, password);
+		    managementApp.createUser(name, password);
+		    stateHelper.setWorker(managementApp.findWorker(name));
 		} catch (Exception e) {
-			 errorMessage.setErrorMessage(e.getMessage());
+			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
 	
 	@Then("the error message {string} is given")
-	public void errorMessageIsProduced(String string) throws Exception {
-		assertEquals(errorMessage, this.errorMessage);
+	public void TheErrorMessageIsGiven(String string) throws Exception {
+		assertEquals(errorMessage.getErrorMessage(), string);
 	}
 
 	@Then("the worker is contained in app")
 	public void theWorkerIsContainedInApp() {
-	    assertTrue(managementApp.containsUser(userName));
+	    assertTrue(managementApp.containsUser(stateHelper.getWorker().getUsername()));
 	}
-	
-//	@Then("the worker has a total of {int} work hours on project {string}")
-//	public void theWorkerHasATotalOfWorkHoursOnProject(int hours, String projectName) {
-//		worker = stateHelper.getWorker();
-//		project = stateHelper.getProject();
-//		assertTrue(project.workerHours(worker) == hours);
-//	}
 }

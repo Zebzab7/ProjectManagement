@@ -22,15 +22,18 @@ public class ManagementApp {
 		return true;
 	}
 	
-	// Returns true if login succeeds, false otherwise
-	public boolean Login(String name, String password) {
+	/*
+	 * Method attempts to log in user with given name and password
+	 * Returns true if successful, false otherwise
+	 */
+	public boolean Login(String name, String password) throws Exception {
 		for (Worker worker : users) {
 			if (worker.getPassword().equals(password) && worker.getUsername().equals(name)) {
 				state.setUser(worker);
 				return true;
 			}
 		}
-		return false;
+		throw new OperationNotAllowedException("Worker does not exist");
 	}
 	public boolean Logout() {
 		state.setUser(null);
@@ -59,6 +62,14 @@ public class ManagementApp {
 		}
 		return false;
 	}
+	public boolean containsUserWithPass(String name, String password) {
+		for (Worker worker : users) {
+			if (worker.getUsername().equals(name) && worker.getPassword().equals(password)) {
+				return true;
+			}
+		}
+		return false;
+	}
 	public boolean containsProject(String name) throws OperationNotAllowedException {
 		for (Project p : projects) {
 			if (p.getName().equals(name)) {
@@ -67,9 +78,7 @@ public class ManagementApp {
 		}
 		return false;
 	}
-	
-	
-	public boolean CreateUser(String username, String password) throws Exception {
+	public boolean createUser(String username, String password) throws Exception {
 		if (!containsUser(username)) {
 			if (users.add(new Worker(username, password))) {
 				return true;
@@ -77,7 +86,14 @@ public class ManagementApp {
 		}
 		throw new Exception("User already exist");
 	}
-	
+	public boolean addWorker(Worker worker) throws Exception {
+		if (!containsUser(worker.getUsername())) {
+			if (users.add(new Worker(worker.getUsername(), worker.getPassword()))) {
+				return true;
+			}
+		}
+		throw new Exception("User already exist");
+	}
 	public Worker findWorker(String name) throws Exception {
 		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
@@ -100,50 +116,46 @@ public class ManagementApp {
 		}
 		return null;
 	}
-	public void addWorkerToProject(Worker worker, Project project) throws Exception {
+	public void addWorkerToProject(Worker worker, Project project) throws Exception{
 		if (state.currentUser() == null) {
-			throw new Exception("User login required");
+			throw new OperationNotAllowedException("User login required");
 		}
 		project.getWorkerList().add(worker);
 
 	}
+	
 	public boolean createProject(String name) throws Exception {
 		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
-		for (Project p : projects) {
-			if (p.getName().equals(name)) {
-				return false;
-			}
-		}
-		if (projects.add(new Project(name, generateProjectId(), state))) {
-			return true;
-		}
-		return false;
+		if ( containsProject(name) ) throw new OperationNotAllowedException("Project already exist");
+		projects.add(new Project(name, generateProjectId(), state));
+		return true;
 	}
-	public boolean createProjectWithLeader(String projectName, Worker leader) throws Exception {
+	
+	public boolean createProjectWithLeader(String name, Worker leader) throws Exception {
 		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
-		if (!containsProject(projectName)) {
-			projects.add(new Project(projectName, generateProjectId(), leader, state));
-			return true;
-		}
-		return false;
+		if (containsProject(name)) throw new OperationNotAllowedException("Project already exist");
+		projects.add(new Project(name, generateProjectId(), leader, state));
+		return true;
 	}
 	
 	public String generateProjectId() {
-		return "" + projects.size() +1;
+		return "" + projects.size() + 1;
 	}
+	/*
+	 * The following two methods return statistics of a given worker
+	 */
 	
 	public ArrayList<String> workerHoursCollected(Worker worker) {
 		workerHours.clear();
 		for(Project p : projects) {
-			if(p.containsWorker(state.currentUser())) {
+			if(p.containsWorker(worker)) {
 				workerHours.add("Project:" + p.getName() + ", hours accumulated:"
-										    + p.getWorkersAccumulatedHours(state.currentUser()));
+										    + p.getWorkersAccumulatedHours(worker));
 			}
-			
 		}
 		return workerHours;
 	}
@@ -158,4 +170,3 @@ public class ManagementApp {
 		return assignedProjects;
 	}
 }
-

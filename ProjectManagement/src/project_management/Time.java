@@ -1,23 +1,27 @@
 package project_management;
 
 public class Time {
-	private Activity task;
+	private int hours;
 	private Worker worker;
-	float time;
+	private Project project;
 	
-	public Time (Activity task, Worker worker, float time) {
-		this.task = task;
+	public Time(int hours) {
+		this.hours = hours;
+	}
+	
+	public void appointWorker(Worker worker) {
 		this.worker = worker;
-		this.time = time;
-	}
-	public void setTime(float time) {
-		this.time = time;
-	}
-	public Activity getTask() {
-		return task;
-	}
-	public Worker getWorker() {
-		return worker;
 	}
 	
+	public void appointProject(Project project) {
+		this.project = project;
+	}
+	
+	public int getHours() {
+		return hours;
+	}
+	
+	public void addHours(int hours) {
+		this.hours += hours;
+	}
 }

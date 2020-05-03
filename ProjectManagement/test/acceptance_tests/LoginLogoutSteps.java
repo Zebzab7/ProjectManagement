@@ -22,13 +22,15 @@ public class LoginLogoutSteps {
 	private ManagementApp managementApp;
 	private String password;
 	private String name;
+	private ErrorMessageHolder errorMessage;
+	private Worker worker;
 	
-	Worker worker;
 	StateHelper stateHelper;
 	
-	public LoginLogoutSteps(ManagementApp managementApp, StateHelper helper) {
+	public LoginLogoutSteps(ManagementApp managementApp, StateHelper helper, ErrorMessageHolder errorMessage) {
 		this.managementApp = managementApp;
 		this.stateHelper = helper;
+		this.errorMessage = errorMessage;
 	}
 	
 	@Given("the name is {string} and password is {string}")
@@ -42,18 +44,42 @@ public class LoginLogoutSteps {
 		managementApp.Logout();
 	    assertFalse(managementApp.LoggedIn());
 	}
+	
+	@Given("that the worker is logged in")
+	public void thatTheWorkerIsLoggedIn() throws Exception {
+		worker = stateHelper.getWorker();
+		if (!managementApp.containsUser(worker.getUsername())) {
+			assertTrue(managementApp.createUser(worker.getUsername(), worker.getPassword()));
+		}
+	    assertTrue(managementApp.Login(worker.getUsername(), worker.getPassword()));
+	}
+	
+	@Given("that worker with the name {string} and password {string} is logged in")
+	public void thatWorkerWithTheNameAndPasswordIsLoggedIn(String name, String password) throws Exception {
+		stateHelper.setWorker(new Worker(name, password));
+		managementApp.createUser(name, password);
+		assertTrue(managementApp.Login(name, password));
+	}
+	
 	@When("the worker logs in")
-	public void theWorkerLogsIn() {
+	public void theWorkerLogsIn() throws Exception {
 	    managementApp.Login(name, password);
 	}
+	
 	@Then("the worker login succeeds")
 	public void theWorkerLoginSucceeds() throws Exception{
 	    assertTrue(managementApp.Login(name, password));
 	}
+	
 	@Then("the worker login fails")
 	public void theWorkerLoginFails() throws Exception {
-		assertFalse(managementApp.Login(name, password));
+		try {
+			assertFalse(managementApp.Login(name, password));
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
 	}
+	
 	@Then("the worker is logged in")
 	public void theWorkerIsLoggedIn() throws Exception {
 		worker = managementApp.getState().currentUser();
@@ -65,21 +91,4 @@ public class LoginLogoutSteps {
 	public void theWorkerIsNotLoggedIn() throws Exception {
 		assertFalse(managementApp.LoggedIn());
 	}
-	
-	@Given("that the worker is logged in")
-	public void thatTheWorkerIsLoggedIn() throws Exception {
-		worker = stateHelper.getWorker();
-		if (!managementApp.containsUser(worker.getUsername())) {
-			assertTrue(managementApp.CreateUser(worker.getUsername(), worker.getPassword()));
-		}
-	    assertTrue(managementApp.Login(worker.getUsername(), worker.getPassword()));
-	}
-	
-	@Given("that worker with the name {string} and password {string} is logged in")
-	public void thatWorkerWithTheNameAndPasswordIsLoggedIn(String name, String password) throws Exception {
-		stateHelper.setWorker(new Worker(name, password));
-		managementApp.CreateUser(name, password);
-		assertTrue(managementApp.Login(name, password));
-	}
-
 }
