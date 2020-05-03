@@ -56,9 +56,10 @@ public class ProjectSteps {
 	
 	@Given("the worker is working on the project")
 	public void theWorkerIsWorkingOnTheProject() throws OperationNotAllowedException, Exception {
-		worker = stateHelper.getWorker();
-		project.addWorker(worker);
-		assertTrue(project.containsWorker(worker));
+		if(!project.containsWorker(managementApp.getState().currentUser())) {
+			project.addWorker(managementApp.getState().currentUser());
+		}
+		assertTrue(project.containsWorker(managementApp.getState().currentUser()));
 	}
 	
 	@Given("the worker is not working on the project")
@@ -104,6 +105,7 @@ public class ProjectSteps {
 		projectName = name;
 		try {
 		    managementApp.createProject(name);
+		    project = managementApp.findProject(name);
 		} catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -121,7 +123,10 @@ public class ProjectSteps {
 	
 	@When("the worker is added to the project")
 	public void the_worker_is_added_to_the_project() {
-	    project.addWorker(managementApp.getState().currentUser());
+		if(!project.containsWorker(managementApp.getState().currentUser())) {
+			project.addWorker(managementApp.getState().currentUser());
+		}
+		
 	    assertTrue(project.containsWorker(managementApp.getState().currentUser()));
 	}
 	
@@ -142,20 +147,22 @@ public class ProjectSteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-	@When("another worker {string} with password {string} adds {int} work hours successfully")
-	public void anotherWorkerAddsWorkHoursSuccessfully(String name, String password, Integer hours) {
-		managementApp.Logout();
-		Worker john = new Worker(name,password);
-		
+	@When("another worker adds {int} work hours successfully")
+	public void anotherWorkerAddsWorkHoursSuccessfully(int hours) {
 		try {
-		managementApp.CreateUser(name, password);
-		managementApp.Login(name, password);
-		project.addWorker(managementApp.getState().currentUser());
-		project.addHours(hours);
+			logInTemp();
+			project.addWorker(managementApp.getState().currentUser());
+			project.addHours(hours);
+			logOutTemp();
 			
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}	
+	}
+	
+	@Then("the worker has a total of {int} individual work hours")
+	public void theWorkerHasATotalOfIndividualWorkHours(int hours) {
+	    assertEquals(project.getWorkersAccumulatedHours(managementApp.getState().currentUser()), hours);
 	}
 	
 	@Then("the project has a total of {int} work hours")
