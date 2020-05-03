@@ -83,12 +83,6 @@ public class ProjectSteps {
 	@Given("the worker is the projectleader")
 	public void theWorkerIsTheProjectleader() throws Exception {
 		worker = stateHelper.getWorker();
-		System.out.println(1);
-		System.out.println(2);
-		System.out.println(3);
-		System.out.println(4);
-		System.out.println(5);
-		System.out.println(project.getName());
 		project.addWorker(worker);
 		project.setProjectLeader(worker);
 		assertEquals(project.getProjectLeader(), worker);
@@ -133,7 +127,11 @@ public class ProjectSteps {
 	@When("the worker is added to the project")
 	public void the_worker_is_added_to_the_project() {
 		if(!project.containsWorker(managementApp.getState().currentUser())) {
-			project.addWorker(managementApp.getState().currentUser());
+			try {
+				project.addWorker(managementApp.getState().currentUser());
+			} catch (Exception e) {
+				errorMessage.setErrorMessage(e.getMessage());
+			}
 		}
 		
 	    assertTrue(project.containsWorker(managementApp.getState().currentUser()));

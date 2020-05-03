@@ -77,7 +77,7 @@ public class Activity {
 			throw new OperationNotAllowedException("Not eligable for this activity");
 		}
 		
-		if ( containsWorker(state.currentUser()) ) {
+		if ( containsWorker(state.currentUser()) || workerIsAbsent()) {
 			workedHours += hours;
 			
 			int incValueActivity = accumulatedHours.get(workers.indexOf(state.currentUser()));
