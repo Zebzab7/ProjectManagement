@@ -1154,6 +1154,71 @@ formatter.result({
   "status": "passed"
 });
 formatter.scenario({
+  "name": "Worker adds hours while working on project",
+  "description": "",
+  "keyword": "Scenario"
+});
+formatter.step({
+  "name": "that the worker is logged in",
+  "keyword": "Given "
+});
+formatter.match({
+  "location": "acceptance_tests.LoginLogoutSteps.thatTheWorkerIsLoggedIn()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the project with name \"Programming 101\" does exist",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theProjectWithNameDoesExist(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker is working on the project",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerIsWorkingOnTheProject()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the project has no work hours",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theProjectHasNoWorkHours()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker adds 10 work hours succesfully",
+  "keyword": "When "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theWorkerAddsWorkHoursSuccesfully(int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the project has a total of 10 work hours",
+  "keyword": "Then "
+});
+formatter.match({
+  "location": "acceptance_tests.ProjectSteps.theProjectHasATotalOfWorkHours(int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.scenario({
   "name": "Worker adds hours while not working on project",
   "description": "",
   "keyword": "Scenario"
