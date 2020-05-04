@@ -1,10 +1,18 @@
 package project_management;
 
-public class AbsentTimeManager extends ActivityTimeManager {
+import java.util.GregorianCalendar;
+
+public class AbsentTimeManager extends TimeManager {
 	private Worker worker;
 	
-	public AbsentTimeManager(Project project, State state, Activity activity, Worker worker) {
-		super(project, state, activity);
+	public AbsentTimeManager(State state, Worker worker) {
+		super(state);
 		this.worker = worker;
 	}
+	
+	public GregorianCalendar getReturnDate(Worker worker) {
+		return super.getEndTime();
+	}
+	
+	
 }

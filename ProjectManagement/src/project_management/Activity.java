@@ -6,13 +6,15 @@ public class Activity {
 	Project project;
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
 	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
+	private ArrayList<AbsentTimeManager> absentees = new ArrayList<AbsentTimeManager>();
 	
 	private int workedHours;
 	private int initialHours = 0;
 	
 	private String name;
 	private State state;
-	private ActivityTimeManager activityTimeManager;
+	private TimeManager timeManager;
+	private FixedActivity absenteeCheck;
 	int ID;
 	
 	public String getName() {
@@ -30,16 +32,28 @@ public class Activity {
 	public int workerHours(Worker worker) {
 		return 0;
 	}
-	public ActivityTimeManager getATM() {
-		return activityTimeManager;
+	public TimeManager getTM() {
+		return timeManager;
 	}
 	
+	/*
+	 * Constructor
+	 */
 	public Activity(String name, Project project, State state) {
 		int ID = project.getActivityList().size() + 1;
 		this.name = name;
 		this.project = project;
 		this.state = state;
-		this.activityTimeManager = new ActivityTimeManager(this.project, this.state, this);
+		this.timeManager = new TimeManager(this.state);
+		this.absenteeCheck = new FixedActivity(name,state);
+	}
+	
+	public boolean selectActivity() {
+		if(state.currentUser() != null && workers.contains(state.currentUser())) {
+			state.setActivity(this);
+			return true;
+		}
+		return false;
 	}
 	
 	/*
@@ -57,7 +71,10 @@ public class Activity {
 	/*
 	 * Adds the given worker as a worker on the project
 	 */
-	public void addWorker(Worker worker) {
+	public void addWorker(Worker worker) throws Exception {
+		if(absenteeCheck.workerIsAbsent(worker)) {
+			throw new Exception("Worker is absent");
+		}
 		workers.add(worker);
 		accumulatedHours.add(initialHours);
 	}
@@ -73,13 +90,14 @@ public class Activity {
 	public boolean addHours(int hours) throws OperationNotAllowedException {
 		if ( state.currentUser() == null ) throw new OperationNotAllowedException("User login required");
 		
-		if(isAbsentActivity()) {
-			throw new OperationNotAllowedException("Not eligable for this activity");
+		if(absenteeCheck.workerIsAbsent(state.currentUser())) {
+			throw new OperationNotAllowedException("Worker is absent");
 		}
 		
-		if ( containsWorker(state.currentUser()) || workerIsAbsent()) {
+		if ( containsWorker(state.currentUser()) && !absenteeCheck.workerIsAbsent(state.currentUser())) {
 			workedHours += hours;
 			
+			// Increments work hours for individual - activity and project
 			int incValueActivity = accumulatedHours.get(workers.indexOf(state.currentUser()));
 			int incValueProject = project.getAHList().get(project.getWorkerList().indexOf(state.currentUser()));
 			accumulatedHours.set(workers.indexOf(state.currentUser()), incValueActivity + hours);
@@ -90,19 +108,5 @@ public class Activity {
 		}
 		return false;
 	}
-	public boolean isAbsentActivity() {
-		if(this.getName().equals("Sickness") || this.getName().equals("Holiday") || this.getName().equals("Courses")) {
-			return true;
-		}
-		return false;
-	}
-	public boolean workerIsAbsent() {
-		if(isAbsentActivity()) {
-			if(this.containsWorker(state.currentUser())) {
-				return true;
-			}
-			return false;
-		}
-		return false;
-	}
+	
 }

@@ -9,7 +9,9 @@ public class ManagementApp {
 	private ArrayList<Project> assignedProjects = new ArrayList<Project>();
 	private ArrayList<Worker> users = new ArrayList<Worker>();
 	private ArrayList<String> workerHours = new ArrayList<String>();
+	private ArrayList<FixedActivity> fixedActivities = new ArrayList<FixedActivity>();
 	private State state = new State();
+	private TimeManager timeManager;
 	
 	public State getState() {
 		return state;
@@ -130,6 +132,7 @@ public class ManagementApp {
 		}
 		if ( containsProject(name) ) throw new OperationNotAllowedException("Project already exist");
 		projects.add(new Project(name, generateProjectId(), state));
+		
 		return true;
 	}
 	
@@ -139,6 +142,20 @@ public class ManagementApp {
 		}
 		if (containsProject(name)) throw new OperationNotAllowedException("Project already exist");
 		projects.add(new Project(name, generateProjectId(), leader, state));
+		return true;
+	}
+	
+	public boolean createFixedActivity(String name, State state, Worker absentee) throws Exception {
+		if (state.currentUser() == null) {
+			throw new OperationNotAllowedException("User login required");
+		}
+		for(FixedActivity f : fixedActivities) {
+			if(f.getName().equals(name) && f.getAbsentee().equals(absentee)) {
+				throw new OperationNotAllowedException("Activity already created");
+			}
+		}
+		fixedActivities.add(new FixedActivity(name, state, absentee));
+		
 		return true;
 	}
 	
