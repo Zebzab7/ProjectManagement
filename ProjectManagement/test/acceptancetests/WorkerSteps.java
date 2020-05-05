@@ -1,4 +1,4 @@
-package acceptance_tests;
+package acceptancetests;
 
 import io.cucumber.java.en.Given;
 import static org.junit.Assert.assertTrue;

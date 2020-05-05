@@ -1,4 +1,4 @@
-package acceptance_tests;
+package acceptancetests;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 
@@ -9,6 +9,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import io.cucumber.java.en.Given;
@@ -41,16 +43,14 @@ public class ProjectSteps {
 	
 	@Given("the project with name {string} does exist")
 	public void theProjectWithNameDoesExist(String name) throws Exception {
-		
 		try {
-			stateHelper.logInTemp();
-			managementApp.createProject(name);
+			if ( !managementApp.containsProject(name) ) {
+				assertTrue(managementApp.addProject(new Project(name, managementApp.getState())));
+			}
+			assertTrue(managementApp.containsProject(name));
 			project = managementApp.findProject(name);
 			this.projectName = name;
 			stateHelper.setProject(project);
-			stateHelper.logOutTemp();
-			
-	    	assertTrue(managementApp.containsProject(name));
 	    } catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -82,16 +82,18 @@ public class ProjectSteps {
 	
 	@Given("the worker is the projectleader")
 	public void theWorkerIsTheProjectleader() throws Exception {
-		worker = stateHelper.getWorker();
-		System.out.println(1);
-		System.out.println(2);
-		System.out.println(3);
-		System.out.println(4);
-		System.out.println(5);
-		System.out.println(project.getName());
-		project.addWorker(worker);
-		project.setProjectLeader(worker);
-		assertEquals(project.getProjectLeader(), worker);
+		stateHelper.logInTemp();
+		if ( !stateHelper.getProject().containsWorker(stateHelper.getWorker()) ) {
+			stateHelper.getProject().addWorker(stateHelper.getWorker());
+			stateHelper.getProject().setProjectLeader(stateHelper.getWorker());
+		}
+		stateHelper.logOutTemp();
+		assertEquals(stateHelper.getProject().getProjectLeader(), stateHelper.getWorker());
+	}
+	
+	@Given("the project is selected")
+	public void theProjectIsSelected() {
+		assertTrue(stateHelper.getProject().select());
 	}
 	
 	@When("the worker adds {int} work hours succesfully")
@@ -110,9 +112,9 @@ public class ProjectSteps {
 
 	@When("worker adds new project named {string}")
 	public void workerAddsNewProject(String name) throws Exception {
-		projectName = name;
 		try {
-		    managementApp.createProject(name);
+			projectName = name;
+			assertTrue(managementApp.addProject(new Project(name, managementApp.getState())));
 		    project = managementApp.findProject(name);
 		} catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
@@ -120,11 +122,11 @@ public class ProjectSteps {
 	}
 	
 	@When("worker adds new project named {string} with {string} as projectleader")
-	public void workerAddsNewProjectNamedWithAsProjectleader(String projectName, String projectLeader) {
+	public void workerAddsNewProjectNamedWithAsProjectleader(String name, String projectLeader) {
 	    try {
-	    	this.projectName =  projectName;
-	 	    managementApp.createProjectWithLeader(projectName, managementApp.findWorker(projectLeader));
-	 	    project = managementApp.findProject(projectName);
+	    	projectName =  name;
+	    	managementApp.addProject(new Project(name, managementApp.getState(), managementApp.findWorker(projectLeader)));
+	 	    project = managementApp.findProject(name);
 	    } catch (Exception e) {
 	    	errorMessage.setErrorMessage(e.getMessage());
 	    }
@@ -133,29 +135,43 @@ public class ProjectSteps {
 	@When("the worker is added to the project")
 	public void the_worker_is_added_to_the_project() {
 		if(!project.containsWorker(managementApp.getState().currentUser())) {
-			project.addWorker(managementApp.getState().currentUser());
+			try {
+				project.addWorker(managementApp.getState().currentUser());
+			} catch (Exception e) {
+				errorMessage.setErrorMessage(e.getMessage());
+			}
 		}
 		
 	    assertTrue(project.containsWorker(managementApp.getState().currentUser()));
 	}
 	
-	@When("the worker sets the start date of the project to the {int}-{int}-{int}")
+	@When("the worker sets the start date of the project to the {int}-{int}-{int} succesfully")
 	public void theWorkerSetsTheStartDateOfTheProjectToThe(int year, int month, int day) throws Exception {
 		try {
-			project.setStartTime(year, month, day);
+			assertTrue(stateHelper.getProject().setStartTime(year, month, day));
 		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
 	
-	@When("the worker sets the end date of the project to the {int}-{int}-{int}")
-	public void theWorkerSetsTheEndDateOfTheProjectTo(int year, int month, int day) throws Exception {
+	@When("the worker sets the end date of the project to the {int}-{int}-{int} succesfully")
+	public void theWorkerSetsTheEndDateOfTheProjectToTheSuccesfully(int year, int month, int day) throws Exception {
 		try {
-			project.setEndTime(year, month, day);
+			assertTrue(stateHelper.getProject().setEndTime(year, month, day));
 		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
+	
+	@When("the worker sets the end date of the project to the {int}-{int}-{int} unsuccesfully")
+	public void theWorkerSetsTheEndDateOfTheProjectToTheUnsuccesfully(int year, int month, int day) {
+		try {
+			assertFalse(stateHelper.getProject().setEndTime(year, month, day));
+		} catch(Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
 	@When("another worker adds {int} work hours successfully")
 	public void anotherWorkerAddsWorkHoursSuccessfully(int hours) {
 		try {
@@ -169,6 +185,22 @@ public class ProjectSteps {
 		}	
 	}
 	
+	@Then("the start time for the project is {int}-{int}-{int}")
+	public void theStartTimeForTheProjectIs(int year, int month, int day) {
+		GregorianCalendar t = stateHelper.getProject().getTimeManager().getStartTime();
+		assertEquals(year, t.get(GregorianCalendar.YEAR));
+		assertEquals(month - 1, t.get(GregorianCalendar.MONTH));
+		assertEquals(day, t.get(GregorianCalendar.DATE));
+	}
+
+	@Then("the end time for the project is {int}-{int}-{int}")
+	public void theEndTimeForTheProjectIs(int year, int month, int day) {
+		GregorianCalendar t = stateHelper.getProject().getTimeManager().getEndTime();
+		assertEquals(year, t.get(GregorianCalendar.YEAR));
+		assertEquals(month - 1, t.get(GregorianCalendar.MONTH));
+		assertEquals(day, t.get(GregorianCalendar.DATE));
+	}
+	
 	@Then("the worker has a total of {int} individual work hours")
 	public void theWorkerHasATotalOfIndividualWorkHours(int hours) {
 	    assertEquals(project.getWorkersAccumulatedHours(managementApp.getState().currentUser()), hours);
@@ -176,23 +208,12 @@ public class ProjectSteps {
 	
 	@Then("the project has a total of {int} work hours")
 	public void theProjectHasATotalOfWorkHours(int hours) {
-		assertTrue(project.workedHours() == hours);
+		assertEquals(project.workedHours(), hours);
 	}
+	
 	@Then("the project is contained in the app")
 	public void theProjectIsContainedInTheApp() throws OperationNotAllowedException {
 	    assertTrue(managementApp.containsProject(projectName));
-	}
-	@Then("the start time is set for the project")
-	public void startTimeIsSet() throws Exception {
-		assertTrue(project.startTimeSet());
-	}
-	@Then("the end time is set for the project")
-	public void endTimeIsSet() throws Exception {
-		assertTrue(project.endTimeSet());
-	}
-	@Then("the time settings for the project are set")
-	public void theTimeIsSet() throws Exception {
-		assertTrue(project.containsTimeSpecifications());
 	}
 	@Then("the workers AH-list will hold {int} hours for {string} and {int} hours for {string}")
 	public void AccumulatedHoursListCheck(Integer hours1, String projectName1, Integer hours2, String projectName2) {
@@ -218,8 +239,8 @@ public class ProjectSteps {
 	}
 	@Then("the start and end week of the given month of the project are week {int} and week {int}")
 	public void weekRepresentation(int startWeek, int endWeek) {
-	    assertEquals(project.getStartWeek(),startWeek);
-	    assertEquals(project.getEndWeek(),endWeek);
+		assertEquals(project.getTimeManager().getStartWeek(), startWeek);
+		assertEquals(project.getTimeManager().getEndWeek(), endWeek);
 	}
 	
 }

@@ -13,25 +13,16 @@ public class StateHelper {
 	public StateHelper (State state) {
 		this.state = state;
 	}
-	
-	private Project exampleProject() {
-		project = new Project("Programming 101", "11", state);
-		return project;
-	}
-	public void setWorker(Worker worker) {
-		this.worker = worker;
-	}
-	public void setProject(Project project) {
-		this.project = project;
-	}
 	public void setState(State state) {
 		this.state = state;
 	}
-	public Worker getWorker() {
-		if (worker == null) {
-			worker = exampleWorker();
-		}
-		return worker;
+	
+	public void setProject(Project project) {
+		this.project = project;
+	}
+	private Project exampleProject() {
+		project = new Project("Programming 101", state);
+		return project;
 	}
 	public Project getProject() {
 		if (project == null) {
@@ -39,6 +30,21 @@ public class StateHelper {
 		}
 		return project;
 	}
+	
+	public void setWorker(Worker worker) {
+		this.worker = worker;
+	}
+	public Worker getWorker() {
+		if (worker == null) {
+			worker = exampleWorker();
+		}
+		return worker;
+	}
+	private Worker exampleWorker() {
+		worker = new Worker("PEPE", "1234");
+		return worker;
+	}
+	
 	/*
 	 * Methods used for logging a temporary user in order to
 	 * perform certain operations in the management app
@@ -51,9 +57,5 @@ public class StateHelper {
 	public void logOutTemp() {
 		state.setUser(worker);
 		temp = null;
-	}
-	private Worker exampleWorker() {
-		worker = new Worker("PEPE", "1234");
-		return worker;
 	}
 }
