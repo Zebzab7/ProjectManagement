@@ -41,6 +41,23 @@ public class Project extends Item {
 	public int workedHours() {
 		return workedHours;
 	}
+	public boolean getPreConditions() throws OperationNotAllowedException {
+		if ( getState().currentUser() == null ) {
+			throw new OperationNotAllowedException("User login required");
+		}
+		if (isSelected()) {
+			if (!containsWorker(getState().currentUser())) {
+				throw new OperationNotAllowedException("User is not assigned to the project");
+			}
+			if (!projectLeaderIsLoggedIn()) {
+			   throw new OperationNotAllowedException("User is not the project leader");
+			}
+			this.setPreConditions(true);
+			return this.getPreConditions();
+		}
+		this.setPreConditions(false);
+		return this.getPreConditions();
+	}
 	
 	
 	/*
@@ -70,44 +87,11 @@ public class Project extends Item {
 	}
 	
 	public boolean projectLeaderIsLoggedIn() throws OperationNotAllowedException {
-		if ( getState().currentUser() == null ) {
-			throw new OperationNotAllowedException("User login required");
-		}
 		
 		if ( hasProjectLeader() &&
 			   getState().currentUser().getUsername().equals(projectLeader.getUsername()) && 
 			   getState().currentUser().getPassword().equals(projectLeader.getPassword()) ) {
 			return true;
-		}
-		return false;
-	}
-	
-	public boolean setStartTime(int year, int month, int day) throws OperationNotAllowedException {
-		if (isSelected()) {
-			if (!containsWorker(getState().currentUser())) {
-				throw new OperationNotAllowedException("User is not assigned to the project");
-			}
-			if (!projectLeaderIsLoggedIn()) {
-			   throw new OperationNotAllowedException("User is not the project leader");
-			}
-			if (getTimeManager().setStartTime(year, month, day)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean setEndTime(int year, int month, int day) throws OperationNotAllowedException {
-		if (isSelected()) {
-			if (!containsWorker(getState().currentUser())) {
-				throw new OperationNotAllowedException("User is not assigned to the project");
-			}
-			if (!projectLeaderIsLoggedIn()) {
-				throw new OperationNotAllowedException("User is not the project leader");
-			}
-			if (getTimeManager().setEndTime(year, month, day)) {
-				return true;
-			}
 		}
 		return false;
 	}

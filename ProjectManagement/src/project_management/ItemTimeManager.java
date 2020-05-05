@@ -45,24 +45,34 @@ public class ItemTimeManager {
 	 *  	- Time must be valid 
 	 */ 
 	
-	public boolean setStartTime(int year, int month, int day) throws OperationNotAllowedException {
-		if (state.currentUser() == null) throw new OperationNotAllowedException("User login required");
-		startTime.set(year, month - 1, day);
-		if (endTimeSpecified && startTime.after(endTime)) {
-			throw new OperationNotAllowedException("Deadline is invalid");
+	public boolean setStartTime(int year, int month, int day, Item object) throws OperationNotAllowedException {
+		if(object.preConditionsMet()) {
+			if (state.currentUser() == null) throw new OperationNotAllowedException("User login required");
+			startTime.set(year, month - 1, day);
+			
+			if (endTimeSpecified && startTime.after(endTime)) {
+				throw new OperationNotAllowedException("Deadline is invalid");
+			}
+			startTimeSpecified = true;
+			return true;
 		}
-		startTimeSpecified = true;
-		return true;
+		else {
+			return false;
+		}
 	}
 	
-	public boolean setEndTime(int year, int month, int day) throws OperationNotAllowedException {
-		if (state.currentUser() == null) throw new OperationNotAllowedException("User login required");
-		endTime.set(year, month - 1, day);
-		if (startTimeSpecified && startTime.after(endTime)) {
-			throw new OperationNotAllowedException("Deadline is invalid");
+	public boolean setEndTime(int year, int month, int day, Item object) throws OperationNotAllowedException {
+		if(object.preConditionsMet()) {
+			endTime.set(year, month - 1, day);
+			if (startTimeSpecified && startTime.after(endTime)) {
+				throw new OperationNotAllowedException("Deadline is invalid");
+			}
+			endTimeSpecified = true;
+			return true;
 		}
-		endTimeSpecified = true;
-		return true;
+		else {
+			return false;
+		}
 	}
 	
 	/*

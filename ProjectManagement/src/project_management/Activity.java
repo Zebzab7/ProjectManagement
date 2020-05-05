@@ -8,6 +8,16 @@ public class Activity extends Item {
 	private int expectedTime;
 	private int workedHours;
 	
+	public boolean getPreConditions() throws OperationNotAllowedException {
+		if ( getState().currentUser() == null ) {
+			throw new OperationNotAllowedException("User login required");
+		}
+		if(isSelected()) {
+			return setPreConditions(true);
+		}
+		return setPreConditions(false);
+	}
+	
 	public Activity(String name, State state) {
 		super(name, state);
 	}
@@ -19,22 +29,6 @@ public class Activity extends Item {
 	
 	public int workedHours() {
 		return workedHours;
-	}
-	
-	public boolean setStartTime(int year, int month, int day) throws OperationNotAllowedException {
-		if (isSelected()) {
-			getTimeManager().setStartTime(year, month, day);
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean setEndTime(int year, int month, int day) throws OperationNotAllowedException {
-		if (isSelected()) {
-			getTimeManager().setStartTime(year, month, day);
-			return true;
-		}
-		return false;
 	}
 	
 	public boolean addHours(int hours) {

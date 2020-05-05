@@ -174,7 +174,7 @@ public class ManagementApp {
 	 * The following two methods return statistics of a given worker
 	 */
 	
-	public ArrayList<String> workerHoursCollected(Worker worker) {
+	public ArrayList<String> workerHoursCollected(Worker worker) throws OperationNotAllowedException {
 		workerHours.clear();
 		for(Project p : projects) {
 			if(p.containsWorker(worker)) {

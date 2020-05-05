@@ -1,5 +1,6 @@
 package test_helpers;
 
+import project_management.Activity;
 import project_management.Project;
 import project_management.State;
 import project_management.Worker;
@@ -7,32 +8,12 @@ import project_management.Worker;
 public class StateHelper {
 	private State state;
 	private Project project;
+	private Activity activity;
 	private Worker worker;
 	private Worker temp;
 	
 	public StateHelper (State state) {
 		this.state = state;
-	}
-	public void setState(State state) {
-		this.state = state;
-	}
-	
-	public void setProject(Project project) {
-		this.project = project;
-	}
-	private Project exampleProject() {
-		project = new Project("Programming 101", state);
-		return project;
-	}
-	public Project getProject() {
-		if (project == null) {
-			project = exampleProject();
-		}
-		return project;
-	}
-	
-	public void setWorker(Worker worker) {
-		this.worker = worker;
 	}
 	public Worker getWorker() {
 		if (worker == null) {
@@ -40,9 +21,45 @@ public class StateHelper {
 		}
 		return worker;
 	}
+	public Project getProject() {
+		if (project == null) {
+			project = exampleProject();
+		}
+		return project;
+	}
+	public Activity getActivity() {
+		if (activity == null) {
+			activity = exampleActivity();
+		}
+		return activity;
+	}
+	
+	public void setState(State state) {
+		this.state = state;
+	}
+	
+	public void setProject(Project project) {
+		this.project = project;
+	}
+	public boolean setActivity(Activity activity) {
+		this.activity = activity;
+		return true;
+	}
+	public void setWorker(Worker worker) {
+		this.worker = worker;
+	}
+	
 	private Worker exampleWorker() {
 		worker = new Worker("PEPE", "1234");
 		return worker;
+	}
+	private Project exampleProject() {
+		project = new Project("Programming 101", state);
+		return project;
+	}
+	private Activity exampleActivity() {
+		activity = new Activity("Activity101", state);
+		return activity;
 	}
 	
 	/*

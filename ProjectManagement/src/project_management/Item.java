@@ -8,6 +8,7 @@ public class Item {
 	private ItemTimeManager timeManager;
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
 	private boolean selected = false;
+	private boolean preConditions = false;
 	
 	public Item(String name, State state) {
 		this.name = name;
@@ -29,8 +30,16 @@ public class Item {
 	public State getState() {
 		return state;
 	}
+	public boolean preConditionsMet() throws OperationNotAllowedException {
+		return preConditions;
+	}
 	
-	public Worker findWorker (String name) throws OperationNotAllowedException {
+	public boolean setPreConditions(boolean statement) {
+		this.preConditions = statement;
+		return preConditions;
+	}
+	
+	public Worker findWorker (String name) {
 		for (Worker w : workers) {
 			if (w.getUsername() == name) {
 				return w;
@@ -52,23 +61,7 @@ public class Item {
 		return false;
 	}
 	
-	public boolean setStartTime(int year, int month, int day) throws OperationNotAllowedException {
-		if (selected) {
-			timeManager.setStartTime(year, month, day);
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean setEndTime(int year, int month, int day) throws OperationNotAllowedException {
-		if (selected) {
-			timeManager.setStartTime(year, month, day);
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean addWorker(Worker worker) throws Exception {
+	public boolean addWorker(Worker worker) {
 //		if(absenteeCheck.workerIsAbsent(worker)) {
 //			throw new Exception("Worker is absent");
 //		}

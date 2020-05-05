@@ -15,7 +15,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import project_management.*;
-import test_helpers.ActivityHelper;
 import test_helpers.ErrorMessageHolder;
 import test_helpers.StateHelper;
 
@@ -24,15 +23,14 @@ public class ActivitySteps {
 	private Activity activity;
 	
 	private StateHelper stateHelper;
-	private ActivityHelper activityHelper;
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
 	
-	public ActivitySteps(ManagementApp managementApp, StateHelper userHelper, ActivityHelper activityHelper, ErrorMessageHolder errorMessage) {
+	public ActivitySteps(ManagementApp managementApp, StateHelper userHelper, StateHelper stateHelper, ErrorMessageHolder errorMessage) {
 		this.managementApp = managementApp;
 		this.stateHelper = new StateHelper(managementApp.getState());
 		this.errorMessage = errorMessage;
-		this.activityHelper = activityHelper;
+		this.stateHelper = stateHelper;
 	}
 	
 	@Given("the worker is working on a project")
@@ -57,8 +55,8 @@ public class ActivitySteps {
 	public void theActivityWithNameIsInTheProject(String name) throws OperationNotAllowedException {
 	   try {
 		   if (!stateHelper.getProject().containsActivity(name)) {
-			   activityHelper.setActivity(new Activity(name, managementApp.getState()));
-			   stateHelper.getProject().addActivity(activityHelper.getActivity());
+			   stateHelper.setActivity(new Activity(name, managementApp.getState()));
+			   stateHelper.getProject().addActivity(stateHelper.getActivity());
 		   }
 		   assertTrue(stateHelper.getProject().containsActivity(name));
 	    } catch (OperationNotAllowedException e) {
@@ -72,27 +70,27 @@ public class ActivitySteps {
 		if (!p.containsActivity(p.getName())) {
 			p.addActivity(new Activity(name, managementApp.getState()));
 		}
-		activityHelper.setActivity(p.findActivity(name));
+		stateHelper.setActivity(p.findActivity(name));
 		assertTrue(p.containsActivity(name));
 	}
 	
 	@Given("the activity has no work hours")
 	public void theActivityHasNoWorkHours() {
-		Activity act = activityHelper.getActivity();
+		Activity act = stateHelper.getActivity();
 		stateHelper.getProject().addHoursToActivity(-act.workedHours(), act);
 		assertEquals(act.workedHours(), 0);
 	}
 	
 	@When("the worker adds {int} work hours to the activity succesfully")
 	public void theWorkerAddsWorkHoursToTheActivitySuccesfully(int hours) {
-		assertTrue(stateHelper.getProject().addHoursToActivity(hours, activityHelper.getActivity()));
+		assertTrue(stateHelper.getProject().addHoursToActivity(hours, stateHelper.getActivity()));
 	}
 
 	@When("worker creates new activity with name {string} and ET {int} hours")
 	public void workerCreatesNewActivityWithNameAndETHours(String name, int ET) throws Exception {
 		try {
 			activityName = name;
-			assertTrue( activityHelper.setActivity(new Activity(name, managementApp.getState(), ET)) );
+			assertTrue( stateHelper.setActivity(new Activity(name, managementApp.getState(), ET)) );
 		}
 		catch (Exception e) {
 	    	errorMessage.setErrorMessage(e.getMessage());
@@ -102,7 +100,7 @@ public class ActivitySteps {
 	@When("worker adds the activity to the project")
 	public void workerAddsTheActivityToTheProject() throws OperationNotAllowedException {
 		try {
-			assertTrue(stateHelper.getProject().addActivity(activityHelper.getActivity()));
+			assertTrue(stateHelper.getProject().addActivity(stateHelper.getActivity()));
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -110,7 +108,7 @@ public class ActivitySteps {
 	
 	@Then("the activity has a total of {int} work hours")
 	public void theActivityHasATotalOfWorkHours(int hours) {
-		assertEquals(activityHelper.getActivity().workedHours(), hours);
+		assertEquals(stateHelper.getActivity().workedHours(), hours);
 	}
 	
 	@Then("the activity is contained in the project")
