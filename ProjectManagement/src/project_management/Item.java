@@ -49,10 +49,6 @@ public class Item {
 	}
 	
 	public boolean containsWorker(Worker worker) throws OperationNotAllowedException {
-		if (state.currentUser() == null) {
-			throw new OperationNotAllowedException("User login required");
-		}
-		
 		for (Worker w : workers) {
 			if (w.getUsername().equals(worker.getUsername())) {
 				return true;
@@ -61,7 +57,7 @@ public class Item {
 		return false;
 	}
 	
-	public boolean addWorker(Worker worker) {
+	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
 //		if(absenteeCheck.workerIsAbsent(worker)) {
 //			throw new Exception("Worker is absent");
 //		}
@@ -70,9 +66,10 @@ public class Item {
 //		accumulatedHours.add(initialHours);
 	}
 	
-	public void removeWorker(Worker worker) {
+	public boolean removeWorker(Worker worker) {
 //		accumulatedHours.remove(workers.indexOf(worker));
 		workers.remove(worker);
+		return true;
 	}
 	
 	public boolean select() {

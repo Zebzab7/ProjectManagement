@@ -9,7 +9,7 @@ public class StateHelper {
 	private State state;
 	private Project project;
 	private Activity activity;
-	private Worker worker;
+	private Worker worker, prev;
 	private Worker temp;
 	
 	public StateHelper (State state) {
@@ -37,7 +37,6 @@ public class StateHelper {
 	public void setState(State state) {
 		this.state = state;
 	}
-	
 	public void setProject(Project project) {
 		this.project = project;
 	}
@@ -67,12 +66,17 @@ public class StateHelper {
 	 * perform certain operations in the management app
 	 */
 	public void logInTemp() {
-		worker = state.currentUser();
+		if (state.currentUser() != null) 
+		prev = new Worker(state.currentUser().getUsername(), state.currentUser().getPassword());
+		else prev = null;
 		temp = new Worker("Temp", "1234");
 		state.setUser(temp);
 	}
 	public void logOutTemp() {
-		state.setUser(worker);
+		state.setUser(prev);
 		temp = null;
+	}
+	public Worker getTemp() {
+		return temp;
 	}
 }

@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 public class Worker {
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
-	
 	private String username;
 	private Project leadingProject;
 	private String password;
+	private int workedHours;
+	
 	private int registerHours;
 	
 	public Worker(String username, String password) {
@@ -17,6 +18,11 @@ public class Worker {
 	
 	public void setLeadingProject(Project project) {
 		leadingProject = project;
+	}
+	
+	public boolean addHours(int hours) {
+		workedHours += hours;
+		return true;
 	}
 
 	public String getUsername() {

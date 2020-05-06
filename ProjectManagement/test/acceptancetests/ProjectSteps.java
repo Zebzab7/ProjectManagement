@@ -44,13 +44,16 @@ public class ProjectSteps {
 	@Given("the project with name {string} does exist")
 	public void theProjectWithNameDoesExist(String name) throws Exception {
 		try {
+			stateHelper.logInTemp();
 			if ( !managementApp.containsProject(name) ) {
 				assertTrue(managementApp.addProject(new Project(name, managementApp.getState())));
+				
 			}
 			assertTrue(managementApp.containsProject(name));
 			project = managementApp.findProject(name);
 			this.projectName = name;
 			stateHelper.setProject(project);
+			stateHelper.logOutTemp();
 	    } catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -58,10 +61,10 @@ public class ProjectSteps {
 	
 	@Given("the worker is working on the project")
 	public void theWorkerIsWorkingOnTheProject() throws OperationNotAllowedException, Exception {
-		if(!project.containsWorker(managementApp.getState().currentUser())) {
-			project.addWorker(managementApp.getState().currentUser());
+		if(!stateHelper.getProject().containsWorker(stateHelper.getWorker())) {
+			stateHelper.getProject().addWorker(stateHelper.getWorker());
 		}
-		assertTrue(project.containsWorker(managementApp.getState().currentUser()));
+		assertTrue(stateHelper.getProject().containsWorker(stateHelper.getWorker()));
 	}
 	
 	@Given("the worker is not working on the project")
@@ -98,7 +101,7 @@ public class ProjectSteps {
 	
 	@When("the worker adds {int} work hours succesfully")
 	public void theWorkerAddsWorkHoursSuccesfully(int hours) throws OperationNotAllowedException {
-		assertTrue(project.addHours(hours));
+		assertTrue(project.addHoursToActivity(hours, stateHelper.getActivity()));
 	}
 	
 	@When("the worker adds {int} work hours unsuccesfully")
@@ -132,23 +135,23 @@ public class ProjectSteps {
 	    }
 	}
 	
-	@When("the worker is added to the project")
-	public void the_worker_is_added_to_the_project() {
-		if(!project.containsWorker(managementApp.getState().currentUser())) {
-			try {
-				project.addWorker(managementApp.getState().currentUser());
-			} catch (Exception e) {
-				errorMessage.setErrorMessage(e.getMessage());
-			}
-		}
-		
-	    assertTrue(project.containsWorker(managementApp.getState().currentUser()));
-	}
+//	@When("the worker is added to the project")
+//	public void the_worker_is_added_to_the_project() {
+//		if(!project.containsWorker(managementApp.getState().currentUser())) {
+//			try {
+//				project.addWorker(managementApp.getState().currentUser());
+//			} catch (Exception e) {
+//				errorMessage.setErrorMessage(e.getMessage());
+//			}
+//		}
+//		
+//	    assertTrue(project.containsWorker(managementApp.getState().currentUser()));
+//	}
 	
 	@When("the worker sets the start date of the project to the {int}-{int}-{int} succesfully")
 	public void theWorkerSetsTheStartDateOfTheProjectToThe(int year, int month, int day) throws Exception {
 		try {
-			assertTrue(stateHelper.getProject().setStartTime(year, month, day));
+			assertTrue(project.getTimeManager().setStartTime(year, month, day, project));
 		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -157,7 +160,7 @@ public class ProjectSteps {
 	@When("the worker sets the end date of the project to the {int}-{int}-{int} succesfully")
 	public void theWorkerSetsTheEndDateOfTheProjectToTheSuccesfully(int year, int month, int day) throws Exception {
 		try {
-			assertTrue(stateHelper.getProject().setEndTime(year, month, day));
+			assertTrue(project.getTimeManager().setEndTime(year, month, day, project));
 		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -166,23 +169,10 @@ public class ProjectSteps {
 	@When("the worker sets the end date of the project to the {int}-{int}-{int} unsuccesfully")
 	public void theWorkerSetsTheEndDateOfTheProjectToTheUnsuccesfully(int year, int month, int day) {
 		try {
-			assertFalse(stateHelper.getProject().setEndTime(year, month, day));
+			assertFalse(stateHelper.getProject().getTimeManager().setEndTime(year, month, day, project));
 		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
-	}
-	
-	@When("another worker adds {int} work hours successfully")
-	public void anotherWorkerAddsWorkHoursSuccessfully(int hours) {
-		try {
-			stateHelper.logInTemp();
-			project.addWorker(managementApp.getState().currentUser());
-			project.addHours(hours);
-			stateHelper.logOutTemp();
-			
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}	
 	}
 	
 	@Then("the start time for the project is {int}-{int}-{int}")
@@ -237,6 +227,7 @@ public class ProjectSteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
+	
 	@Then("the start and end week of the given month of the project are week {int} and week {int}")
 	public void weekRepresentation(int startWeek, int endWeek) {
 		assertEquals(project.getTimeManager().getStartWeek(), startWeek);

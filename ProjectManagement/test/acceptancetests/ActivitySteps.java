@@ -26,11 +26,11 @@ public class ActivitySteps {
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
 	
-	public ActivitySteps(ManagementApp managementApp, StateHelper userHelper, StateHelper stateHelper, ErrorMessageHolder errorMessage) {
+	public ActivitySteps(ManagementApp managementApp, StateHelper stateHelper, ErrorMessageHolder errorMessage) {
 		this.managementApp = managementApp;
-		this.stateHelper = new StateHelper(managementApp.getState());
-		this.errorMessage = errorMessage;
 		this.stateHelper = stateHelper;
+		this.errorMessage = errorMessage;
+		stateHelper.setState(managementApp.getState());
 	}
 	
 	@Given("the worker is working on a project")
@@ -67,23 +67,89 @@ public class ActivitySteps {
 	@Given("the project has an activity named {string}")
 	public void theProjectHasAnActivityNamed(String name) throws OperationNotAllowedException {
 		Project p = stateHelper.getProject();
+		stateHelper.logInTemp();
 		if (!p.containsActivity(p.getName())) {
 			p.addActivity(new Activity(name, managementApp.getState()));
 		}
 		stateHelper.setActivity(p.findActivity(name));
+		stateHelper.logOutTemp();
 		assertTrue(p.containsActivity(name));
 	}
 	
 	@Given("the activity has no work hours")
-	public void theActivityHasNoWorkHours() {
-		Activity act = stateHelper.getActivity();
-		stateHelper.getProject().addHoursToActivity(-act.workedHours(), act);
-		assertEquals(act.workedHours(), 0);
+	public void theActivityHasNoWorkHours() throws OperationNotAllowedException {
+		try {
+			Activity act = stateHelper.getActivity();
+			stateHelper.logInTemp();
+			if (!stateHelper.getProject().containsWorker(stateHelper.getTemp())) {
+				stateHelper.getProject().addWorker(stateHelper.getTemp());
+			}
+			if (!stateHelper.getActivity().containsWorker(stateHelper.getTemp())) {
+				stateHelper.getActivity().addWorker(stateHelper.getTemp());
+			}
+			stateHelper.getProject().addHoursToActivity(-act.workedHours(), act);
+			stateHelper.logOutTemp();
+			assertEquals(act.workedHours(), 0);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@Given("the activity is selected")
+	public void theActivityIsSelected() {
+		assertTrue(stateHelper.getActivity().select());
+	}
+	
+	@Given("the worker is working on the activity")
+	public void theWorkerIsWorkingOnTheActivity() throws OperationNotAllowedException {
+		if(!stateHelper.getActivity().containsWorker(stateHelper.getWorker())) {
+			stateHelper.getProject().addWorkerToActivity(stateHelper.getWorker(), stateHelper.getActivity());
+		}
+		assertTrue(stateHelper.getActivity().containsWorker(stateHelper.getWorker()));
+	}
+	
+	@Given("the worker is not working on the activity")
+	public void theWorkerIsNotWorkingOnTheActivity() throws OperationNotAllowedException {
+		assertFalse(stateHelper.getActivity().containsWorker(stateHelper.getWorker()));
 	}
 	
 	@When("the worker adds {int} work hours to the activity succesfully")
-	public void theWorkerAddsWorkHoursToTheActivitySuccesfully(int hours) {
-		assertTrue(stateHelper.getProject().addHoursToActivity(hours, stateHelper.getActivity()));
+	public void theWorkerAddsWorkHoursToTheActivitySuccesfully(int hours) throws OperationNotAllowedException {
+		try {
+			assertTrue(stateHelper.getProject().addHoursToActivity(hours, stateHelper.getActivity()));
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+		
+	}
+	
+	@When("another worker adds {int} work hours to the activity successfully")
+	public void anotherWorkerAddsWorkHoursToTheActivitySuccessfully(Integer int1) throws OperationNotAllowedException {
+		try {
+			Activity act = stateHelper.getActivity();
+			stateHelper.logInTemp();
+			if (!stateHelper.getProject().containsWorker(stateHelper.getTemp())) {
+				stateHelper.getProject().addWorker(stateHelper.getTemp());
+			}
+			if (!stateHelper.getActivity().containsWorker(stateHelper.getTemp())) {
+				stateHelper.getActivity().addWorker(stateHelper.getTemp());
+			}
+			boolean result = stateHelper.getProject().addHoursToActivity(-act.workedHours(), act);
+			stateHelper.logOutTemp();
+			assertTrue(result);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@When("the worker adds {int} work hours to the activity unsuccesfully")
+	public void theWorkerAddsWorkHoursToTheActivityUnsuccesfully(int hours) throws OperationNotAllowedException {
+		try {
+			assertFalse(stateHelper.getProject().addHoursToActivity(hours, stateHelper.getActivity()));
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+		
 	}
 
 	@When("worker creates new activity with name {string} and ET {int} hours")
@@ -109,6 +175,11 @@ public class ActivitySteps {
 	@Then("the activity has a total of {int} work hours")
 	public void theActivityHasATotalOfWorkHours(int hours) {
 		assertEquals(stateHelper.getActivity().workedHours(), hours);
+	}
+	
+	@Then("the worker has a total of {int} hours contributed to the activity")
+	public void theWorkerHasATotalOfHoursContributedToTheActivity(int hours) {
+		assertEquals(stateHelper.getActivity().workerContributedHours(stateHelper.getWorker()), hours);
 	}
 	
 	@Then("the activity is contained in the project")
