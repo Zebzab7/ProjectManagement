@@ -16,7 +16,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import project_management.*;
 import test_helpers.ErrorMessageHolder;
-import test_helpers.StateHelper;
+import test_helpers.ItemHolder;
 
 public class LoginLogoutSteps {
 	private ManagementApp managementApp;
@@ -25,11 +25,11 @@ public class LoginLogoutSteps {
 	private ErrorMessageHolder errorMessage;
 	private Worker worker;
 	
-	StateHelper stateHelper;
+	ItemHolder itemHolder;
 	
-	public LoginLogoutSteps(ManagementApp managementApp, StateHelper helper, ErrorMessageHolder errorMessage) {
+	public LoginLogoutSteps(ManagementApp managementApp, ItemHolder helper, ErrorMessageHolder errorMessage) {
 		this.managementApp = managementApp;
-		this.stateHelper = helper;
+		this.itemHolder = helper;
 		this.errorMessage = errorMessage;
 	}
 	
@@ -47,7 +47,7 @@ public class LoginLogoutSteps {
 	
 	@Given("that the worker is logged in")
 	public void thatTheWorkerIsLoggedIn() throws Exception {
-		worker = stateHelper.getWorker();
+		worker = itemHolder.getWorker();
 		if (!managementApp.containsUser(worker.getUsername())) {
 			assertTrue(managementApp.createUser(worker.getUsername(), worker.getPassword()));
 		}
@@ -56,7 +56,7 @@ public class LoginLogoutSteps {
 	
 	@Given("that worker with the name {string} and password {string} is logged in")
 	public void thatWorkerWithTheNameAndPasswordIsLoggedIn(String name, String password) throws Exception {
-		stateHelper.setWorker(new Worker(name, password));
+		itemHolder.setWorker(new Worker(name, password));
 		managementApp.createUser(name, password);
 		assertTrue(managementApp.Login(name, password));
 	}

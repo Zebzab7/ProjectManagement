@@ -49,29 +49,35 @@ Scenario: Hours are subtracted to a negative number
 	And the project has a total of 0 work hours
 
 Scenario: Worker has certain time contribution to given activity
-	Given the worker is logged in
+	Given that the worker is logged in
 	And the project with name "Programming 101" does exist
 	And the project has an activity named "ProgrammingTasks 101"
 	And the worker is working on the project
-	And the project has no work hours
+	And the worker is working on the activity
+	And the activity has no work hours
 	And the activity is selected
 	When the worker adds 15 work hours to the activity succesfully
 	And another worker adds 10 work hours to the activity successfully
 	Then the project has a total of 25 work hours
 	And the worker has a total of 15 hours contributed to the activity
 
-Scenario: Check workers accumulated hours list
-	Given that worker with the name "PEPE" and password "1234" is logged in
+Scenario: Worker has certain time contribution to different projects
+	Given that the worker is logged in
 	And the project with name "Programming 101" does exist
+	And the project has an activity named "ProgrammingTasks 101"
 	And the worker is working on the project
-	When the worker adds 15 work hours succesfully
-	And worker adds new project named "Programming 102"
-	And the worker is added to the project
-	And the worker adds 7 work hours succesfully
-	Then the workers AH-list will hold 15 hours for "Programming 101" and 7 hours for "Programming 102"
+	And the worker is working on the activity
+	And the project with name "Programming 102" does exist
+	And the project has an activity named "ProgrammingTasks 102"
+	And the worker is working on the project
+	And the worker is working on the activity
+	When the worker selects and adds 15 work hours to activity "ProgrammingTasks 101" in project "Programming 101" succesfully
+	And the worker selects and adds 7 work hours to activity "ProgrammingTasks 102" in project "Programming 102" succesfully
+	Then the worker has a total of 15 work hours contributed to project "Programming 101"
+	And the worker has a total of 7 work hours contributed to project "Programming 102"
 
 Scenario: Number of assigned projects
-	Given that worker with the name "PEPE" and password "1234" is logged in
+	Given that worker "PEPE" with password "1234" exist
 	And the project with name "Programming 101" does exist
 	And the worker is working on the project
 	And the project with name "Programming 102" does exist

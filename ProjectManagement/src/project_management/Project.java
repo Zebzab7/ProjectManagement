@@ -100,12 +100,13 @@ public class Project extends Item {
 				|| !activity.containsWorker(getState().currentUser())) return false;
 		
 		Activity act = findActivity(activity.getName());
+		
 		int index = getWorkerList().indexOf(findWorker(getState().currentUser().getUsername()));
 		int value = accumulatedHours.get(index);
 		accumulatedHours.set(index, value+hours);
-		act.addHours(hours);
 		
-		if ( !((workedHours + hours) < 0) ) {
+		if ( !((workedHours + hours) < 0) && act.preConditionsMet() ) {
+			act.addHours(hours);
 			workedHours += hours;
 			return true;
 		}

@@ -18,22 +18,23 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import project_management.*;
 import test_helpers.ErrorMessageHolder;
-import test_helpers.StateHelper;
+import test_helpers.ItemHolder;
+
 public class WorkerSteps {
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
-	private StateHelper stateHelper;
+	private ItemHolder itemHolder;
 	
-	public WorkerSteps(ManagementApp managementApp, ErrorMessageHolder errorMessage, StateHelper stateHelper) {
+	public WorkerSteps(ManagementApp managementApp, ErrorMessageHolder errorMessage, ItemHolder stateHelper) {
 		this.managementApp = managementApp;
 		this.errorMessage = errorMessage;
-		this.stateHelper = stateHelper;
+		this.itemHolder = stateHelper;
 	}
 	
 	@Given("that worker {string} with password {string} exist")
 	public void thatWorkerWithPasswordExist(String name, String password) throws Exception {
-		stateHelper.setWorker(new Worker(name, password));
-		managementApp.addWorker(stateHelper.getWorker());
+		itemHolder.setWorker(new Worker(name, password));
+		managementApp.addWorker(itemHolder.getWorker());
 	    assertTrue(managementApp.containsUser(name));
 	}
 	
@@ -46,7 +47,19 @@ public class WorkerSteps {
 	public void theWorkerNamedWithPasswordIsCreated(String name, String password) throws Exception {
 		try {
 		    managementApp.createUser(name, password);
-		    stateHelper.setWorker(managementApp.findWorker(name));
+		    itemHolder.setWorker(managementApp.findWorker(name));
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@Then("the workers AssignedProjects list will hold {string} and {string}")
+	public void the_workers_AssignedProjects_list_will_hold_and(String projectName1, String projectName2) {
+	    try {
+	    	Project p1 = managementApp.findProject(projectName1);
+	    	Project p2 = managementApp.findProject(projectName2);
+	    	assertTrue(itemHolder.getWorker().getAssignedProjects().contains(p1));
+	    	assertTrue(itemHolder.getWorker().getAssignedProjects().contains(p2));
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -59,6 +72,6 @@ public class WorkerSteps {
 
 	@Then("the worker is contained in app")
 	public void theWorkerIsContainedInApp() {
-	    assertTrue(managementApp.containsUser(stateHelper.getWorker().getUsername()));
+	    assertTrue(managementApp.containsUser(itemHolder.getWorker().getUsername()));
 	}
 }

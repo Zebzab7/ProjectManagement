@@ -18,22 +18,22 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import project_management.*;
 import test_helpers.ErrorMessageHolder;
-import test_helpers.StateHelper;
+import test_helpers.ItemHolder;
 public class ProjectSteps {
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
 	
-	private StateHelper stateHelper;
+	private ItemHolder itemHolder;
 	private Worker worker, prev, temp;
 	private Project project;
 	
 	String projectName;
 	
-	public ProjectSteps(ManagementApp managementApp, ErrorMessageHolder errorMessage, StateHelper stateHelper) {
+	public ProjectSteps(ManagementApp managementApp, ErrorMessageHolder errorMessage, ItemHolder stateHelper) {
 		this.managementApp = managementApp;
 		this.errorMessage = errorMessage;
-		this.stateHelper = stateHelper;
-		this.stateHelper.setState(managementApp.getState());
+		this.itemHolder = stateHelper;
+		this.itemHolder.setState(managementApp.getState());
 	}
 	
 	@Given("the project with name {string} does not exist")
@@ -44,7 +44,7 @@ public class ProjectSteps {
 	@Given("the project with name {string} does exist")
 	public void theProjectWithNameDoesExist(String name) throws Exception {
 		try {
-			stateHelper.logInTemp();
+			itemHolder.logInTemp();
 			if ( !managementApp.containsProject(name) ) {
 				assertTrue(managementApp.addProject(new Project(name, managementApp.getState())));
 				
@@ -52,8 +52,8 @@ public class ProjectSteps {
 			assertTrue(managementApp.containsProject(name));
 			project = managementApp.findProject(name);
 			this.projectName = name;
-			stateHelper.setProject(project);
-			stateHelper.logOutTemp();
+			itemHolder.setProject(project);
+			itemHolder.logOutTemp();
 	    } catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -61,58 +61,35 @@ public class ProjectSteps {
 	
 	@Given("the worker is working on the project")
 	public void theWorkerIsWorkingOnTheProject() throws OperationNotAllowedException, Exception {
-		if(!stateHelper.getProject().containsWorker(stateHelper.getWorker())) {
-			stateHelper.getProject().addWorker(stateHelper.getWorker());
+		if(!itemHolder.getProject().containsWorker(itemHolder.getWorker())) {
+			itemHolder.getProject().addWorker(itemHolder.getWorker());
 		}
-		assertTrue(stateHelper.getProject().containsWorker(stateHelper.getWorker()));
+		assertTrue(itemHolder.getProject().containsWorker(itemHolder.getWorker()));
 	}
 	
 	@Given("the worker is not working on the project")
 	public void theWorkerIsNotWorkingOnTheProject() throws OperationNotAllowedException {
-		worker = stateHelper.getWorker();
+		worker = itemHolder.getWorker();
 		if ( project.containsWorker(worker) ) project.removeWorker(worker);
 	    assertFalse(project.containsWorker(worker));
 	}
 	
-	@Given("the project has no work hours")
-	public void theProjectHasNoWorkHours() throws OperationNotAllowedException {
-		stateHelper.logInTemp();
-		int hours = project.workedHours();
-		project.addHours( -hours );
-		stateHelper.logOutTemp();
-		assertTrue(project.workedHours() == 0);
-	}
-	
 	@Given("the worker is the projectleader")
 	public void theWorkerIsTheProjectleader() throws Exception {
-		stateHelper.logInTemp();
-		if ( !stateHelper.getProject().containsWorker(stateHelper.getWorker()) ) {
-			stateHelper.getProject().addWorker(stateHelper.getWorker());
-			stateHelper.getProject().setProjectLeader(stateHelper.getWorker());
+		itemHolder.logInTemp();
+		if ( !itemHolder.getProject().containsWorker(itemHolder.getWorker()) ) {
+			itemHolder.getProject().addWorker(itemHolder.getWorker());
+			itemHolder.getProject().setProjectLeader(itemHolder.getWorker());
 		}
-		stateHelper.logOutTemp();
-		assertEquals(stateHelper.getProject().getProjectLeader(), stateHelper.getWorker());
+		itemHolder.logOutTemp();
+		assertEquals(itemHolder.getProject().getProjectLeader(), itemHolder.getWorker());
 	}
 	
 	@Given("the project is selected")
 	public void theProjectIsSelected() {
-		assertTrue(stateHelper.getProject().select());
+		assertTrue(itemHolder.getProject().select());
 	}
 	
-	@When("the worker adds {int} work hours succesfully")
-	public void theWorkerAddsWorkHoursSuccesfully(int hours) throws OperationNotAllowedException {
-		assertTrue(project.addHoursToActivity(hours, stateHelper.getActivity()));
-	}
-	
-	@When("the worker adds {int} work hours unsuccesfully")
-	public void theWorkerAddsWorkHoursUnSuccesfully(int hours) throws OperationNotAllowedException {
-		try {
-			assertFalse(project.addHours(hours));
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
-
 	@When("worker adds new project named {string}")
 	public void workerAddsNewProject(String name) throws Exception {
 		try {
@@ -135,19 +112,6 @@ public class ProjectSteps {
 	    }
 	}
 	
-//	@When("the worker is added to the project")
-//	public void the_worker_is_added_to_the_project() {
-//		if(!project.containsWorker(managementApp.getState().currentUser())) {
-//			try {
-//				project.addWorker(managementApp.getState().currentUser());
-//			} catch (Exception e) {
-//				errorMessage.setErrorMessage(e.getMessage());
-//			}
-//		}
-//		
-//	    assertTrue(project.containsWorker(managementApp.getState().currentUser()));
-//	}
-	
 	@When("the worker sets the start date of the project to the {int}-{int}-{int} succesfully")
 	public void theWorkerSetsTheStartDateOfTheProjectToThe(int year, int month, int day) throws Exception {
 		try {
@@ -169,7 +133,7 @@ public class ProjectSteps {
 	@When("the worker sets the end date of the project to the {int}-{int}-{int} unsuccesfully")
 	public void theWorkerSetsTheEndDateOfTheProjectToTheUnsuccesfully(int year, int month, int day) {
 		try {
-			assertFalse(stateHelper.getProject().getTimeManager().setEndTime(year, month, day, project));
+			assertFalse(itemHolder.getProject().getTimeManager().setEndTime(year, month, day, project));
 		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -177,7 +141,7 @@ public class ProjectSteps {
 	
 	@Then("the start time for the project is {int}-{int}-{int}")
 	public void theStartTimeForTheProjectIs(int year, int month, int day) {
-		GregorianCalendar t = stateHelper.getProject().getTimeManager().getStartTime();
+		GregorianCalendar t = itemHolder.getProject().getTimeManager().getStartTime();
 		assertEquals(year, t.get(GregorianCalendar.YEAR));
 		assertEquals(month - 1, t.get(GregorianCalendar.MONTH));
 		assertEquals(day, t.get(GregorianCalendar.DATE));
@@ -185,7 +149,7 @@ public class ProjectSteps {
 
 	@Then("the end time for the project is {int}-{int}-{int}")
 	public void theEndTimeForTheProjectIs(int year, int month, int day) {
-		GregorianCalendar t = stateHelper.getProject().getTimeManager().getEndTime();
+		GregorianCalendar t = itemHolder.getProject().getTimeManager().getEndTime();
 		assertEquals(year, t.get(GregorianCalendar.YEAR));
 		assertEquals(month - 1, t.get(GregorianCalendar.MONTH));
 		assertEquals(day, t.get(GregorianCalendar.DATE));
@@ -196,36 +160,21 @@ public class ProjectSteps {
 	    assertEquals(project.getWorkersAccumulatedHours(managementApp.getState().currentUser()), hours);
 	}
 	
+	@Then("the worker has a total of {int} work hours contributed to project {string}")
+	public void theWorkerHasATotalOfWorkHoursContributedToProject(int hours, String name) throws Exception {
+		Project p = managementApp.findProject(name);
+		assertEquals(p.getWorkersAccumulatedHours(itemHolder.getWorker()),hours);
+	}
+	
 	@Then("the project has a total of {int} work hours")
 	public void theProjectHasATotalOfWorkHours(int hours) {
-		assertEquals(project.workedHours(), hours);
+		System.out.println(itemHolder.getProject().workedHours());
+		assertEquals(itemHolder.getProject().workedHours(), hours);
 	}
 	
 	@Then("the project is contained in the app")
 	public void theProjectIsContainedInTheApp() throws OperationNotAllowedException {
 	    assertTrue(managementApp.containsProject(projectName));
-	}
-	@Then("the workers AH-list will hold {int} hours for {string} and {int} hours for {string}")
-	public void AccumulatedHoursListCheck(Integer hours1, String projectName1, Integer hours2, String projectName2) {
-	    
-		try {
-			assertTrue(managementApp.workerHoursCollected(managementApp.getState().currentUser()).get(0).contains("" + hours1));
-			assertTrue(managementApp.workerHoursCollected(managementApp.getState().currentUser()).get(1).contains("" + hours2));
-			
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
-	@Then("the workers AssignedProjects list will hold {string} and {string}")
-	public void the_workers_AssignedProjects_list_will_hold_and(String projectName1, String projectName2) {
-	    try {
-			assertEquals(managementApp.currentAssignedProjects(managementApp.getState().currentUser()).get(0).getName(),
-																											projectName1);
-			assertEquals(managementApp.currentAssignedProjects(managementApp.getState().currentUser()).get(1).getName(),
-																											projectName2);
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
 	}
 	
 	@Then("the start and end week of the given month of the project are week {int} and week {int}")

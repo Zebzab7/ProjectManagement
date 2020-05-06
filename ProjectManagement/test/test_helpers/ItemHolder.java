@@ -5,16 +5,17 @@ import project_management.Project;
 import project_management.State;
 import project_management.Worker;
 
-public class StateHelper {
+public class ItemHolder {
 	private State state;
 	private Project project;
 	private Activity activity;
 	private Worker worker, prev;
 	private Worker temp;
 	
-	public StateHelper (State state) {
+	public ItemHolder (State state) {
 		this.state = state;
 	}
+	
 	public Worker getWorker() {
 		if (worker == null) {
 			worker = exampleWorker();
