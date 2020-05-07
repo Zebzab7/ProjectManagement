@@ -51,6 +51,16 @@ public class ProjectController implements Initializable {
 	private Activity selectedActivity;
 	
 //	Initialize
+	public void init() {
+		updateLabels();
+		updateWorkerList();
+		
+		try {
+			updateTaskList();
+		} catch (OperationNotAllowedException e) {
+			e.printStackTrace();
+		}
+	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		managementApp = Main.getManagementApp();
@@ -58,37 +68,27 @@ public class ProjectController implements Initializable {
 		projectLeader = project.getProjectLeader();
 		workerCounter = project.getWorkerList().size();
 		
-		updateLabels();
-		updateWorkerList();
-		try {
-			updateTaskList();
-		} catch (OperationNotAllowedException e) {
-			e.printStackTrace();
-		}
+		init();
 		
 		listView1.getSelectionModel().selectedItemProperty().addListener((v, oldVal, newVal) -> {
 			selectedActivity = project.findActivity(newVal);
 		});
 	}
 	
-//	public void setProject(Project p) throws OperationNotAllowedException {
-//		this.project = p;
-//		this.projectLeader = p.getProjectLeader();
-//		this.workerCounter = p.getWorkerList().size();
-//		
-//		
-//	}
-	
 //	ActionEvents
 	public void ViewActivity(ActionEvent event) {
 		if(selectedActivity != null) {
 			try {
+				if(selectedActivity.findWorker(managementApp.getState().currentUser().getUsername()) == null) {
+					selectedActivity.addWorker(managementApp.getState().currentUser());
+				}
+				managementApp.getState().setActivity(selectedActivity);
+				
 				((Node)event.getSource()).getScene().getWindow().hide();
 				Stage primaryStage = new Stage();
 				primaryStage.setTitle("Activity");
 				FXMLLoader loader = new FXMLLoader();
 				Parent root = loader.load(getClass().getResource("../view/Activity.fxml").openStream());
-				managementApp.getState().setActivity(selectedActivity);
 				ActivityController activityController = (ActivityController) loader.getController();
 				activityController.initialize(selectedActivity);
 				Scene scene = new Scene(root,500,500);
@@ -114,13 +114,12 @@ public class ProjectController implements Initializable {
 	}
 	
 	public void GoBack(ActionEvent event) {
-		try {
+		try {		
 			((Node)event.getSource()).getScene().getWindow().hide();
 			Stage primaryStage = new Stage();
 			primaryStage.setTitle("Worker");
 			FXMLLoader loader = new FXMLLoader();
 			Parent root = loader.load(getClass().getResource("../view/Worker.fxml").openStream());
-			managementApp.getState().setProject(null);
 			Scene scene = new Scene(root,759,460);
 			scene.getStylesheets().add(getClass().getResource("../runner_class/application.css").toExternalForm());
 			primaryStage.setScene(scene);

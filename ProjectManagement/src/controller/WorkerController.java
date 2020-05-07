@@ -55,15 +55,18 @@ public class WorkerController implements Initializable {
 		managementApp.addProject(new Project("Example project3", managementApp.getState()));
 		managementApp.addProject(new Project("Example project4", managementApp.getState()));
 	}
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		managementApp = Main.getManagementApp();
+	private void init() {
+		lblWorkerID.setText("Welcome back: "+managementApp.getState().currentUser().getUsername());
+		lblProject.setText("Select a project");
+		lblAssignedProject.setText("Select assigned project");
+		managementApp.getState().setProject(null);
+		managementApp.getState().setActivity(null);
+		
 		try {
 			addExampleProjects();
 		} catch (OperationNotAllowedException e2) {
 			e2.printStackTrace();
 		}
-		lblWorkerID.setText("Welcome back: "+managementApp.getState().currentUser().getUsername());
 		updateListView1();
 		try {
 			updateListView2();
@@ -71,6 +74,13 @@ public class WorkerController implements Initializable {
 			
 		}
 		updateListView3();
+	}
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		managementApp = Main.getManagementApp();
+		selectedProject = null;
+		selectedAssignedProject = null;
+		init();
 		
 		listView1.getSelectionModel().selectedItemProperty().addListener((v, oldVal, newVal) -> {
 			try {
@@ -101,14 +111,6 @@ public class WorkerController implements Initializable {
 			}
 			
 		});
-		
-//		listView3.getSelectionModel().selectedItemProperty().addListener((v, oldVal, newVal) -> {
-//			try {
-//				selectedWorker = managementApp.findWorker(newVal);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		});
 	}
 	
 //	ActionEvents
@@ -122,8 +124,6 @@ public class WorkerController implements Initializable {
 				primaryStage.setTitle("Worker");
 				FXMLLoader loader = new FXMLLoader();
 				Parent root = loader.load(getClass().getResource("../view/Project.fxml").openStream());
-//				ProjectController projectController = (ProjectController) loader.getController();
-//				projectController.setProject(selectedProject);
 				Scene scene = new Scene(root,530,545);
 				scene.getStylesheets().add(getClass().getResource("../runner_class/application.css").toExternalForm());
 				primaryStage.setScene(scene);
@@ -165,7 +165,6 @@ public class WorkerController implements Initializable {
 	
 	public void AddUserToProject(ActionEvent e) throws Exception {
 		if(selectedProject != null) {
-			
 			managementApp.addWorkerToProject(managementApp.getState().currentUser(), selectedProject);
 			listView2.getItems().add(selectedProject.getName());
 			lblStatus.setText("You are now working on project "+selectedProject.getName());
