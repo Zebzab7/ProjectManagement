@@ -24,7 +24,7 @@ public class RegisterHours {
 			throw new OperationNotAllowedException("Can't add hours to project");
 		}
 		if(item.preConditionsMet()) {
-			workedHours += hours;
+			setWorkedHours(hours);
 			addIndividualHours(hours, item, state.currentUser());
 			if (workedHours < 0) workedHours = 0;
 			return true;
@@ -32,9 +32,25 @@ public class RegisterHours {
 		return false;
 	}
 	
-	private void addIndividualHours(int hours, Item item, Worker worker) {
+	public boolean addHoursWithWorker(int halfHours, Item item, Worker worker) throws OperationNotAllowedException {
+		if(item instanceof Project) {
+			throw new OperationNotAllowedException("Can't add hours to project");
+		}
+		if(item.preConditionsMet()) {
+			setWorkedHours(halfHours);
+			addIndividualHours(halfHours, item, worker);
+			if (workedHours < 0) workedHours = 0;
+			return true;
+		}
+		return false;
+	}
+	
+	private void addIndividualHours(int halfHours, Item item, Worker worker) {
 		int value = individualHours.get(item.getWorkerList().indexOf(worker));
-		individualHours.set(item.getWorkerList().indexOf(worker), value + hours);
+		individualHours.set(item.getWorkerList().indexOf(worker), value + halfHours);
+	}
+	private void setWorkedHours(int halfHours) {
+		workedHours+=halfHours;
 	}
 	
 }
