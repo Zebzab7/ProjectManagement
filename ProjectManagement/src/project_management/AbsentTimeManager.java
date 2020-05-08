@@ -2,7 +2,7 @@ package project_management;
 
 import java.util.GregorianCalendar;
 
-public class AbsentTimeManager extends TimeManager {
+public class AbsentTimeManager extends ItemTimeManager {
 	private Worker worker;
 	
 	public AbsentTimeManager(State state, Worker worker) {

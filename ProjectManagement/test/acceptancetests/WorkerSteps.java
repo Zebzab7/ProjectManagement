@@ -1,4 +1,4 @@
-package acceptance_tests;
+package acceptancetests;
 
 import io.cucumber.java.en.Given;
 import static org.junit.Assert.assertTrue;
@@ -18,7 +18,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import project_management.*;
 import test_helpers.ErrorMessageHolder;
-import test_helpers.ProjectHelper;
 import test_helpers.StateHelper;
 public class WorkerSteps {
 	private ManagementApp managementApp;

@@ -11,7 +11,6 @@ public class ManagementApp {
 	private ArrayList<String> workerHours = new ArrayList<String>();
 	private ArrayList<FixedActivity> fixedActivities = new ArrayList<FixedActivity>();
 	private State state = new State();
-	private TimeManager timeManager;
 	
 	public State getState() {
 		return state;
@@ -37,6 +36,7 @@ public class ManagementApp {
 		}
 		throw new OperationNotAllowedException("Worker does not exist");
 	}
+	
 	public boolean Logout() {
 		state.setUser(null);
 		if (state.currentUser() == null) {
@@ -123,27 +123,35 @@ public class ManagementApp {
 			throw new OperationNotAllowedException("User login required");
 		}
 		project.getWorkerList().add(worker);
-
 	}
 	
-	public boolean createProject(String name) throws Exception {
+	public boolean addProject(Project project) throws OperationNotAllowedException {
 		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
-		if ( containsProject(name) ) throw new OperationNotAllowedException("Project already exist");
-		projects.add(new Project(name, generateProjectId(), state));
-		
+		if ( containsProject(project.getName()) ) throw new OperationNotAllowedException("Project already exist");
+		projects.add(project);
 		return true;
 	}
 	
-	public boolean createProjectWithLeader(String name, Worker leader) throws Exception {
-		if (state.currentUser() == null) {
-			throw new OperationNotAllowedException("User login required");
-		}
-		if (containsProject(name)) throw new OperationNotAllowedException("Project already exist");
-		projects.add(new Project(name, generateProjectId(), leader, state));
-		return true;
-	}
+//	public boolean createProject(String name) throws Exception {
+//		if (state.currentUser() == null) {
+//			throw new OperationNotAllowedException("User login required");
+//		}
+//		if ( containsProject(name) ) throw new OperationNotAllowedException("Project already exist");
+//		projects.add(new Project(name, generateProjectId(), state));
+//		
+//		return true;
+//	}
+	
+//	public boolean createProjectWithLeader(String name, Worker leader) throws Exception {
+//		if (state.currentUser() == null) {
+//			throw new OperationNotAllowedException("User login required");
+//		}
+//		if (containsProject(name)) throw new OperationNotAllowedException("Project already exist");
+//		projects.add(new Project(name, generateProjectId(), leader, state));
+//		return true;
+//	}
 	
 	public boolean createFixedActivity(String name, State state, Worker absentee) throws Exception {
 		if (state.currentUser() == null) {
@@ -166,7 +174,7 @@ public class ManagementApp {
 	 * The following two methods return statistics of a given worker
 	 */
 	
-	public ArrayList<String> workerHoursCollected(Worker worker) {
+	public ArrayList<String> workerHoursCollected(Worker worker) throws OperationNotAllowedException {
 		workerHours.clear();
 		for(Project p : projects) {
 			if(p.containsWorker(worker)) {

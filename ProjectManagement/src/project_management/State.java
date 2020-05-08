@@ -18,9 +18,13 @@ public class State {
 		cUser = user;
 	}
 	public void setProject(Project project) {
+		cProject.unselect();
+		project.select();
 		cProject = project;
 	}
 	public void setActivity(Activity activity) {
+		cActivity.unselect();
+		activity.select();
 		this.cActivity = activity;
 	}
 

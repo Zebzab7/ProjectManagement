@@ -1,4 +1,4 @@
-package acceptance_tests;
+package acceptancetests;
 
 import static org.junit.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
