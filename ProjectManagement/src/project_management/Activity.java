@@ -62,4 +62,11 @@ public class Activity extends Item {
 		}
 		return false;
 	}
+	
+	public void requestAssistance(Worker worker) throws OperationNotAllowedException {
+		if(preConditionsMet() && worker.grantAssistance()) {
+			addWorker(worker);
+		}
+	}
+	
 }
