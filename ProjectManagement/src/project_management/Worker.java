@@ -19,6 +19,10 @@ public class Worker {
 		workedHours += hours;
 		return true;
 	}
+	
+	public int workedHours() {
+		return workedHours;
+	}
 
 	public String getUsername() {
 		return username;

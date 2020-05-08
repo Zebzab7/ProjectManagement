@@ -53,6 +53,7 @@ public class Activity extends Item {
 	
 	public boolean addHours(int hours) throws OperationNotAllowedException {
 		if (preConditionsMet()) {
+			getState().currentUser().addHours(hours);
 			workedHours += hours;
 			int index = getWorkerList().indexOf(findWorker(getState().currentUser().getUsername()));
 			int value = accumulatedHours.get(index);
