@@ -58,7 +58,7 @@ public class LoginRegisterController implements Initializable {
 						primaryStage.setTitle("Worker");
 						FXMLLoader loader = new FXMLLoader();
 						Parent root = loader.load(getClass().getResource("../view/Worker.fxml").openStream());
-						Scene scene = new Scene(root,530,500);
+						Scene scene = new Scene(root,759.0,460.0);
 						scene.getStylesheets().add(getClass().getResource("../runner_class/application.css").toExternalForm());
 						primaryStage.setScene(scene);
 						primaryStage.show();

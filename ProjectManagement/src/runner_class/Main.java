@@ -18,6 +18,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		managementApp = new ManagementApp();
+		tmpExampleUsers();
 		primaryStage.setTitle("Login");
 		try {
 			FXMLLoader loader = new FXMLLoader();
@@ -29,6 +30,15 @@ public class Main extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void tmpExampleUsers() throws Exception {
+		managementApp.createUser("Adams", "1234");
+		managementApp.createUser("Baker", "1234");
+		managementApp.createUser("Clark", "1234");
+		managementApp.createUser("Davis", "1234");
+		managementApp.createUser("Evans", "1234");
+		managementApp.createUser("Frank", "1234");
 	}
 	
 	public static void main(String[] args) {

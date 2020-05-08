@@ -4,9 +4,6 @@ import java.util.ArrayList;
 
 public class Project extends Item {
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
-	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
-	
-	private int workedHours;
 	
 	private Worker projectLeader;
 	
@@ -20,8 +17,6 @@ public class Project extends Item {
 		super(name, state);
 		this.projectLeader = projectLeader;
 	}
-	
-	
 	public ArrayList<Activity> getActivityList() {
 		return activities;
 	}
@@ -31,17 +26,23 @@ public class Project extends Item {
 	public Worker getProjectLeader() {
 		return projectLeader;
 	}
-	public int workedHours() {
-		return workedHours;
-	}
-	public ArrayList<Integer> getActivityWorkedTime() {
-		accumulatedHours.clear();
+	public int getWorkersAccumulatedHours(Worker worker) throws OperationNotAllowedException {
+		int count = 0;
 		for(Activity a : activities) {
-			accumulatedHours.add(a.getRegisterHours().getWorkedHours());
+			if(a.containsWorker(worker)) {
+				count += getRegisterHours().getIndividualHoursList().get(getWorkerList().indexOf(worker));
+			}
 		}
-		return accumulatedHours;
+		return count;
 	}
-	public boolean getPreConditions() throws OperationNotAllowedException {
+	public int getAccumulatedHours(Worker worker) throws OperationNotAllowedException {
+		int count = 0;
+		for(Activity a : activities) {
+			count += getRegisterHours().getWorkedHours();
+		}
+		return count;
+	}
+	public boolean preConditionsMet() throws OperationNotAllowedException {
 		if ( getState().currentUser() == null ) {
 			throw new OperationNotAllowedException("User login required");
 		}
@@ -52,13 +53,12 @@ public class Project extends Item {
 			if (!projectLeaderIsLoggedIn()) {
 			   throw new OperationNotAllowedException("User is not the project leader");
 			}
-			this.setPreConditions(true);
-			return this.getPreConditions();
+			setPreConditions(true);
+			return true;
 		}
-		this.setPreConditions(false);
-		return this.getPreConditions();
+		setPreConditions(false);
+		return false;
 	}
-	
 	
 	/*
 	 * Returns true if project has a project leader, false otherwise
@@ -90,6 +90,13 @@ public class Project extends Item {
 		if ( hasProjectLeader() &&
 			   getState().currentUser().getUsername().equals(projectLeader.getUsername()) && 
 			   getState().currentUser().getPassword().equals(projectLeader.getPassword()) ) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean addWorkerToActivity(Worker worker, Activity activity) throws OperationNotAllowedException {
+		if (activity.addWorker(worker)) {
 			return true;
 		}
 		return false;

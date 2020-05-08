@@ -41,29 +41,68 @@ public class ProjectController implements Initializable {
 	private TextField activityName;
 	@FXML
 	private TextField activityET;
+	@FXML
+	private Label lblStatus;
 	
 	private ManagementApp managementApp;
 	private Project project;
 	private Worker projectLeader;
 	private int workerCounter;
+	private Activity selectedActivity;
 	
 //	Initialize
+	public void init() {
+		updateLabels();
+		updateWorkerList();
+		
+		try {
+			updateTaskList();
+		} catch (OperationNotAllowedException e) {
+			e.printStackTrace();
+		}
+	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		managementApp = Main.getManagementApp();
-	}
-	
-	public void setProject(Project p) throws OperationNotAllowedException {
-		this.project = p;
-		this.projectLeader = p.getProjectLeader();
-		this.workerCounter = p.getWorkerList().size();
+		project = managementApp.getState().currentProject();
+		projectLeader = project.getProjectLeader();
+		workerCounter = project.getWorkerList().size();
 		
-		updateLabels();
-		updateWorkerList();
-		updateTaskList();
+		init();
+		
+		listView1.getSelectionModel().selectedItemProperty().addListener((v, oldVal, newVal) -> {
+			selectedActivity = project.findActivity(newVal);
+		});
 	}
 	
 //	ActionEvents
+	public void ViewActivity(ActionEvent event) {
+		if(selectedActivity != null) {
+			try {
+				if(selectedActivity.findWorker(managementApp.getState().currentUser().getUsername()) == null) {
+					selectedActivity.addWorker(managementApp.getState().currentUser());
+				}
+				managementApp.getState().setActivity(selectedActivity);
+				
+				((Node)event.getSource()).getScene().getWindow().hide();
+				Stage primaryStage = new Stage();
+				primaryStage.setTitle("Activity");
+				FXMLLoader loader = new FXMLLoader();
+				Parent root = loader.load(getClass().getResource("../view/Activity.fxml").openStream());
+				ActivityController activityController = (ActivityController) loader.getController();
+				activityController.initialize(selectedActivity);
+				Scene scene = new Scene(root,500,500);
+				scene.getStylesheets().add(getClass().getResource("../runner_class/application.css").toExternalForm());
+				primaryStage.setScene(scene);
+				primaryStage.show();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			lblStatus.setText("Please select activity");
+		}
+	}
+	
 	public void CreateActivity(ActionEvent event) throws OperationNotAllowedException {
 		if(projectLeader.getUsername() == managementApp.getState().currentUser().getUsername()) {
 			String name = activityName.getText();
@@ -75,13 +114,13 @@ public class ProjectController implements Initializable {
 	}
 	
 	public void GoBack(ActionEvent event) {
-		try {
+		try {		
 			((Node)event.getSource()).getScene().getWindow().hide();
 			Stage primaryStage = new Stage();
 			primaryStage.setTitle("Worker");
 			FXMLLoader loader = new FXMLLoader();
 			Parent root = loader.load(getClass().getResource("../view/Worker.fxml").openStream());
-			Scene scene = new Scene(root,530,500);
+			Scene scene = new Scene(root,759,460);
 			scene.getStylesheets().add(getClass().getResource("../runner_class/application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();

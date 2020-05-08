@@ -6,6 +6,7 @@ public class RegisterHours {
 	
 	private State state;
 	private int workedHours = 0;
+	private int projectWorkedHours = 0;
 	private ArrayList<Integer> individualHours = new ArrayList<Integer>();
 	
 	public ArrayList<Integer> getIndividualHoursList() {
@@ -13,6 +14,9 @@ public class RegisterHours {
 	}
 	public int getWorkedHours() {
 		return workedHours;
+	}
+	public int getProjectHours() {
+		return projectWorkedHours;
 	}
 	
 	public RegisterHours(State state) {
@@ -24,6 +28,9 @@ public class RegisterHours {
 			throw new OperationNotAllowedException("Can't add hours to project");
 		}
 		if(item.preConditionsMet()) {
+			if(item instanceof Activity) {
+				
+			}
 			setWorkedHours(hours);
 			addIndividualHours(hours, item, state.currentUser());
 			if (workedHours < 0) workedHours = 0;
@@ -51,6 +58,9 @@ public class RegisterHours {
 	}
 	private void setWorkedHours(int halfHours) {
 		workedHours+=halfHours;
+	}
+	private void addHoursToProject(int halfHours, Project project) {
+		projectWorkedHours += halfHours;
 	}
 	
 }

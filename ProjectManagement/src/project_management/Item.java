@@ -72,18 +72,28 @@ public class Item {
 //		}
 		if(preConditionsMet()) {
 			if(this instanceof Activity) {
-				worker.getWorkedActivities().add(state.currentActivity());
+				worker.getAssignedActivities().add(state.currentActivity());
 			}
-			workers.add(worker);
-			registerHours.getIndividualHoursList().add(0);
-			return true;
+			
+		workers.add(worker);
+		registerHours.getIndividualHoursList().add(0);
+		return true;
 		}
 		return false;
+//		accumulatedHours.add(initialHours);
 	}
 	
-	public void removeWorker(Worker worker) {
-		registerHours.getIndividualHoursList().remove(workers.indexOf(worker));
+	public boolean removeWorker(Worker worker) throws OperationNotAllowedException {
+//		accumulatedHours.remove(workers.indexOf(worker));
+		if(preConditionsMet()) {
+			if(this instanceof Activity) {
+				worker.getAssignedActivities().remove(state.currentActivity());
+			}
 		workers.remove(worker);
+		registerHours.getIndividualHoursList().remove(workers.indexOf(worker));
+		return true;
+		}
+		return false;
 	}
 	
 	public boolean select() {

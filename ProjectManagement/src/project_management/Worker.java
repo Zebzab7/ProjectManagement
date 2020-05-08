@@ -3,21 +3,21 @@ package project_management;
 import java.util.ArrayList;
 
 public class Worker {
-	private ArrayList<Activity> activities = new ArrayList<Activity>();
-	
+	private ArrayList<Activity> assignedActivities = new ArrayList<Activity>();
+	private ArrayList<Project> assignedProjects = new ArrayList<Project>();
 	private String username;
-	private Project leadingProject;
 	private String password;
-	private int registerHours;
-	private boolean help = false;
+	private int workedHours;
+	private boolean help;
 	
 	public Worker(String username, String password) {
 		this.username = username;
 		this.password = password;
 	}
 	
-	public void setLeadingProject(Project project) {
-		leadingProject = project;
+	public boolean addHours(int hours) {
+		workedHours += hours;
+		return true;
 	}
 
 	public String getUsername() {
@@ -26,21 +26,23 @@ public class Worker {
 	public String getPassword() {
 		return password;
 	}
-	public ArrayList<Activity> getWorkedActivities() {
-		return activities;
+	
+	public ArrayList<Project> getAssignedProjects() {
+		return assignedProjects;
 	}
-	//public boolean newActivity(String name, int ET) {
-		//return leadingProject.getActivityList().add(new Activity(name, leadingProject));
-	//}
-	public boolean changeLeader(Worker newLeader) {
-		if(leadingProject.getProjectLeader() == this && newLeader != this) {
-			leadingProject.setProjectLeader(newLeader);
-			return true;
-		}
-		return false;
+	public ArrayList<Activity> getAssignedActivities() {
+		return assignedActivities;
 	}
+	
+	public void addProject(Project project) {
+		assignedProjects.add(project);
+	}
+	public void addActivity(Activity activity) {
+		assignedActivities.add(activity);
+	}
+	
 	public boolean isAvailable() {
-		if(activities.size() < 20) {
+		if(assignedActivities.size() < 20) {
 			return true;
 		}
 		return false;

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="500.0" prefWidth="530.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProjectController">
+<AnchorPane prefHeight="545.0" prefWidth="530.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProjectController">
    <children>
       <Label fx:id="lblProjectName" layoutX="14.0" layoutY="14.0" text="Project #" />
       <Label fx:id="lblWorkerCounter" layoutX="14.0" layoutY="35.0" text="Counter #" />
@@ -31,7 +31,15 @@
                   </TextField>
                </children>
             </HBox>
-            <Button fx:id="createActivity" mnemonicParsing="false" onAction="#CreateActivity" text="Create Activity" />
+            <Button fx:id="createActivity" mnemonicParsing="false" onAction="#CreateActivity" text="Create Activity">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin></Button>
+            <Button mnemonicParsing="false" onAction="#ViewActivity" text="View Selected Activity">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Button>
          </children>
       </VBox>
       <HBox layoutX="371.0" layoutY="7.0">
@@ -45,5 +53,6 @@
          </children>
       </HBox>
       <Label fx:id="lblWorkedHours" layoutX="15.0" layoutY="77.0" text="Worked hours: #" />
+      <Label fx:id="lblStatus" alignment="TOP_LEFT" layoutX="14.0" layoutY="518.0" textFill="#dd6969" />
       </children>
 </AnchorPane>
