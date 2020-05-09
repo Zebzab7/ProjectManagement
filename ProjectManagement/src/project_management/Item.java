@@ -17,14 +17,11 @@ public class Item {
 	}
 	public void addHours(int hours)throws OperationNotAllowedException {
 		if (preConditionsMet()) {
-			System.out.println("ran" + hours);
 			this.hours += hours;
-			System.out.println(this.hours + "is now total "+ this.name);
 		}
 		
 	}
 	public int getHours() {
-		System.out.println("return" + hours + " " + this);
 		return hours;
 	}
 	public String getName() {
@@ -52,6 +49,13 @@ public class Item {
 		}
 		return null;
 	}
+	public boolean TimepreConditionsMet() throws OperationNotAllowedException {
+		if (getState().currentUser() == null ) {
+			throw new OperationNotAllowedException("User login required");
+		}
+		return true;
+	}
+	
 	
 	public boolean preConditionsMet() throws OperationNotAllowedException {
 		if(getState().currentUser() == null) {

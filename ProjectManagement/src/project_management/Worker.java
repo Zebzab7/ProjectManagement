@@ -21,8 +21,13 @@ public class Worker {
 		return workHoursOnActivities.get(assignedActivities.indexOf(activity));
 	}
 	public boolean addHours(int hours, Activity activity) {
+		System.out.println("add hours" + hours);
+		System.out.println(workHoursOnActivities.size() + " " + assignedActivities.indexOf(activity));
 		workHoursOnActivities.set(assignedActivities.indexOf(activity), hours);
+		
 		workedHours += hours;
+		System.out.println("total workhours" + this.workedHours);
+
 		return true;
 	}
 	public int getHours() {
@@ -50,8 +55,10 @@ public class Worker {
 		assignedProjects.add(project);
 	}
 	public void addActivity(Activity activity) {
+		System.out.println("Activity: " + activity.getName() + " was added to:"  + this.getUsername());
 		assignedActivities.add(activity);
 		workHoursOnActivities.add(0);
+		System.out.println(workHoursOnActivities.size() + " " + assignedActivities.indexOf(activity));
 	}
 	
 	public boolean isAvailable() {

@@ -21,6 +21,7 @@ public class Activity extends Item {
 	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
 		accumulatedHours.add(0);
 		getWorkerList().add(worker);
+		worker.addActivity(this);
 		return true;
 	}
 	
@@ -33,6 +34,16 @@ public class Activity extends Item {
 	public int workerContributedHours(Worker worker) {
 		int index = getWorkerList().indexOf(findWorker(worker.getUsername()));
 		return accumulatedHours.get(index);
+	}
+
+	public boolean TimepreConditionsMet() throws OperationNotAllowedException {
+		if (getState().currentActivity() == this && super.TimepreConditionsMet()) {
+			if (!containsWorker(getState().currentUser())) {
+				throw new OperationNotAllowedException("User is not assigned to the project");
+			}
+			return true;
+		}
+		return false;
 	}
 	/*
 	public boolean addHours(int hours) throws OperationNotAllowedException {

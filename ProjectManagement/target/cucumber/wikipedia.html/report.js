@@ -699,8 +699,7 @@ formatter.match({
   "location": "acceptancetests.ProjectSteps.theWorkerSetsTheEndDateOfTheProjectToTheUnsuccesfully(int,int,int)"
 });
 formatter.result({
-  "error_message": "java.lang.AssertionError\r\n\tat org.junit.Assert.fail(Assert.java:87)\r\n\tat org.junit.Assert.assertTrue(Assert.java:42)\r\n\tat org.junit.Assert.assertFalse(Assert.java:65)\r\n\tat org.junit.Assert.assertFalse(Assert.java:75)\r\n\tat acceptancetests.ProjectSteps.theWorkerSetsTheEndDateOfTheProjectToTheUnsuccesfully(ProjectSteps.java:137)\r\n\tat ✽.the worker sets the end date of the project to the 2020-5-12 unsuccesfully(file:///C:/Users/simon/Desktop/ProjectManagement/ProjectManagement/usecases/DatesAndDeadlines.feature:60)\r\n",
-  "status": "failed"
+  "status": "passed"
 });
 formatter.step({
   "name": "the error message \"User is not assigned to the project\" is given",
@@ -710,7 +709,7 @@ formatter.match({
   "location": "acceptancetests.WorkerSteps.TheErrorMessageIsGiven(java.lang.String)"
 });
 formatter.result({
-  "status": "skipped"
+  "status": "passed"
 });
 formatter.uri("file:usecases/LoginLogout.feature");
 formatter.feature({
@@ -1336,16 +1335,6 @@ formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "the activity is selected",
-  "keyword": "And "
-});
-formatter.match({
-  "location": "acceptancetests.ActivitySteps.theActivityIsSelected()"
-});
-formatter.result({
-  "status": "passed"
-});
-formatter.step({
   "name": "the project is selected",
   "keyword": "And "
 });
@@ -1383,8 +1372,7 @@ formatter.match({
   "location": "acceptancetests.ProjectSteps.theProjectHasATotalOfWorkHours(int)"
 });
 formatter.result({
-  "error_message": "java.lang.AssertionError: expected:\u003c10\u003e but was:\u003c0\u003e\r\n\tat org.junit.Assert.fail(Assert.java:89)\r\n\tat org.junit.Assert.failNotEquals(Assert.java:835)\r\n\tat org.junit.Assert.assertEquals(Assert.java:647)\r\n\tat org.junit.Assert.assertEquals(Assert.java:633)\r\n\tat acceptancetests.ProjectSteps.theProjectHasATotalOfWorkHours(ProjectSteps.java:172)\r\n\tat ✽.the project has a total of 0 work hours(file:///C:/Users/simon/Desktop/ProjectManagement/ProjectManagement/usecases/TimeManagement.feature:27)\r\n",
-  "status": "failed"
+  "status": "passed"
 });
 formatter.scenario({
   "name": "Worker adds hours to activity while not logged in",
@@ -1489,7 +1477,7 @@ formatter.match({
   "location": "acceptancetests.WorkerSteps.TheErrorMessageIsGiven(java.lang.String)"
 });
 formatter.result({
-  "error_message": "org.junit.ComparisonFailure: expected:\u003c[Index -1 out of bounds for length 0]\u003e but was:\u003c[User login required]\u003e\r\n\tat org.junit.Assert.assertEquals(Assert.java:117)\r\n\tat org.junit.Assert.assertEquals(Assert.java:146)\r\n\tat acceptancetests.WorkerSteps.TheErrorMessageIsGiven(WorkerSteps.java:71)\r\n\tat ✽.the error message \"User login required\" is given(file:///C:/Users/simon/Desktop/ProjectManagement/ProjectManagement/usecases/TimeManagement.feature:39)\r\n",
+  "error_message": "org.junit.ComparisonFailure: expected:\u003c[]\u003e but was:\u003c[User login required]\u003e\r\n\tat org.junit.Assert.assertEquals(Assert.java:117)\r\n\tat org.junit.Assert.assertEquals(Assert.java:146)\r\n\tat acceptancetests.WorkerSteps.TheErrorMessageIsGiven(WorkerSteps.java:71)\r\n\tat ✽.the error message \"User login required\" is given(file:///C:/Users/simon/Desktop/ProjectManagement/ProjectManagement/usecases/TimeManagement.feature:39)\r\n",
   "status": "failed"
 });
 formatter.step({
@@ -1741,7 +1729,7 @@ formatter.match({
   "location": "acceptancetests.ActivitySteps.theWorkerHasATotalOfHoursContributedToTheActivity(int)"
 });
 formatter.result({
-  "error_message": "java.lang.IndexOutOfBoundsException: Index -1 out of bounds for length 0\r\n\tat java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)\r\n\tat java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)\r\n\tat java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)\r\n\tat java.base/java.util.Objects.checkIndex(Objects.java:372)\r\n\tat java.base/java.util.ArrayList.get(ArrayList.java:458)\r\n\tat project_management.Worker.getHoursOnTask(Worker.java:21)\r\n\tat acceptancetests.ActivitySteps.theWorkerHasATotalOfHoursContributedToTheActivity(ActivitySteps.java:193)\r\n\tat ✽.the worker has a total of 15 hours contributed to the activity(file:///C:/Users/simon/Desktop/ProjectManagement/ProjectManagement/usecases/TimeManagement.feature:67)\r\n",
+  "error_message": "java.lang.IndexOutOfBoundsException: Index -1 out of bounds for length 1\r\n\tat java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)\r\n\tat java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)\r\n\tat java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)\r\n\tat java.base/java.util.Objects.checkIndex(Objects.java:372)\r\n\tat java.base/java.util.ArrayList.get(ArrayList.java:458)\r\n\tat project_management.Worker.getHoursOnTask(Worker.java:21)\r\n\tat acceptancetests.ActivitySteps.theWorkerHasATotalOfHoursContributedToTheActivity(ActivitySteps.java:193)\r\n\tat ✽.the worker has a total of 15 hours contributed to the activity(file:///C:/Users/simon/Desktop/ProjectManagement/ProjectManagement/usecases/TimeManagement.feature:67)\r\n",
   "status": "failed"
 });
 formatter.scenario({
@@ -1800,6 +1788,36 @@ formatter.result({
   "status": "passed"
 });
 formatter.step({
+  "name": "the activity is selected",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptancetests.ActivitySteps.theActivityIsSelected()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the project is selected",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptancetests.ProjectSteps.theProjectIsSelected()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker adds 15 work hours to the activity succesfully",
+  "keyword": "When "
+});
+formatter.match({
+  "location": "acceptancetests.ActivitySteps.theWorkerAddsWorkHoursToTheActivitySuccesfully(int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
   "name": "the project with name \"Programming 102\" does exist",
   "keyword": "And "
 });
@@ -1840,21 +1858,31 @@ formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "the worker selects and adds 15 work hours to activity \"ProgrammingTasks 101\" in project \"Programming 101\" succesfully",
-  "keyword": "When "
+  "name": "the activity is selected",
+  "keyword": "And "
 });
 formatter.match({
-  "location": "acceptancetests.ActivitySteps.theWorkerSelectsAndAddsWorkHoursToActivityInProjectSuccesfully(int,java.lang.String,java.lang.String)"
+  "location": "acceptancetests.ActivitySteps.theActivityIsSelected()"
 });
 formatter.result({
   "status": "passed"
 });
 formatter.step({
-  "name": "the worker selects and adds 7 work hours to activity \"ProgrammingTasks 102\" in project \"Programming 102\" succesfully",
+  "name": "the project is selected",
   "keyword": "And "
 });
 formatter.match({
-  "location": "acceptancetests.ActivitySteps.theWorkerSelectsAndAddsWorkHoursToActivityInProjectSuccesfully(int,java.lang.String,java.lang.String)"
+  "location": "acceptancetests.ProjectSteps.theProjectIsSelected()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker adds 7 work hours to the activity succesfully",
+  "keyword": "When "
+});
+formatter.match({
+  "location": "acceptancetests.ActivitySteps.theWorkerAddsWorkHoursToTheActivitySuccesfully(int)"
 });
 formatter.result({
   "status": "passed"
@@ -1867,7 +1895,7 @@ formatter.match({
   "location": "acceptancetests.ProjectSteps.theWorkerHasATotalOfWorkHoursContributedToProject(int,java.lang.String)"
 });
 formatter.result({
-  "error_message": "java.lang.AssertionError: expected:\u003c0\u003e but was:\u003c15\u003e\r\n\tat org.junit.Assert.fail(Assert.java:89)\r\n\tat org.junit.Assert.failNotEquals(Assert.java:835)\r\n\tat org.junit.Assert.assertEquals(Assert.java:647)\r\n\tat org.junit.Assert.assertEquals(Assert.java:633)\r\n\tat acceptancetests.ProjectSteps.theWorkerHasATotalOfWorkHoursContributedToProject(ProjectSteps.java:167)\r\n\tat ✽.the worker has a total of 15 work hours contributed to project \"Programming 101\"(file:///C:/Users/simon/Desktop/ProjectManagement/ProjectManagement/usecases/TimeManagement.feature:81)\r\n",
+  "error_message": "java.lang.AssertionError: expected:\u003c0\u003e but was:\u003c15\u003e\r\n\tat org.junit.Assert.fail(Assert.java:89)\r\n\tat org.junit.Assert.failNotEquals(Assert.java:835)\r\n\tat org.junit.Assert.assertEquals(Assert.java:647)\r\n\tat org.junit.Assert.assertEquals(Assert.java:633)\r\n\tat acceptancetests.ProjectSteps.theWorkerHasATotalOfWorkHoursContributedToProject(ProjectSteps.java:168)\r\n\tat ✽.the worker has a total of 15 work hours contributed to project \"Programming 101\"(file:///C:/Users/simon/Desktop/ProjectManagement/ProjectManagement/usecases/TimeManagement.feature:86)\r\n",
   "status": "failed"
 });
 formatter.step({

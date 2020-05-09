@@ -164,6 +164,7 @@ public class ProjectSteps {
 	@Then("the worker has a total of {int} work hours contributed to project {string}")
 	public void theWorkerHasATotalOfWorkHoursContributedToProject(int hours, String name) throws Exception {
 		Project p = managementApp.findProject(name);
+		System.out.println("accumilat " + p.getWorkersAccumulatedHours(itemHolder.getWorker()));
 		assertEquals(p.getWorkersAccumulatedHours(itemHolder.getWorker()),hours);
 	}
 	

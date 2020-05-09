@@ -38,27 +38,26 @@ public class Project extends Item {
 		for (Activity a : worker.getAssignedActivities()) {
 			if (activities.contains(a)) {
 				hours += worker.getHoursOnTask(a);
+				System.out.println(worker.getHoursOnTask(a));
 			}
 		}
 		return hours;
 	}
-	/*
-	public boolean preConditionsMet() throws OperationNotAllowedException {
-		if ( getState().currentUser() == null ) {
-			throw new OperationNotAllowedException("User login required");
-		}
-		if (getState().currentProject() == this) {
+	
+	public boolean TimepreConditionsMet() throws OperationNotAllowedException {
+		if (getState().currentProject() == this && super.TimepreConditionsMet()) {
 			if (!containsWorker(getState().currentUser())) {
 				throw new OperationNotAllowedException("User is not assigned to the project");
 			}
 			if (getProjectLeader() == getState().currentUser()) {
-			   throw new OperationNotAllowedException("User is not the project leader");
+				   throw new OperationNotAllowedException("User is not the project leader");
 			}
 			return true;
+			
 		}
 		return false;
+		
 	}
-	*/
 	/*
 	 * Returns true if project has a project leader, false otherwise
 	 */
@@ -105,12 +104,13 @@ public class Project extends Item {
 		throw new OperationNotAllowedException("Invalid input amount");
 	}*/
 	
+	/*
 	public boolean addWorkerToActivity(Worker worker, Activity activity) throws OperationNotAllowedException {
 		if (activity.addWorker(worker)) {
 			return true;
 		}
 		return false;
-	}
+	}*/
 	
 	public boolean addWorker(Worker worker) {
 		accumulatedHours.add(0);

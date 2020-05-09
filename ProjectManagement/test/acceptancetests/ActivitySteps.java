@@ -102,7 +102,7 @@ public class ActivitySteps {
 	@Given("the worker is working on the activity")
 	public void theWorkerIsWorkingOnTheActivity() throws OperationNotAllowedException {
 		if(!itemHolder.getActivity().containsWorker(itemHolder.getWorker())) {
-			itemHolder.getProject().addWorkerToActivity(itemHolder.getWorker(), itemHolder.getActivity());
+			itemHolder.getActivity().addWorker(itemHolder.getWorker());
 		}
 		assertTrue(itemHolder.getActivity().containsWorker(itemHolder.getWorker()));
 	}
@@ -156,7 +156,7 @@ public class ActivitySteps {
 	@When("the worker adds {int} work hours to the activity unsuccesfully")
 	public void theWorkerAddsWorkHoursToTheActivityUnsuccesfully(int hours) throws OperationNotAllowedException {
 		try {
-			managementApp.AddHours(hours);
+			assertFalse(managementApp.AddHours(hours));
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}

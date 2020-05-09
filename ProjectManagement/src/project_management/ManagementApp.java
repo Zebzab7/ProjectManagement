@@ -22,10 +22,20 @@ public class ManagementApp {
 		}
 		return true; 
 	}
-	public void AddHours(int hours) throws OperationNotAllowedException {
-		state.currentActivity().addHours(hours);
-		state.currentProject().addHours(hours);
-		state.currentUser().addHours(hours, state.currentActivity());
+	public boolean AddHours(int hours) throws OperationNotAllowedException {
+		if (state.currentActivity() != null && state.currentProject() != null && state.currentUser() != null) {
+			
+			System.out.println(state.currentUser().getUsername());
+			System.out.println(state.currentActivity().getName());
+			
+			state.currentActivity().addHours(hours);
+			state.currentProject().addHours(hours);
+			state.currentUser().addHours(hours, state.currentActivity());
+
+			return true;
+		}
+		return false;
+
 	}
 	/*
 	 * Method attempts to log in user with given name and password

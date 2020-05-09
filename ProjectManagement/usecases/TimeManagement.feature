@@ -20,7 +20,7 @@ Scenario: Worker adds hours to activity while not on the workerlist
 	And the project with name "Programming 101" does exist
 	And the project has an activity named "ProgrammingTasks 101"
 	And the worker is not working on the activity
-	And the activity is selected
+	#add select unsecccussfully
 	And the project is selected
 	And the activity has no work hours
 	When the worker adds 10 work hours to the activity unsuccesfully
@@ -72,12 +72,17 @@ Scenario: Worker has certain time contribution to different projects
 	And the project has an activity named "ProgrammingTasks 101"
 	And the worker is working on the project
 	And the worker is working on the activity
+	And the activity is selected
+	And the project is selected
+	When the worker adds 15 work hours to the activity succesfully
+	
 	And the project with name "Programming 102" does exist
 	And the project has an activity named "ProgrammingTasks 102"
 	And the worker is working on the project
 	And the worker is working on the activity
-	When the worker selects and adds 15 work hours to activity "ProgrammingTasks 101" in project "Programming 101" succesfully
-	And the worker selects and adds 7 work hours to activity "ProgrammingTasks 102" in project "Programming 102" succesfully
+	And the activity is selected
+	And the project is selected
+	When the worker adds 7 work hours to the activity succesfully
 	Then the worker has a total of 15 work hours contributed to project "Programming 101"
 	And the worker has a total of 7 work hours contributed to project "Programming 102"
 
