@@ -31,6 +31,7 @@ public class LoginLogoutSteps {
 		this.managementApp = managementApp;
 		this.itemHolder = helper;
 		this.errorMessage = errorMessage;
+		itemHolder.setState(managementApp.getState());
 	}
 	
 	@Given("the name is {string} and password is {string}")
@@ -41,8 +42,6 @@ public class LoginLogoutSteps {
 	
 	@Given("that no one is logged in")
 	public void thatNoOneIsLoggedIn()throws Exception {
-		itemHolder.setState(managementApp.getState());
-		itemHolder.setWorker(managementApp.getState().currentUser());
 		managementApp.Logout();
 	    assertFalse(managementApp.LoggedIn());
 	}
@@ -54,7 +53,6 @@ public class LoginLogoutSteps {
 			assertTrue(managementApp.createUser(worker.getUsername(), worker.getPassword()));
 		}
 	    assertTrue(managementApp.Login(worker.getUsername(), worker.getPassword()));
-	    itemHolder.setState(managementApp.getState());
 	    itemHolder.setWorker(managementApp.getState().currentUser());
 	}
 	

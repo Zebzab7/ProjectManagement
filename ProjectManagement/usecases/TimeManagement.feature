@@ -64,7 +64,8 @@ Scenario: Worker has certain time contribution to different projects
 	And the project has an activity named "ProgrammingTasks 101"
 	And the activity is selected
 	And the project is selected
-	And the worker adds 15 work hours to the activity succesfully
+	When the worker adds 15 work hours to the activity succesfully
+
 	And the project with name "Programming 102" does exist
 	And the project has an activity named "ProgrammingTasks 102"
 	And the activity is selected

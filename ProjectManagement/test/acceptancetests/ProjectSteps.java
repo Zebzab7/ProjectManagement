@@ -35,6 +35,7 @@ public class ProjectSteps {
 		this.managementApp = managementApp;
 		this.errorMessage = errorMessage;
 		this.itemHolder = stateHelper;
+		itemHolder.setState(managementApp.getState());
 	}
 	
 	@Given("the project with name {string} does not exist")
@@ -167,12 +168,12 @@ public class ProjectSteps {
 	
 	@Then("the worker has a total of {int} work hours contributed to project {string}")
 	public void theWorkerHasATotalOfWorkHoursContributedToProject(int hours, String name) throws Exception {
-		assertEquals(itemHolder.getProject().getWorkersAccumulatedHours(itemHolder.getWorker()), hours);
+		Project p = managementApp.findProject(name);
+		assertEquals(p.getWorkersAccumulatedHours(itemHolder.getWorker()), hours);
 	}
 	
 	@Then("the project has a total of {int} work hours")
 	public void theProjectHasATotalOfWorkHours(int hours) {
-		System.out.println(itemHolder.getProject().getHours());
 		assertEquals(itemHolder.getProject().getHours(), hours);
 	}
 	

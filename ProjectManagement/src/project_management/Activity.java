@@ -16,13 +16,11 @@ public class Activity extends Item {
 	}
 	
 	public void addHours(int hours) throws OperationNotAllowedException {
-		System.out.println(getHours());
-		if (getState().currentUser() == null ) {
+		System.out.println("adding hours to activity: "+ hours);
+		//defence
+		/*if (getState().currentUser() == null ) {
 			throw new OperationNotAllowedException("User login required");
-		}
-		if ((getHours() + hours) < 0 ) {
-			throw new OperationNotAllowedException("Invalid input amount");
-		}
+		}*/
 		super.addHours(hours);
 	}
 	

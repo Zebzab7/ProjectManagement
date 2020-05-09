@@ -30,6 +30,7 @@ public class ActivitySteps {
 		this.managementApp = managementApp;
 		this.itemHolder = stateHelper;
 		this.errorMessage = errorMessage;
+		itemHolder.setState(managementApp.getState());
 	}
 	
 	@Given("the worker is working on a project")

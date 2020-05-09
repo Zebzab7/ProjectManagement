@@ -18,8 +18,9 @@ public class Worker {
 	
 	public int getHoursOnActivity(Activity activity) {
 		return workHoursOnActivities.get(assignedActivities.indexOf(activity));
-	}
+	}	
 	public boolean addHours(int hours, Activity activity) {
+		System.out.println("add hours on activity from worker: " + this);
 		workHoursOnActivities.set(assignedActivities.indexOf(activity), hours);
 		workedHours += hours;
 		return true;

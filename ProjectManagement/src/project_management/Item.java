@@ -6,7 +6,7 @@ public class Item {
 	private String name;
 	private State state;
 	private ItemTimeManager timeManager;
-	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
+	//private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
 	private boolean preConditions = false;
 	private int hours = 0;
@@ -17,11 +17,13 @@ public class Item {
 		timeManager = new ItemTimeManager(state);
 	}
 	public void addHours(int hours) throws OperationNotAllowedException {
+		//defence
 		if (getState().currentUser() == null ) {
 			throw new OperationNotAllowedException("User login required");
 		}
-		int cUserIndex = getWorkerList().indexOf(getState().currentUser());
-		accumulatedHours.set(cUserIndex, accumulatedHours.get(cUserIndex) + hours);
+		
+		//int cUserIndex = getWorkerList().indexOf(getState().currentUser());
+		//accumulatedHours.set(cUserIndex, accumulatedHours.get(cUserIndex) + hours);
 		this.hours += hours;
 	}
 	public int getHours() {
