@@ -7,13 +7,25 @@ public class Item {
 	private State state;
 	private ItemTimeManager timeManager;
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
-	private boolean selected = false;
 	private boolean preConditions = false;
+	private int hours = 0;
 	
 	public Item(String name, State state) {
 		this.name = name;
 		this.state = state;
 		timeManager = new ItemTimeManager(state);
+	}
+	public void addHours(int hours)throws OperationNotAllowedException {
+		if (preConditionsMet()) {
+			System.out.println("ran" + hours);
+			this.hours += hours;
+			System.out.println(this.hours + "is now total "+ this.name);
+		}
+		
+	}
+	public int getHours() {
+		System.out.println("return" + hours + " " + this);
+		return hours;
 	}
 	public String getName() {
 		return name;
@@ -24,21 +36,14 @@ public class Item {
 	public ArrayList<Worker> getWorkerList() {
 		return workers;
 	}
-	public boolean isSelected() {
-		return selected;
-	}
 	public State getState() {
 		return state;
 	}
+	/*
 	public boolean preConditionsMet() throws OperationNotAllowedException {
 		return preConditions;
-	}
-	
-	public boolean setPreConditions(boolean statement) {
-		this.preConditions = statement;
-		return preConditions;
-	}
-	
+	}*/
+
 	public Worker findWorker (String name) {
 		for (Worker w : workers) {
 			if (w.getUsername() == name) {
@@ -48,6 +53,15 @@ public class Item {
 		return null;
 	}
 	
+	public boolean preConditionsMet() throws OperationNotAllowedException {
+		if(getState().currentUser() == null) {
+			throw new OperationNotAllowedException("User login required");
+		}
+		if(getState().currentActivity() != null || getState().currentProject() != null) {
+			return true;
+		}
+		return false;
+	}
 	public boolean containsWorker(Worker worker) throws OperationNotAllowedException {
 		for (Worker w : workers) {
 			if (w.getUsername().equals(worker.getUsername())) {
@@ -69,16 +83,6 @@ public class Item {
 	public boolean removeWorker(Worker worker) {
 //		accumulatedHours.remove(workers.indexOf(worker));
 		workers.remove(worker);
-		return true;
-	}
-	
-	public boolean select() {
-		selected = true;
-		return true;
-	}
-	
-	public boolean unselect() {
-		selected = false;
 		return true;
 	}
 }

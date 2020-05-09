@@ -15,7 +15,12 @@ public class ItemHolder {
 	public ItemHolder (State state) {
 		this.state = state;
 	}
-	
+	public State getState() {
+		if (state == null) {
+			state = new State();
+		}
+		return state;
+	}
 	public Worker getWorker() {
 		if (worker == null) {
 			worker = exampleWorker();
@@ -54,6 +59,7 @@ public class ItemHolder {
 		return worker;
 	}
 	private Project exampleProject() {
+		System.out.println("Programming 101 has been created");
 		project = new Project("Programming 101", state);
 		return project;
 	}

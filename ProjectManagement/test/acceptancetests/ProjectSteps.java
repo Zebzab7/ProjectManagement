@@ -71,6 +71,7 @@ public class ProjectSteps {
 	public void theWorkerIsNotWorkingOnTheProject() throws OperationNotAllowedException {
 		worker = itemHolder.getWorker();
 		if ( project.containsWorker(worker) ) project.removeWorker(worker);
+		
 	    assertFalse(project.containsWorker(worker));
 	}
 	
@@ -87,7 +88,7 @@ public class ProjectSteps {
 	
 	@Given("the project is selected")
 	public void theProjectIsSelected() {
-		assertTrue(itemHolder.getProject().select());
+		itemHolder.getState().setProject(itemHolder.getProject());
 	}
 	
 	@When("worker adds new project named {string}")
@@ -168,8 +169,8 @@ public class ProjectSteps {
 	
 	@Then("the project has a total of {int} work hours")
 	public void theProjectHasATotalOfWorkHours(int hours) {
-		System.out.println(itemHolder.getProject().workedHours());
-		assertEquals(itemHolder.getProject().workedHours(), hours);
+		assertEquals(itemHolder.getProject().getHours(), hours);
+		System.out.println(itemHolder.getProject().getHours());
 	}
 	
 	@Then("the project is contained in the app")

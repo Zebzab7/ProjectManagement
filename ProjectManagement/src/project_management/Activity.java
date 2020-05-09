@@ -5,17 +5,6 @@ import java.util.ArrayList;
 public class Activity extends Item {
 	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
 	private int expectedTime;
-	private int workedHours;
-	
-	public boolean preConditionsMet() throws OperationNotAllowedException {
-		if(getState().currentUser() == null) {
-			throw new OperationNotAllowedException("User login required");
-		}
-		if(isSelected()) {
-			return true;
-		}
-		return false;
-	}
 	
 	public Activity(String name, State state) {
 		super(name, state);
@@ -29,11 +18,6 @@ public class Activity extends Item {
 	public ArrayList<Integer> getAccumlatedHoursList() {
 		return accumulatedHours;
 	}
-	
-	public int workedHours() {
-		return workedHours;
-	}
-	
 	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
 		accumulatedHours.add(0);
 		getWorkerList().add(worker);
@@ -50,7 +34,7 @@ public class Activity extends Item {
 		int index = getWorkerList().indexOf(findWorker(worker.getUsername()));
 		return accumulatedHours.get(index);
 	}
-	
+	/*
 	public boolean addHours(int hours) throws OperationNotAllowedException {
 		if (preConditionsMet()) {
 			getState().currentUser().addHours(hours);
@@ -62,7 +46,7 @@ public class Activity extends Item {
 			return true;
 		}
 		return false;
-	}
+	}*/
 	
 	public void requestAssistance(Worker worker) throws OperationNotAllowedException {
 		if(preConditionsMet() && worker.grantAssistance()) {

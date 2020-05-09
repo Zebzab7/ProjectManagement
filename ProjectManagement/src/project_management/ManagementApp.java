@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 public class ManagementApp {
 	private ArrayList<Project> projects = new ArrayList<Project>();
-	private ArrayList<Project> assignedProjects = new ArrayList<Project>();
+//	private ArrayList<Project> assignedProjects = new ArrayList<Project>();
 	private ArrayList<Worker> users = new ArrayList<Worker>();
 	private ArrayList<String> workerHours = new ArrayList<String>();
 	private ArrayList<FixedActivity> fixedActivities = new ArrayList<FixedActivity>();
@@ -20,9 +20,13 @@ public class ManagementApp {
 		if (state.currentUser() == null) {
 			return false;
 		}
-		return true;
+		return true; 
 	}
-	
+	public void AddHours(int hours) throws OperationNotAllowedException {
+		state.currentActivity().addHours(hours);
+		state.currentProject().addHours(hours);
+		state.currentUser().addHours(hours, state.currentActivity());
+	}
 	/*
 	 * Method attempts to log in user with given name and password
 	 * Returns true if successful, false otherwise
@@ -174,17 +178,7 @@ public class ManagementApp {
 	 * The following two methods return statistics of a given worker
 	 */
 	
-	public ArrayList<String> workerHoursCollected(Worker worker) throws OperationNotAllowedException {
-		workerHours.clear();
-		for(Project p : projects) {
-			if(p.containsWorker(worker)) {
-				workerHours.add("Project:" + p.getName() + ", hours accumulated:"
-										    + p.getWorkersAccumulatedHours(worker));
-			}
-		}
-		return workerHours;
-	}
-	public ArrayList<Project> currentAssignedProjects(Worker worker) throws Exception {
+	/*public ArrayList<Project> currentAssignedProjects(Worker worker) throws Exception {
 		assignedProjects.clear();
 		for(Project p : projects) {
 			if(p.containsWorker(state.currentUser())) {
@@ -193,5 +187,5 @@ public class ManagementApp {
 		}
 		if(assignedProjects.isEmpty()) throw new Exception("Worker isn't assigned to a project");
 		return assignedProjects;
-	}
+	}*/ 
 }

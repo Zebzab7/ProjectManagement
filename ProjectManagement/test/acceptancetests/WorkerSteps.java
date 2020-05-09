@@ -29,6 +29,7 @@ public class WorkerSteps {
 		this.managementApp = managementApp;
 		this.errorMessage = errorMessage;
 		this.itemHolder = stateHelper;
+		stateHelper.setState(managementApp.getState());
 	}
 	
 	@Given("that worker {string} with password {string} exist")

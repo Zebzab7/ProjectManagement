@@ -9,6 +9,7 @@ Scenario: Worker adds hours to an activity while not on the workerlist
 	And the worker is working on the activity
 	And the worker is working on the project
 	And the activity is selected
+	And the project is selected
 	And the activity has no work hours
 	When the worker adds 10 work hours to the activity succesfully
 	Then the activity has a total of 10 work hours
@@ -20,6 +21,7 @@ Scenario: Worker adds hours to activity while not on the workerlist
 	And the project has an activity named "ProgrammingTasks 101"
 	And the worker is not working on the activity
 	And the activity is selected
+	And the project is selected
 	And the activity has no work hours
 	When the worker adds 10 work hours to the activity unsuccesfully
 	Then the project has a total of 0 work hours
@@ -32,6 +34,7 @@ Scenario: Worker adds hours to activity while not logged in
 	And the worker is working on the project
 	And the activity has no work hours
 	And the activity is selected
+	And the project is selected
 	When the worker adds 10 work hours to the activity unsuccesfully
 	Then the error message "User login required" is given
 	Then the project has a total of 0 work hours
@@ -44,6 +47,7 @@ Scenario: Hours are subtracted to a negative number
 	And the worker is working on the project
 	And the activity has no work hours
 	And the activity is selected
+	And the project is selected
 	When the worker adds -10 work hours to the activity unsuccesfully
 	Then the error message "Invalid input amount" is given
 	And the project has a total of 0 work hours
@@ -56,6 +60,7 @@ Scenario: Worker has certain time contribution to given activity
 	And the worker is working on the activity
 	And the activity has no work hours
 	And the activity is selected
+	And the project is selected
 	When the worker adds 15 work hours to the activity succesfully
 	And another worker adds 10 work hours to the activity successfully
 	Then the project has a total of 25 work hours

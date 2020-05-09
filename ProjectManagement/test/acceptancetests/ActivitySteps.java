@@ -79,7 +79,6 @@ public class ActivitySteps {
 	@Given("the activity has no work hours")
 	public void theActivityHasNoWorkHours() throws OperationNotAllowedException {
 		try {
-			Activity act = itemHolder.getActivity();
 			itemHolder.logInTemp();
 			if (!itemHolder.getProject().containsWorker(itemHolder.getTemp())) {
 				itemHolder.getProject().addWorker(itemHolder.getTemp());
@@ -87,9 +86,9 @@ public class ActivitySteps {
 			if (!itemHolder.getActivity().containsWorker(itemHolder.getTemp())) {
 				itemHolder.getActivity().addWorker(itemHolder.getTemp());
 			}
-			itemHolder.getProject().addHoursToActivity(-act.workedHours(), act);
+			managementApp.AddHours(-itemHolder.getActivity().getHours());
 			itemHolder.logOutTemp();
-			assertEquals(act.workedHours(), 0);
+			assertEquals(itemHolder.getActivity().getHours(), 0);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -97,7 +96,7 @@ public class ActivitySteps {
 	
 	@Given("the activity is selected")
 	public void theActivityIsSelected() {
-		assertTrue(itemHolder.getActivity().select());
+		itemHolder.getState().setActivity(itemHolder.getActivity());
 	}
 	
 	@Given("the worker is working on the activity")
@@ -116,7 +115,7 @@ public class ActivitySteps {
 	@When("the worker adds {int} work hours to the activity succesfully")
 	public void theWorkerAddsWorkHoursToTheActivitySuccesfully(int hours) throws OperationNotAllowedException {
 		try {
-			assertTrue(itemHolder.getProject().addHoursToActivity(hours, itemHolder.getActivity()));
+			managementApp.AddHours(hours);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -128,8 +127,9 @@ public class ActivitySteps {
 		try {
 			Project p = managementApp.findProject(projectName);
 			Activity a = p.findActivity(activityName);
-			a.select();
-			assertTrue(p.addHoursToActivity(hours, a));
+			itemHolder.setProject(p);
+			managementApp.AddHours(hours);
+		//	assertTrue(p.addHoursToActivity(hours, a));
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -138,7 +138,6 @@ public class ActivitySteps {
 	@When("another worker adds {int} work hours to the activity successfully")
 	public void anotherWorkerAddsWorkHoursToTheActivitySuccessfully(int hours) throws OperationNotAllowedException {
 		try {
-			Activity act = itemHolder.getActivity();
 			itemHolder.logInTemp();
 			if (!itemHolder.getProject().containsWorker(itemHolder.getTemp())) {
 				itemHolder.getProject().addWorker(itemHolder.getTemp());
@@ -146,9 +145,9 @@ public class ActivitySteps {
 			if (!itemHolder.getActivity().containsWorker(itemHolder.getTemp())) {
 				itemHolder.getActivity().addWorker(itemHolder.getTemp());
 			}
-			boolean result = itemHolder.getProject().addHoursToActivity(hours, act);
+			
+			managementApp.AddHours(hours);
 			itemHolder.logOutTemp();
-			assertTrue(result);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -157,7 +156,7 @@ public class ActivitySteps {
 	@When("the worker adds {int} work hours to the activity unsuccesfully")
 	public void theWorkerAddsWorkHoursToTheActivityUnsuccesfully(int hours) throws OperationNotAllowedException {
 		try {
-			assertFalse(itemHolder.getProject().addHoursToActivity(hours, itemHolder.getActivity()));
+			managementApp.AddHours(hours);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -168,7 +167,7 @@ public class ActivitySteps {
 	public void workerCreatesNewActivityWithNameAndETHours(String name, int ET) throws Exception {
 		try {
 			activityName = name;
-			assertTrue( itemHolder.setActivity(new Activity(name, managementApp.getState(), ET)) );
+			assertTrue(itemHolder.setActivity(new Activity(name, managementApp.getState(), ET)) );
 		}
 		catch (Exception e) {
 	    	errorMessage.setErrorMessage(e.getMessage());
@@ -186,12 +185,12 @@ public class ActivitySteps {
 	
 	@Then("the activity has a total of {int} work hours")
 	public void theActivityHasATotalOfWorkHours(int hours) {
-		assertEquals(itemHolder.getActivity().workedHours(), hours);
+		assertEquals(itemHolder.getActivity().getHours(), hours);
 	}
 	
 	@Then("the worker has a total of {int} hours contributed to the activity")
 	public void theWorkerHasATotalOfHoursContributedToTheActivity(int hours) {
-		assertEquals(itemHolder.getActivity().workerContributedHours(itemHolder.getWorker()), hours);
+		assertEquals(itemHolder.getWorker().getHoursOnTask(activity), hours);
 	}
 	
 	@Then("the activity is contained in the project")

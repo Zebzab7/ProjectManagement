@@ -4,22 +4,30 @@ import java.util.ArrayList;
 
 public class Worker {
 	private ArrayList<Activity> assignedActivities = new ArrayList<Activity>();
+	private ArrayList<Integer> workHoursOnActivities = new ArrayList<Integer>();
 	private ArrayList<Project> assignedProjects = new ArrayList<Project>();
 	private String username;
 	private String password;
-	private int workedHours;
+	private int workedHours = 0;
 	private boolean help;
+	
+	
 	
 	public Worker(String username, String password) {
 		this.username = username;
 		this.password = password;
 	}
-	
-	public boolean addHours(int hours) {
+	public int getHoursOnTask(Activity activity) {
+		return workHoursOnActivities.get(assignedActivities.indexOf(activity));
+	}
+	public boolean addHours(int hours, Activity activity) {
+		workHoursOnActivities.set(assignedActivities.indexOf(activity), hours);
 		workedHours += hours;
 		return true;
 	}
-	
+	public int getHours() {
+		return workedHours;
+	}
 	public int workedHours() {
 		return workedHours;
 	}
@@ -43,6 +51,7 @@ public class Worker {
 	}
 	public void addActivity(Activity activity) {
 		assignedActivities.add(activity);
+		workHoursOnActivities.add(0);
 	}
 	
 	public boolean isAvailable() {

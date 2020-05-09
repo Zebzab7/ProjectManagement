@@ -6,8 +6,6 @@ public class Project extends Item {
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
 	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
 	
-	private int workedHours;
-	private int initialHours = 0;
 	private int expectedTime;
 	
 	private Worker projectLeader;
@@ -36,29 +34,31 @@ public class Project extends Item {
 		return projectLeader;
 	}
 	public int getWorkersAccumulatedHours(Worker worker) {
-		return accumulatedHours.get(getWorkerList().indexOf(worker));
+		int hours = 0;
+		for (Activity a : worker.getAssignedActivities()) {
+			if (activities.contains(a)) {
+				hours += worker.getHoursOnTask(a);
+			}
+		}
+		return hours;
 	}
-	public int workedHours() {
-		return workedHours;
-	}
+	/*
 	public boolean preConditionsMet() throws OperationNotAllowedException {
 		if ( getState().currentUser() == null ) {
 			throw new OperationNotAllowedException("User login required");
 		}
-		if (isSelected()) {
+		if (getState().currentProject() == this) {
 			if (!containsWorker(getState().currentUser())) {
 				throw new OperationNotAllowedException("User is not assigned to the project");
 			}
-			if (!projectLeaderIsLoggedIn()) {
+			if (getProjectLeader() == getState().currentUser()) {
 			   throw new OperationNotAllowedException("User is not the project leader");
 			}
-			setPreConditions(true);
 			return true;
 		}
-		setPreConditions(false);
 		return false;
 	}
-	
+	*/
 	/*
 	 * Returns true if project has a project leader, false otherwise
 	 */
@@ -85,15 +85,7 @@ public class Project extends Item {
 		return null;
 	}
 	
-	public boolean projectLeaderIsLoggedIn() throws OperationNotAllowedException {
-		if ( hasProjectLeader() &&
-			   getState().currentUser().getUsername().equals(projectLeader.getUsername()) && 
-			   getState().currentUser().getPassword().equals(projectLeader.getPassword()) ) {
-			return true;
-		}
-		return false;
-	}
-	
+	/*
 	public boolean addHoursToActivity(int hours, Activity activity) throws OperationNotAllowedException {
 		
 		if (!activity.preConditionsMet() || !containsWorker(getState().currentUser()) 
@@ -111,7 +103,7 @@ public class Project extends Item {
 			return true;
 		}
 		throw new OperationNotAllowedException("Invalid input amount");
-	}
+	}*/
 	
 	public boolean addWorkerToActivity(Worker worker, Activity activity) throws OperationNotAllowedException {
 		if (activity.addWorker(worker)) {
