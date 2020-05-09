@@ -28,9 +28,11 @@ public class LoginLogoutSteps {
 	ItemHolder itemHolder;
 	
 	public LoginLogoutSteps(ManagementApp managementApp, ItemHolder helper, ErrorMessageHolder errorMessage) {
+		
 		this.managementApp = managementApp;
 		this.itemHolder = helper;
 		this.errorMessage = errorMessage;
+		itemHolder.setState(managementApp.getState());
 	}
 	
 	@Given("the name is {string} and password is {string}")
@@ -52,13 +54,15 @@ public class LoginLogoutSteps {
 			assertTrue(managementApp.createUser(worker.getUsername(), worker.getPassword()));
 		}
 	    assertTrue(managementApp.Login(worker.getUsername(), worker.getPassword()));
+		itemHolder.setWorker(managementApp.getState().currentUser());
+		worker = itemHolder.getWorker();
 	}
 	
 	@Given("that worker with the name {string} and password {string} is logged in")
 	public void thatWorkerWithTheNameAndPasswordIsLoggedIn(String name, String password) throws Exception {
-		itemHolder.setWorker(new Worker(name, password));
 		managementApp.createUser(name, password);
 		assertTrue(managementApp.Login(name, password));
+		itemHolder.setWorker(managementApp.getState().currentUser());
 	}
 	
 	@When("the worker logs in")

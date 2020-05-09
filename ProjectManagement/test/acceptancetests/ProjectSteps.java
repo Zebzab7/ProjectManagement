@@ -33,7 +33,7 @@ public class ProjectSteps {
 		this.managementApp = managementApp;
 		this.errorMessage = errorMessage;
 		this.itemHolder = stateHelper;
-		this.itemHolder.setState(managementApp.getState());
+		itemHolder.setState(managementApp.getState());
 	}
 	
 	@Given("the project with name {string} does not exist")
@@ -46,7 +46,7 @@ public class ProjectSteps {
 		try {
 			itemHolder.logInTemp();
 			if ( !managementApp.containsProject(name) ) {
-				assertTrue(managementApp.addProject(new Project(name, managementApp.getState())));
+				assertTrue(managementApp.addProject(new Project(name, itemHolder.getState())));
 				
 			}
 			assertTrue(managementApp.containsProject(name));
@@ -95,7 +95,7 @@ public class ProjectSteps {
 	public void workerAddsNewProject(String name) throws Exception {
 		try {
 			projectName = name;
-			assertTrue(managementApp.addProject(new Project(name, managementApp.getState())));
+			assertTrue(managementApp.addProject(new Project(name, itemHolder.getState())));
 		    project = managementApp.findProject(name);
 		} catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
@@ -106,7 +106,7 @@ public class ProjectSteps {
 	public void workerAddsNewProjectNamedWithAsProjectleader(String name, String projectLeader) {
 	    try {
 	    	projectName =  name;
-	    	managementApp.addProject(new Project(name, managementApp.getState(), managementApp.findWorker(projectLeader)));
+	    	managementApp.addProject(new Project(name, itemHolder.getState(), managementApp.findWorker(projectLeader)));
 	 	    project = managementApp.findProject(name);
 	    } catch (Exception e) {
 	    	errorMessage.setErrorMessage(e.getMessage());
@@ -158,20 +158,18 @@ public class ProjectSteps {
 	
 	@Then("the worker has a total of {int} individual work hours")
 	public void theWorkerHasATotalOfIndividualWorkHours(int hours) {
-	    assertEquals(project.getWorkersAccumulatedHours(managementApp.getState().currentUser()), hours);
+	    assertEquals(project.getWorkersAccumulatedHours(itemHolder.getState().currentUser()), hours);
 	}
 	
 	@Then("the worker has a total of {int} work hours contributed to project {string}")
 	public void theWorkerHasATotalOfWorkHoursContributedToProject(int hours, String name) throws Exception {
 		Project p = managementApp.findProject(name);
-		System.out.println("accumilat " + p.getWorkersAccumulatedHours(itemHolder.getWorker()));
 		assertEquals(p.getWorkersAccumulatedHours(itemHolder.getWorker()),hours);
 	}
 	
 	@Then("the project has a total of {int} work hours")
 	public void theProjectHasATotalOfWorkHours(int hours) {
 		assertEquals(itemHolder.getProject().getHours(), hours);
-		System.out.println(itemHolder.getProject().getHours());
 	}
 	
 	@Then("the project is contained in the app")

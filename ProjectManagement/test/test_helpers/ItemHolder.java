@@ -59,7 +59,6 @@ public class ItemHolder {
 		return worker;
 	}
 	private Project exampleProject() {
-		System.out.println("Programming 101 has been created");
 		project = new Project("Programming 101", state);
 		return project;
 	}
@@ -73,9 +72,11 @@ public class ItemHolder {
 	 * perform certain operations in the management app
 	 */
 	public void logInTemp() {
-		if (state.currentUser() != null) 
-		prev = new Worker(state.currentUser().getUsername(), state.currentUser().getPassword());
+		if (state.currentUser() != null) {
+			prev = state.currentUser();
+		}
 		else prev = null;
+		
 		temp = new Worker("Temp", "1234");
 		state.setUser(temp);
 	}

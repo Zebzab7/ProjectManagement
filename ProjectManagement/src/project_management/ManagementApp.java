@@ -25,9 +25,6 @@ public class ManagementApp {
 	public boolean AddHours(int hours) throws OperationNotAllowedException {
 		if (state.currentActivity() != null && state.currentProject() != null && state.currentUser() != null) {
 			
-			System.out.println(state.currentUser().getUsername());
-			System.out.println(state.currentActivity().getName());
-			
 			state.currentActivity().addHours(hours);
 			state.currentProject().addHours(hours);
 			state.currentUser().addHours(hours, state.currentActivity());
@@ -98,7 +95,7 @@ public class ManagementApp {
 		if (!containsUser(username)) {
 			if (users.add(new Worker(username, password))) {
 				return true;
-			}
+			} 
 		}
 		throw new Exception("User already exist");
 	}

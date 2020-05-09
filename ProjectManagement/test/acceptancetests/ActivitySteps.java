@@ -30,7 +30,7 @@ public class ActivitySteps {
 		this.managementApp = managementApp;
 		this.itemHolder = stateHelper;
 		this.errorMessage = errorMessage;
-		stateHelper.setState(managementApp.getState());
+		itemHolder.setState(managementApp.getState());
 	}
 	
 	@Given("the worker is working on a project")
@@ -55,7 +55,7 @@ public class ActivitySteps {
 	public void theActivityWithNameIsInTheProject(String name) throws OperationNotAllowedException {
 	   try {
 		   if (!itemHolder.getProject().containsActivity(name)) {
-			   itemHolder.setActivity(new Activity(name, managementApp.getState()));
+			   itemHolder.setActivity(new Activity(name, itemHolder.getState()));
 			   itemHolder.getProject().addActivity(itemHolder.getActivity());
 		   }
 		   assertTrue(itemHolder.getProject().containsActivity(name));
@@ -69,7 +69,7 @@ public class ActivitySteps {
 		Project p = itemHolder.getProject();
 		itemHolder.logInTemp();
 		if (!p.containsActivity(p.getName())) {
-			p.addActivity(new Activity(name, managementApp.getState()));
+			p.addActivity(new Activity(name, itemHolder.getState()));
 		}
 		itemHolder.setActivity(p.findActivity(name));
 		itemHolder.logOutTemp();
@@ -139,14 +139,13 @@ public class ActivitySteps {
 	public void anotherWorkerAddsWorkHoursToTheActivitySuccessfully(int hours) throws OperationNotAllowedException {
 		try {
 			itemHolder.logInTemp();
-			if (!itemHolder.getProject().containsWorker(itemHolder.getTemp())) {
-				itemHolder.getProject().addWorker(itemHolder.getTemp());
-			}
-			if (!itemHolder.getActivity().containsWorker(itemHolder.getTemp())) {
-				itemHolder.getActivity().addWorker(itemHolder.getTemp());
-			}
+			itemHolder.getProject().addWorker(itemHolder.getTemp());
+	
+			itemHolder.getActivity().addWorker(itemHolder.getTemp());
+			
 			
 			managementApp.AddHours(hours);
+			
 			itemHolder.logOutTemp();
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
@@ -167,7 +166,7 @@ public class ActivitySteps {
 	public void workerCreatesNewActivityWithNameAndETHours(String name, int ET) throws Exception {
 		try {
 			activityName = name;
-			assertTrue(itemHolder.setActivity(new Activity(name, managementApp.getState(), ET)) );
+			assertTrue(itemHolder.setActivity(new Activity(name, itemHolder.getState(), ET)) );
 		}
 		catch (Exception e) {
 	    	errorMessage.setErrorMessage(e.getMessage());
@@ -190,7 +189,7 @@ public class ActivitySteps {
 	
 	@Then("the worker has a total of {int} hours contributed to the activity")
 	public void theWorkerHasATotalOfHoursContributedToTheActivity(int hours) {
-		assertEquals(itemHolder.getWorker().getHoursOnTask(activity), hours);
+		assertEquals(itemHolder.getState().currentUser().getHoursOnTask(activity), hours);
 	}
 	
 	@Then("the activity is contained in the project")

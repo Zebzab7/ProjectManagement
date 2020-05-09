@@ -38,7 +38,7 @@ public class Project extends Item {
 		for (Activity a : worker.getAssignedActivities()) {
 			if (activities.contains(a)) {
 				hours += worker.getHoursOnTask(a);
-				System.out.println(worker.getHoursOnTask(a));
+
 			}
 		}
 		return hours;
