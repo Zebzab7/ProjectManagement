@@ -2,6 +2,7 @@ package acceptancetests;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -19,6 +20,7 @@ import io.cucumber.java.en.When;
 import project_management.*;
 import test_helpers.ErrorMessageHolder;
 import test_helpers.ItemHolder;
+
 public class ProjectSteps {
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
@@ -33,7 +35,6 @@ public class ProjectSteps {
 		this.managementApp = managementApp;
 		this.errorMessage = errorMessage;
 		this.itemHolder = stateHelper;
-		this.itemHolder.setState(managementApp.getState());
 	}
 	
 	@Given("the project with name {string} does not exist")
@@ -46,13 +47,12 @@ public class ProjectSteps {
 		try {
 			itemHolder.logInTemp();
 			if ( !managementApp.containsProject(name) ) {
-				assertTrue(managementApp.addProject(new Project(name, managementApp.getState())));
-				
+				itemHolder.setProject(new Project(name, managementApp.getState()));
+				assertTrue(managementApp.addProject(itemHolder.getProject()));
 			}
 			assertTrue(managementApp.containsProject(name));
-			project = managementApp.findProject(name);
+			project = itemHolder.getProject();
 			this.projectName = name;
-			itemHolder.setProject(project);
 			itemHolder.logOutTemp();
 	    } catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
@@ -77,17 +77,22 @@ public class ProjectSteps {
 	@Given("the worker is the projectleader")
 	public void theWorkerIsTheProjectleader() throws Exception {
 		itemHolder.logInTemp();
-		if ( !itemHolder.getProject().containsWorker(itemHolder.getWorker()) ) {
+		if ( !itemHolder.getProject().isProjectLeader(managementApp.getState().currentUser()) ) {
+			
 			itemHolder.getProject().addWorker(itemHolder.getWorker());
 			itemHolder.getProject().setProjectLeader(itemHolder.getWorker());
 		}
+		
 		itemHolder.logOutTemp();
 		assertEquals(itemHolder.getProject().getProjectLeader(), itemHolder.getWorker());
 	}
 	
 	@Given("the project is selected")
-	public void theProjectIsSelected() {
-		assertTrue(itemHolder.getProject().select());
+	public void theProjectIsSelected() throws OperationNotAllowedException {
+		if ( itemHolder.getProject() != null && !itemHolder.getProject().containsWorker(itemHolder.getWorker()) ) {
+			itemHolder.getProject().addWorker(itemHolder.getWorker());
+		}
+		assertTrue(managementApp.getState().setProject(itemHolder.getProject()));
 	}
 	
 	@When("worker adds new project named {string}")
@@ -162,14 +167,13 @@ public class ProjectSteps {
 	
 	@Then("the worker has a total of {int} work hours contributed to project {string}")
 	public void theWorkerHasATotalOfWorkHoursContributedToProject(int hours, String name) throws Exception {
-		Project p = managementApp.findProject(name);
-		assertEquals(p.getWorkersAccumulatedHours(itemHolder.getWorker()),hours);
+		assertEquals(itemHolder.getProject().getWorkersAccumulatedHours(itemHolder.getWorker()), hours);
 	}
 	
 	@Then("the project has a total of {int} work hours")
 	public void theProjectHasATotalOfWorkHours(int hours) {
-		System.out.println(itemHolder.getProject().workedHours());
-		assertEquals(itemHolder.getProject().workedHours(), hours);
+		System.out.println(itemHolder.getProject().getHours());
+		assertEquals(itemHolder.getProject().getHours(), hours);
 	}
 	
 	@Then("the project is contained in the app")

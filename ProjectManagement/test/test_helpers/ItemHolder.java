@@ -15,7 +15,9 @@ public class ItemHolder {
 	public ItemHolder (State state) {
 		this.state = state;
 	}
-	
+	public State getState() {
+		return state;
+	}
 	public Worker getWorker() {
 		if (worker == null) {
 			worker = exampleWorker();
@@ -67,9 +69,7 @@ public class ItemHolder {
 	 * perform certain operations in the management app
 	 */
 	public void logInTemp() {
-		if (state.currentUser() != null) 
-		prev = new Worker(state.currentUser().getUsername(), state.currentUser().getPassword());
-		else prev = null;
+		prev = state.currentUser();
 		temp = new Worker("Temp", "1234");
 		state.setUser(temp);
 	}

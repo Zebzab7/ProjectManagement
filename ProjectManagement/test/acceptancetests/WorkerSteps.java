@@ -38,6 +38,11 @@ public class WorkerSteps {
 	    assertTrue(managementApp.containsUser(name));
 	}
 	
+	@Given("the worker is not the projectleader")
+	public void theWorkerIsNotTheProjectleader() {
+		assertFalse(itemHolder.getProject().isProjectLeader(itemHolder.getWorker()));
+	}
+	
 	@Given("that worker {string} with password {string} does not exist")
 	public void thatWorkerWithPasswordDoesNotExist(String name, String password) throws Exception {
 		assertFalse(managementApp.containsUser(name));

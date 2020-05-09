@@ -3,6 +3,8 @@ package project_management;
 import java.util.*;
 
 public class ItemTimeManager {
+	private ArrayList<GregorianCalendar> absenteesReturn = new ArrayList<GregorianCalendar>();
+	private ArrayList<Worker> absentees = new ArrayList<Worker>();
 	
 	private State state;
 	private GregorianCalendar startTime = new GregorianCalendar();
@@ -44,7 +46,7 @@ public class ItemTimeManager {
 	 */ 
 	
 	public boolean setStartTime(int year, int month, int day, Item object) throws OperationNotAllowedException {
-		if(object.preConditionsMet()) {
+		if(object.TimepreConditionsMet()) {
 			startTime.set(year, month - 1, day);
 			if (endTimeSpecified && startTime.after(endTime)) {
 				throw new OperationNotAllowedException("Deadline is invalid");
@@ -58,7 +60,7 @@ public class ItemTimeManager {
 	}
 	
 	public boolean setEndTime(int year, int month, int day, Item object) throws OperationNotAllowedException {
-		if(object.preConditionsMet()) {
+		if(object.TimepreConditionsMet()) {
 			endTime.set(year, month - 1, day);
 			if (startTimeSpecified && startTime.after(endTime)) {
 				throw new OperationNotAllowedException("Deadline is invalid");

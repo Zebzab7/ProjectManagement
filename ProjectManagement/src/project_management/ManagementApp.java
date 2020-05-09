@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 public class ManagementApp {
 	private ArrayList<Project> projects = new ArrayList<Project>();
-	private ArrayList<Project> assignedProjects = new ArrayList<Project>();
 	private ArrayList<Worker> users = new ArrayList<Worker>();
 	private ArrayList<String> workerHours = new ArrayList<String>();
 	private ArrayList<FixedActivity> fixedActivities = new ArrayList<FixedActivity>();
@@ -20,7 +19,19 @@ public class ManagementApp {
 		if (state.currentUser() == null) {
 			return false;
 		}
-		return true;
+		return true; 
+	}
+	public boolean addHours(int hours) throws OperationNotAllowedException {
+		if (state.currentUser() == null) {
+			throw new OperationNotAllowedException("User login required");
+		}
+		if (state.currentActivity() != null && state.currentProject() != null) {
+			state.currentActivity().addHours(hours);
+			state.currentProject().addHours(hours);
+			state.currentUser().addHours(hours, state.currentActivity());
+			return true;
+		}
+		return false;
 	}
 	
 	/*
@@ -55,14 +66,6 @@ public class ManagementApp {
 			throw new OperationNotAllowedException("User login required");
 		}
 			projects.remove(project);
-			state.currentUser().removeProject(project);
-	}
-	public void removeFixedActivity(FixedActivity fActivity) throws OperationNotAllowedException {
-		if (state.currentUser() == null) {
-			throw new OperationNotAllowedException("User login required");
-		}
-		fixedActivities.remove(fActivity);
-		state.currentUser().removeFixedActivity(fActivity);
 	}
 	public boolean containsUser(String name) {
 		for (Worker worker : users) {
@@ -83,14 +86,6 @@ public class ManagementApp {
 	public boolean containsProject(String name) throws OperationNotAllowedException {
 		for (Project p : projects) {
 			if (p.getName().equals(name)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	public boolean containsFixedActivity(String name, Worker absentee) {
-		for(FixedActivity f : fixedActivities) {
-			if(f.getName().equals(name) && f.getAbsentee().equals(absentee)) {
 				return true;
 			}
 		}
@@ -142,9 +137,6 @@ public class ManagementApp {
 	}
 	
 	public boolean addProject(Project project) throws OperationNotAllowedException {
-		if (state.currentUser() == null) {
-			throw new OperationNotAllowedException("User login required");
-		}
 		if ( containsProject(project.getName()) ) throw new OperationNotAllowedException("Project already exist");
 		projects.add(project);
 		return true;
@@ -169,16 +161,17 @@ public class ManagementApp {
 //		return true;
 //	}
 	
-	public boolean createFixedActivity(String name, State state, Worker absentee) throws OperationNotAllowedException {
+	public boolean createFixedActivity(String name, State state, Worker absentee) throws Exception {
 		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
-		if(containsFixedActivity(name,absentee)) throw new OperationNotAllowedException("Fixed activity already exists");
+		for(FixedActivity f : fixedActivities) {
+			if(f.getName().equals(name) && f.getAbsentee().equals(absentee)) {
+				throw new OperationNotAllowedException("Activity already created");
+			}
+		}
+		fixedActivities.add(new FixedActivity(name, state, absentee));
 		
-		FixedActivity fAct = new FixedActivity(name, state, absentee);
-		
-		fixedActivities.add(fAct);
-		absentee.addFixedActivity(fAct);
 		return true;
 	}
 	
@@ -189,14 +182,14 @@ public class ManagementApp {
 	 * The following two methods return statistics of a given worker
 	 */
 	
-	public ArrayList<String> workerHoursCollected(Worker worker) throws OperationNotAllowedException {
-		workerHours.clear();
+	/*public ArrayList<Project> currentAssignedProjects(Worker worker) throws Exception {
+		assignedProjects.clear();
 		for(Project p : projects) {
-			if(p.containsWorker(worker)) {
-				workerHours.add("Project:" + p.getName() + ", hours accumulated:"
-										    + p.getWorkersAccumulatedHours(worker));
+			if(p.containsWorker(state.currentUser())) {
+				assignedProjects.add(p);
 			}
 		}
-		return workerHours;
-	}
+		if(assignedProjects.isEmpty()) throw new Exception("Worker isn't assigned to a project");
+		return assignedProjects;
+	}*/ 
 }
