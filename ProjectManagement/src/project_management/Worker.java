@@ -1,10 +1,12 @@
 package project_management;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 public class Worker {
 	private ArrayList<Activity> assignedActivities = new ArrayList<Activity>();
 	private ArrayList<Project> assignedProjects = new ArrayList<Project>();
+	private ArrayList<FixedActivity> assignedFixedActivities = new ArrayList<FixedActivity>();
 	private String username;
 	private String password;
 	private int workedHours;
@@ -27,11 +29,24 @@ public class Worker {
 		return password;
 	}
 	
+	public ArrayList<FixedActivity> getAssignedFixedActivityList() {
+		return assignedFixedActivities;
+	}
+	
 	public ArrayList<Project> getAssignedProjects() {
 		return assignedProjects;
 	}
 	public ArrayList<Activity> getAssignedActivities() {
 		return assignedActivities;
+	}
+	
+	public boolean isAbsent() {
+		for(FixedActivity f : assignedFixedActivities) {
+			if(f.getAbsenceManager().hasStarted()) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void addProject(Project project) {
@@ -40,9 +55,22 @@ public class Worker {
 	public void addActivity(Activity activity) {
 		assignedActivities.add(activity);
 	}
+	public void addFixedActivity(FixedActivity fActivity) {
+		assignedFixedActivities.add(fActivity);
+	}
+	
+	public void removeProject(Project project) {
+		assignedProjects.remove(project);
+	}
+	public void removeActivity(Activity activity) {
+		assignedActivities.remove(activity);
+	}
+	public void removeFixedActivity(FixedActivity fActivity) {
+		assignedFixedActivities.remove(fActivity);
+	}
 	
 	public boolean isAvailable() {
-		if(assignedActivities.size() < 20) {
+		if(assignedActivities.size() < 20 && !isAbsent()) {
 			return true;
 		}
 		return false;

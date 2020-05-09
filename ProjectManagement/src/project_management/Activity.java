@@ -3,7 +3,6 @@ package project_management;
 import java.util.ArrayList;
 
 public class Activity extends Item {
-	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
 	private int expectedTime;
 	private int workedHours;
 	
@@ -26,37 +25,34 @@ public class Activity extends Item {
 		this.expectedTime = ET;
 	}
 	
-	public ArrayList<Integer> getAccumlatedHoursList() {
-		return accumulatedHours;
-	}
-	
 	public int workedHours() {
 		return workedHours;
 	}
 	
-	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
-		accumulatedHours.add(0);
-		getWorkerList().add(worker);
-		return true;
-	}
-	
-	public boolean removeWorker(Worker worker) {
-		accumulatedHours.remove(getWorkerList().indexOf(worker));
-		getWorkerList().remove(worker);
-		return true;
-	}
+//	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
+//		accumulatedHours.add(0);
+//		getWorkerList().add(worker);
+//		return true;
+//	}
+//	
+//	public boolean removeWorker(Worker worker) {
+//		accumulatedHours.remove(getWorkerList().indexOf(worker));
+//		getWorkerList().remove(worker);
+//		return true;
+//	}
 	
 	public int workerContributedHours(Worker worker) {
 		int index = getWorkerList().indexOf(findWorker(worker.getUsername()));
-		return accumulatedHours.get(index);
+		return getAccumulatedHours().get(index);
 	}
 	
 	public boolean addHours(int hours) throws OperationNotAllowedException {
 		if (preConditionsMet()) {
 			workedHours += hours;
 			int index = getWorkerList().indexOf(findWorker(getState().currentUser().getUsername()));
-			int value = accumulatedHours.get(index);
-			accumulatedHours.set(index, value+hours);
+			int value = getAccumulatedHours().get(index);
+			getAccumulatedHours().set(index, value+hours);
+			getState().currentUser().addHours(hours);
 			if (workedHours < 0) workedHours = 0;
 			return true;
 		}
@@ -68,4 +64,5 @@ public class Activity extends Item {
 			addWorker(worker);
 		}
 	}
+	
 }

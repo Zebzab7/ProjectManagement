@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Project extends Item {
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
-	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
 	
 	private int workedHours;
 	private int initialHours = 0;
@@ -23,9 +22,6 @@ public class Project extends Item {
 		this.projectLeader = projectLeader;
 	}
 	
-	public ArrayList<Integer> getAccumulatedHoursList() {
-		return accumulatedHours;
-	}
 	public ArrayList<Activity> getActivityList() {
 		return activities;
 	}
@@ -34,9 +30,6 @@ public class Project extends Item {
 	}
 	public Worker getProjectLeader() {
 		return projectLeader;
-	}
-	public int getWorkersAccumulatedHours(Worker worker) {
-		return accumulatedHours.get(getWorkerList().indexOf(worker));
 	}
 	public int workedHours() {
 		return workedHours;
@@ -97,13 +90,24 @@ public class Project extends Item {
 	public boolean addHoursToActivity(int hours, Activity activity) throws OperationNotAllowedException {
 		
 		if (!activity.preConditionsMet() || !containsWorker(getState().currentUser()) 
-				|| !activity.containsWorker(getState().currentUser())) return false;
+			|| !activity.containsWorker(getState().currentUser())) {
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println("Didn't add hours");
+			return false;
+		}
 		
 		Activity act = findActivity(activity.getName());
 		
 		int index = getWorkerList().indexOf(findWorker(getState().currentUser().getUsername()));
-		int value = accumulatedHours.get(index);
-		accumulatedHours.set(index, value+hours);
+		int value = getAccumulatedHours().get(index);
+		getAccumulatedHours().set(index, value+hours);
+		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println("Added hours");
 		
 		if ( !((workedHours + hours) < 0) && act.preConditionsMet() ) {
 			act.addHours(hours);
@@ -120,17 +124,17 @@ public class Project extends Item {
 		return false;
 	}
 	
-	public boolean addWorker(Worker worker) {
-		accumulatedHours.add(0);
-		getWorkerList().add(worker);
-		return true;
-	}
+	//public boolean addWorker(Worker worker) {
+		//accumulatedHours.add(0);
+		//getWorkerList().add(worker);
+		//return true;
+	//}
 	
-	public boolean removeWorker(Worker worker) {
-		accumulatedHours.remove(getWorkerList().indexOf(worker));
-		getWorkerList().remove(worker);
-		return true;
-	}
+	//public boolean removeWorker(Worker worker) {
+		//accumulatedHours.remove(getWorkerList().indexOf(worker));
+		//getWorkerList().remove(worker);
+		//return true;
+	//}
 	
 	public boolean addActivity(Activity activity) throws OperationNotAllowedException {
 		if ( getState().currentUser() == null ) {

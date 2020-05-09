@@ -4,22 +4,49 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 public class AbsenceManager {
-	private GregorianCalendar startTime = new GregorianCalendar();
-	private GregorianCalendar endTime = new GregorianCalendar();
-	private Worker worker;
-	private State state;
+	private GregorianCalendar startTime = null;
+	private GregorianCalendar endTime = null;
 	
-	public AbsenceManager(Worker worker, State state) {
-		this.worker = worker;
-		this.state = state;
+	public GregorianCalendar getStartTime() {
+		return startTime;
+	}
+	public GregorianCalendar getEndTime() {
+		return endTime;
 	}
 	
-	public void setStartTime(int year, int month, int day) throws OperationNotAllowedException {
-		if(state.currentUser() == null) throw new OperationNotAllowedException("User login required");
-		startTime.set(year, month - 1, day);
+	public AbsenceManager() {
 	}
-	public void setEndTime(int year, int month, int day) throws OperationNotAllowedException {
-		if(state.currentUser() == null) throw new OperationNotAllowedException("User login required");
-		endTime.set(year, month - 1, day);
+	
+	public boolean setStartTime(int year, int month, int day) throws OperationNotAllowedException {
+		startTime = new GregorianCalendar(year, month - 1, day);
+		return true;
 	}
+	public boolean setEndTime(int year, int month, int day) throws OperationNotAllowedException {
+		endTime = new GregorianCalendar(year, month - 1, day);
+		return true;
+	}
+	
+	public void removeTimeSpecifications() {
+		startTime = null;
+		endTime = null;
+	}
+	
+	public boolean hasStarted() {
+		if(endTime == null) {
+			return false;
+		}
+		
+		if(endTime != null && startTime == null) {
+			return true;
+		}
+		
+		GregorianCalendar currentTime = new GregorianCalendar();
+		
+		if(currentTime.after(startTime) && currentTime.before(endTime)) {
+			return true;
+		}
+		return false;
+		
+	}
+	
 }

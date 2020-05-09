@@ -55,6 +55,14 @@ public class ManagementApp {
 			throw new OperationNotAllowedException("User login required");
 		}
 			projects.remove(project);
+			state.currentUser().removeProject(project);
+	}
+	public void removeFixedActivity(FixedActivity fActivity) throws OperationNotAllowedException {
+		if (state.currentUser() == null) {
+			throw new OperationNotAllowedException("User login required");
+		}
+		fixedActivities.remove(fActivity);
+		state.currentUser().removeFixedActivity(fActivity);
 	}
 	public boolean containsUser(String name) {
 		for (Worker worker : users) {
@@ -75,6 +83,14 @@ public class ManagementApp {
 	public boolean containsProject(String name) throws OperationNotAllowedException {
 		for (Project p : projects) {
 			if (p.getName().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public boolean containsFixedActivity(String name, String absentee) {
+		for(FixedActivity f : fixedActivities) {
+			if(f.getName().equals(name) && f.getAbsentee().getUsername().contentEquals(absentee)) {
 				return true;
 			}
 		}
@@ -118,6 +134,18 @@ public class ManagementApp {
 		}
 		return null;
 	}
+	public FixedActivity findFixedActivity(String fActivityName) throws OperationNotAllowedException{
+		if (state.currentUser() == null) {
+			throw new OperationNotAllowedException("User login required");
+		}
+		for (FixedActivity f : fixedActivities) {
+			if (f.getName().equals(fActivityName)){
+				return f;
+			}
+		}
+		return null;
+	}
+	
 	public void addWorkerToProject(Worker worker, Project project) throws Exception{
 		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
@@ -153,17 +181,14 @@ public class ManagementApp {
 //		return true;
 //	}
 	
-	public boolean createFixedActivity(String name, State state, Worker absentee) throws Exception {
+	public boolean createFixedActivity(FixedActivity fActivity) throws OperationNotAllowedException {
 		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
-		for(FixedActivity f : fixedActivities) {
-			if(f.getName().equals(name) && f.getAbsentee().equals(absentee)) {
-				throw new OperationNotAllowedException("Activity already created");
-			}
-		}
-		fixedActivities.add(new FixedActivity(name, state, absentee));
+		if(containsFixedActivity(fActivity.getName(),state.currentUser().getUsername())) throw new OperationNotAllowedException("Fixed activity already exists");
 		
+		fixedActivities.add(fActivity);
+		state.currentUser().addFixedActivity(fActivity);
 		return true;
 	}
 	
@@ -183,15 +208,5 @@ public class ManagementApp {
 			}
 		}
 		return workerHours;
-	}
-	public ArrayList<Project> currentAssignedProjects(Worker worker) throws Exception {
-		assignedProjects.clear();
-		for(Project p : projects) {
-			if(p.containsWorker(state.currentUser())) {
-				assignedProjects.add(p);
-			}
-		}
-		if(assignedProjects.isEmpty()) throw new Exception("Worker isn't assigned to a project");
-		return assignedProjects;
 	}
 }

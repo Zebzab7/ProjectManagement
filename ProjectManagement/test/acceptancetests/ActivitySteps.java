@@ -43,7 +43,7 @@ public class ActivitySteps {
 
 	@Given("the worker is the project leader")
 	public void theWorkerIsTheProjectLeader() {
-	    itemHolder.getProject().setProjectLeader(itemHolder.getWorker());
+		itemHolder.getProject().setProjectLeader(itemHolder.getWorker());
 	}
 
 	@Given("the activity with name {string} is not in the project")
@@ -111,6 +111,16 @@ public class ActivitySteps {
 	@Given("the worker is not working on the activity")
 	public void theWorkerIsNotWorkingOnTheActivity() throws OperationNotAllowedException {
 		assertFalse(itemHolder.getActivity().containsWorker(itemHolder.getWorker()));
+	}
+	
+	@When("the worker is added to the activity")
+	public void addWorkerToActivity() throws OperationNotAllowedException {
+		
+		try{
+			itemHolder.getActivity().addWorker(managementApp.getState().currentUser());
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
 	}
 	
 	@When("the worker adds {int} work hours to the activity succesfully")

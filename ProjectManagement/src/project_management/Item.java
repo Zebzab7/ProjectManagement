@@ -7,6 +7,7 @@ public class Item {
 	private State state;
 	private ItemTimeManager timeManager;
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
+	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
 	private boolean selected = false;
 	private boolean preConditions = false;
 	
@@ -23,6 +24,12 @@ public class Item {
 	}
 	public ArrayList<Worker> getWorkerList() {
 		return workers;
+	}
+	public ArrayList<Integer> getAccumulatedHours() {
+		return accumulatedHours;
+	}
+	public int getWorkersAccumulatedHours(Worker worker) {
+		return accumulatedHours.get(getWorkerList().indexOf(worker));
 	}
 	public boolean isSelected() {
 		return selected;
@@ -58,17 +65,25 @@ public class Item {
 	}
 	
 	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
-//		if(absenteeCheck.workerIsAbsent(worker)) {
-//			throw new Exception("Worker is absent");
-//		}
+		if(worker.isAbsent() && !(this instanceof Project)) {
+			throw new OperationNotAllowedException("Worker is absent");
+		}
 		workers.add(worker);
+		
+		if(this instanceof Project) worker.addProject(state.currentProject());
+		if(this instanceof Activity) worker.addActivity(state.currentActivity());
+		
+		accumulatedHours.add(0);
 		return true;
-//		accumulatedHours.add(initialHours);
 	}
 	
 	public boolean removeWorker(Worker worker) {
-//		accumulatedHours.remove(workers.indexOf(worker));
+		accumulatedHours.remove(workers.indexOf(worker));
 		workers.remove(worker);
+		
+		if(this instanceof Project) worker.removeProject(state.currentProject());
+		if(this instanceof Activity) worker.removeActivity(state.currentActivity());
+		
 		return true;
 	}
 	
