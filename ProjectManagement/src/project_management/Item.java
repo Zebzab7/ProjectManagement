@@ -6,7 +6,7 @@ public class Item {
 	private String name;
 	private State state;
 	private ItemTimeManager timeManager;
-	//private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
+	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
 	private boolean preConditions = false;
 	private int hours = 0;
@@ -25,6 +25,7 @@ public class Item {
 		//int cUserIndex = getWorkerList().indexOf(getState().currentUser());
 		//accumulatedHours.set(cUserIndex, accumulatedHours.get(cUserIndex) + hours);
 		this.hours += hours;
+		
 	}
 	public int getHours() {
 		return hours;
@@ -80,17 +81,38 @@ public class Item {
 	}
 	
 	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
-//		if(absenteeCheck.workerIsAbsent(worker)) {
-//			throw new Exception("Worker is absent");
-//		}
+		System.out.println("Worker is absent:" + worker.isAbsent());
+		if(worker.isAbsent() && !(this instanceof Project)) {
+			throw new OperationNotAllowedException("Worker is absent");
+		}
+		accumulatedHours.add(0);
 		workers.add(worker);
+		
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println("CURRENT ACTIVITY == null: ");
+		System.out.println(state.currentActivity() == null);
+		
+		if(this instanceof Project) worker.getAssignedProjects().add(state.currentProject());
+		if(this instanceof Activity) {
+			System.out.println("ADDED WORKER DETAILS");
+			worker.getAssignedActivities().add(state.currentActivity());
+			worker.getWorkedHoursOnActivities().add(0);
+		}
+		System.out.println("WORKED ACTIVITIES: " + worker.getAssignedActivities().toString());
+		
 		return true;
-//		accumulatedHours.add(initialHours);
 	}
 	
 	public boolean removeWorker(Worker worker) {
-//		accumulatedHours.remove(workers.indexOf(worker));
+		accumulatedHours.remove(getWorkerList().indexOf(worker));
 		workers.remove(worker);
+		
+		if(this instanceof Project) worker.getAssignedProjects().remove(state.currentProject());
+		if(this instanceof Activity) worker.getAssignedActivities().remove(state.currentActivity());
+		
 		return true;
 	}
 }

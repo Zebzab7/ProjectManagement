@@ -6,6 +6,7 @@ public class Worker {
 	private ArrayList<Activity> assignedActivities = new ArrayList<Activity>();
 	private ArrayList<Integer> workHoursOnActivities = new ArrayList<Integer>();
 	private ArrayList<Project> assignedProjects = new ArrayList<Project>();
+	private ArrayList<FixedActivity> assignedFixedActivities = new ArrayList<FixedActivity>();
 	private String username;
 	private String password;
 	private int workedHours = 0;
@@ -17,6 +18,8 @@ public class Worker {
 	}
 	
 	public int getHoursOnActivity(Activity activity) {
+		System.out.println("!!!!!!");
+		System.out.println(assignedActivities.contains(activity));
 		return workHoursOnActivities.get(assignedActivities.indexOf(activity));
 	}	
 	public boolean addHours(int hours, Activity activity) {
@@ -44,17 +47,15 @@ public class Worker {
 	public ArrayList<Activity> getAssignedActivities() {
 		return assignedActivities;
 	}
-	
-	public void addProject(Project project) {
-		assignedProjects.add(project);
+	public ArrayList<FixedActivity> getAssignedFixedActivityList() {
+		return assignedFixedActivities;
 	}
-	public void addActivity(Activity activity) {
-		assignedActivities.add(activity);
-		workHoursOnActivities.add(0);
+	public ArrayList<Integer> getWorkedHoursOnActivities() {
+		return workHoursOnActivities;
 	}
 	
 	public boolean isAvailable() {
-		if(assignedActivities.size() < 20) {
+		if(assignedActivities.size() < 20 && !isAbsent()) {
 			return true;
 		}
 		return false;
@@ -66,6 +67,14 @@ public class Worker {
 		}
 		help = false;
 		return help;
+	}
+	public boolean isAbsent() {
+		for(FixedActivity f : assignedFixedActivities) {
+			if(f.getAbsenceManager().hasStarted()) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

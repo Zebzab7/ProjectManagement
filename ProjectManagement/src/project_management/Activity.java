@@ -27,18 +27,18 @@ public class Activity extends Item {
 	public ArrayList<Integer> getAccumlatedHoursList() {
 		return accumulatedHours;
 	}
-	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
-		accumulatedHours.add(0);
-		getWorkerList().add(worker);
-		worker.addActivity(this);
-		return true;
-	}
-	
-	public boolean removeWorker(Worker worker) {
-		accumulatedHours.remove(getWorkerList().indexOf(worker));
-		getWorkerList().remove(worker);
-		return true;
-	}
+//	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
+//		accumulatedHours.add(0);
+//		getWorkerList().add(worker);
+//		worker.addActivity(this);
+//		return true;
+//	}
+//	
+//	public boolean removeWorker(Worker worker) {
+//		accumulatedHours.remove(getWorkerList().indexOf(worker));
+//		getWorkerList().remove(worker);
+//		return true;
+//	}
 	
 	public int workerContributedHours(Worker worker) {
 		int index = getWorkerList().indexOf(findWorker(worker.getUsername()));

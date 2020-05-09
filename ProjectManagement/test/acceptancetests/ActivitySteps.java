@@ -94,6 +94,7 @@ public class ActivitySteps {
 	@Given("the activity is selected")
 	public void theActivityIsSelected() throws OperationNotAllowedException {
 		if ( itemHolder.getActivity() != null && !itemHolder.getActivity().containsWorker(itemHolder.getWorker()) ) {
+			managementApp.getState().setActivity(itemHolder.getActivity());
 			itemHolder.getActivity().addWorker(itemHolder.getWorker());
 		}
 		assertTrue(managementApp.getState().setActivity(itemHolder.getActivity()));
@@ -110,6 +111,22 @@ public class ActivitySteps {
 	@Given("the worker is not working on the activity")
 	public void theWorkerIsNotWorkingOnTheActivity() throws OperationNotAllowedException {
 		assertFalse(itemHolder.getActivity().containsWorker(itemHolder.getWorker()));
+	}
+	
+	@When("the worker is added to the activity")
+	public void addWorkerToActivity() throws OperationNotAllowedException {
+		System.out.println("EndTime: " + managementApp.getState().currentFixedActivity().getAbsenceManager().getEndTime().getTime());
+		System.out.println(managementApp.getState().currentFixedActivity().getAbsenceManager().getStartTime() == null);
+		System.out.print("Worker is absent: ");
+		System.out.println(managementApp.getState().currentUser().isAbsent());
+		try{
+			itemHolder.getActivity().addWorker(managementApp.getState().currentUser());
+			System.out.println("Activity, itemHolder: " + itemHolder.getActivity().getName());
+			System.out.println("Worker fA list size, mApp: " + managementApp.getState().currentUser().getAssignedFixedActivityList().toString());
+			System.out.println("Worker added: " + itemHolder.getActivity().containsWorker(managementApp.getState().currentUser()));
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
 	}
 	
 	@When("the worker adds {int} work hours to the activity succesfully")
@@ -190,6 +207,8 @@ public class ActivitySteps {
 	
 	@Then("the worker has a total of {int} hours contributed to the activity")
 	public void theWorkerHasATotalOfHoursContributedToTheActivity(int hours) {
+		System.out.println(itemHolder.getWorker().getAssignedActivities());
+		System.out.println(managementApp.getState().currentUser().getAssignedActivities());
 		assertEquals(itemHolder.getWorker().getHoursOnActivity(activity), hours);
 	}
 	

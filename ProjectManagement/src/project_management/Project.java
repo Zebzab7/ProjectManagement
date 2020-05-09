@@ -117,17 +117,17 @@ public class Project extends Item {
 		return false;
 	}*/
 	
-	public boolean addWorker(Worker worker) {
-		accumulatedHours.add(0);
-		getWorkerList().add(worker);
-		return true;
-	}
-	
-	public boolean removeWorker(Worker worker) {
-		accumulatedHours.remove(getWorkerList().indexOf(worker));
-		getWorkerList().remove(worker);
-		return true;
-	}
+//	public boolean addWorker(Worker worker) {
+//		accumulatedHours.add(0);
+//		getWorkerList().add(worker);
+//		return true;
+//	}
+//	
+//	public boolean removeWorker(Worker worker) {
+//		accumulatedHours.remove(getWorkerList().indexOf(worker));
+//		getWorkerList().remove(worker);
+//		return true;
+//	}
 	
 	public boolean addActivity(Activity activity) throws OperationNotAllowedException {
 		if ( getState().currentUser() == null ) {

@@ -1,6 +1,7 @@
 package test_helpers;
 
 import project_management.Activity;
+import project_management.FixedActivity;
 import project_management.Project;
 import project_management.State;
 import project_management.Worker;
@@ -9,6 +10,7 @@ public class ItemHolder {
 	private State state;
 	private Project project;
 	private Activity activity;
+	private FixedActivity fixedActivity;
 	private Worker worker, prev;
 	private Worker temp;
 	
@@ -36,6 +38,12 @@ public class ItemHolder {
 		}
 		return activity;
 	}
+	public FixedActivity getFixedActivity() {
+		if(fixedActivity == null) {
+			fixedActivity = exampleFixedActivity();
+		}
+		return fixedActivity;
+	}
 	
 	public void setState(State state) {
 		this.state = state;
@@ -50,6 +58,9 @@ public class ItemHolder {
 	public void setWorker(Worker worker) {
 		this.worker = worker;
 	}
+	public void setFixedActivity(FixedActivity fixedActivity) {
+		this.fixedActivity = fixedActivity;
+	}
 	
 	private Worker exampleWorker() {
 		worker = new Worker("PEPE", "1234");
@@ -62,6 +73,10 @@ public class ItemHolder {
 	private Activity exampleActivity() {
 		activity = new Activity("Activity101", state);
 		return activity;
+	}
+	private FixedActivity exampleFixedActivity() {
+		fixedActivity = new FixedActivity("fixedActivity101", state, state.currentUser());
+		return fixedActivity;
 	}
 	
 	/*

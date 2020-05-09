@@ -91,6 +91,7 @@ public class ProjectSteps {
 	@Given("the project is selected")
 	public void theProjectIsSelected() throws OperationNotAllowedException {
 		if ( itemHolder.getProject() != null && !itemHolder.getProject().containsWorker(itemHolder.getWorker()) ) {
+			managementApp.getState().setProject(itemHolder.getProject());
 			itemHolder.getProject().addWorker(itemHolder.getWorker());
 		}
 		assertTrue(managementApp.getState().setProject(itemHolder.getProject()));
