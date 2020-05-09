@@ -24,9 +24,6 @@ public class Activity extends Item {
 		super.addHours(hours);
 	}
 	
-	public ArrayList<Integer> getAccumlatedHoursList() {
-		return accumulatedHours;
-	}
 //	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
 //		accumulatedHours.add(0);
 //		getWorkerList().add(worker);
@@ -39,11 +36,6 @@ public class Activity extends Item {
 //		getWorkerList().remove(worker);
 //		return true;
 //	}
-	
-	public int workerContributedHours(Worker worker) {
-		int index = getWorkerList().indexOf(findWorker(worker.getUsername()));
-		return accumulatedHours.get(index);
-	}
 
 	public boolean TimepreConditionsMet() throws OperationNotAllowedException {
 		if (getState().currentActivity() == this && super.TimepreConditionsMet()) {
