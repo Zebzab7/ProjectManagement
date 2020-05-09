@@ -69,6 +69,10 @@ public class Item {
 			throw new OperationNotAllowedException("Worker is absent");
 		}
 		workers.add(worker);
+		
+		if(this instanceof Project) worker.addProject(state.currentProject());
+		if(this instanceof Activity) worker.addActivity(state.currentActivity());
+		
 		accumulatedHours.add(0);
 		return true;
 	}
@@ -76,6 +80,10 @@ public class Item {
 	public boolean removeWorker(Worker worker) {
 		accumulatedHours.remove(workers.indexOf(worker));
 		workers.remove(worker);
+		
+		if(this instanceof Project) worker.removeProject(state.currentProject());
+		if(this instanceof Activity) worker.removeActivity(state.currentActivity());
+		
 		return true;
 	}
 	

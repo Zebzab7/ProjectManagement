@@ -22,20 +22,7 @@ public class FixedActivity {
 		this.name = name;
 		this.state = state;
 		this.absentee = absentee;
-		absenceManager = absentee.getAbsenceManager();
-	}
-	
-	public void setWorker(Worker worker) throws OperationNotAllowedException {
-		if(state.currentUser() == null) {
-			throw new OperationNotAllowedException("User login required");
-		}
-		if(worker != null) {
-			worker.getAbsenceManager().setFixedTime(absentee.getAbsenceManager().getStartTime(),absentee.getAbsenceManager().getEndTime());
-			absentee.getAbsenceManager().removeTimeSpecifications();
-			this.absentee = worker;
-		}
-		throw new OperationNotAllowedException("Worker not registered");
-		
+		absenceManager = new AbsenceManager();
 	}
 	
 }

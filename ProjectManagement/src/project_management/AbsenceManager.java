@@ -23,14 +23,28 @@ public class AbsenceManager {
 	public void setEndTime(int year, int month, int day) throws OperationNotAllowedException {
 		endTime.set(year, month - 1, day);
 	}
-	public void setFixedTime(GregorianCalendar start, GregorianCalendar end) {
-		this.startTime = start;
-		this.endTime = end;
-	}
 	
 	public void removeTimeSpecifications() {
 		startTime = null;
 		endTime = null;
+	}
+	
+	public boolean hasStarted() {
+		if(endTime == null) {
+			return false;
+		}
+		
+		if(startTime == null && endTime != null) {
+			return true;
+		}
+		
+		GregorianCalendar currentTime = new GregorianCalendar();
+		
+		if(currentTime.after(startTime) && currentTime.before(endTime)) {
+			return true;
+		}
+		return false;
+		
 	}
 	
 }

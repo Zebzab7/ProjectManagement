@@ -55,12 +55,14 @@ public class ManagementApp {
 			throw new OperationNotAllowedException("User login required");
 		}
 			projects.remove(project);
+			state.currentUser().removeProject(project);
 	}
 	public void removeFixedActivity(FixedActivity fActivity) throws OperationNotAllowedException {
 		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
 		fixedActivities.remove(fActivity);
+		state.currentUser().removeFixedActivity(fActivity);
 	}
 	public boolean containsUser(String name) {
 		for (Worker worker : users) {
@@ -173,7 +175,10 @@ public class ManagementApp {
 		}
 		if(containsFixedActivity(name,absentee)) throw new OperationNotAllowedException("Fixed activity already exists");
 		
-		fixedActivities.add(new FixedActivity(name, state, absentee));
+		FixedActivity fAct = new FixedActivity(name, state, absentee);
+		
+		fixedActivities.add(fAct);
+		absentee.addFixedActivity(fAct);
 		return true;
 	}
 	

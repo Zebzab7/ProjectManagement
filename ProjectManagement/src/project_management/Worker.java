@@ -6,16 +6,15 @@ import java.util.GregorianCalendar;
 public class Worker {
 	private ArrayList<Activity> assignedActivities = new ArrayList<Activity>();
 	private ArrayList<Project> assignedProjects = new ArrayList<Project>();
+	private ArrayList<FixedActivity> assignedFixedActivities = new ArrayList<FixedActivity>();
 	private String username;
 	private String password;
-	private AbsenceManager absenceManager;
 	private int workedHours;
 	private boolean help;
 	
 	public Worker(String username, String password) {
 		this.username = username;
 		this.password = password;
-		this.absenceManager = new AbsenceManager();
 	}
 	
 	public boolean addHours(int hours) {
@@ -30,8 +29,8 @@ public class Worker {
 		return password;
 	}
 	
-	public AbsenceManager getAbsenceManager() {
-		return absenceManager;
+	public ArrayList<FixedActivity> getAssignedFixedActivityList() {
+		return assignedFixedActivities;
 	}
 	
 	public ArrayList<Project> getAssignedProjects() {
@@ -42,17 +41,10 @@ public class Worker {
 	}
 	
 	public boolean isAbsent() {
-		if(absenceManager.getEndTime() == null) {
-			return false;
-		}
-		
-		GregorianCalendar currentDate = new GregorianCalendar();
-		
-		if(absenceManager.getStartTime() == null) {
-			return true;
-		}
-		if(currentDate.after(absenceManager.getStartTime()) && currentDate.before(absenceManager.getEndTime())) {
-			return true;
+		for(FixedActivity f : assignedFixedActivities) {
+			if(f.getAbsenceManager().hasStarted()) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -62,6 +54,19 @@ public class Worker {
 	}
 	public void addActivity(Activity activity) {
 		assignedActivities.add(activity);
+	}
+	public void addFixedActivity(FixedActivity fActivity) {
+		assignedFixedActivities.add(fActivity);
+	}
+	
+	public void removeProject(Project project) {
+		assignedProjects.remove(project);
+	}
+	public void removeActivity(Activity activity) {
+		assignedActivities.remove(activity);
+	}
+	public void removeFixedActivity(FixedActivity fActivity) {
+		assignedFixedActivities.remove(fActivity);
 	}
 	
 	public boolean isAvailable() {
