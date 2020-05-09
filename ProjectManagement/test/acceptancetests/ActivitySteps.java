@@ -20,7 +20,6 @@ import test_helpers.ItemHolder;
 
 public class ActivitySteps {
 	private String activityName;
-	private Activity activity;
 	
 	private ItemHolder itemHolder;
 	private ManagementApp managementApp;
@@ -209,7 +208,7 @@ public class ActivitySteps {
 	public void theWorkerHasATotalOfHoursContributedToTheActivity(int hours) {
 		System.out.println(itemHolder.getWorker().getAssignedActivities());
 		System.out.println(managementApp.getState().currentUser().getAssignedActivities());
-		assertEquals(itemHolder.getWorker().getHoursOnActivity(activity), hours);
+		assertEquals(itemHolder.getWorker().getHoursOnActivity(managementApp.getState().currentActivity()), hours);
 	}
 	
 	@Then("the activity is contained in the project")
