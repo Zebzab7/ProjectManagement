@@ -59,4 +59,3 @@ Scenario: worker sets deadline when he is not assigned to project
 	And the worker is not working on the project
 	When the worker sets the end date of the project to the 2020-5-12 unsuccesfully
 	Then the error message "User is not assigned to the project" is given
-	
