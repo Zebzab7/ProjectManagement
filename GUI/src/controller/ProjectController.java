@@ -171,7 +171,7 @@ public class ProjectController implements Initializable {
 		}
 		
 		lblWorkerCounter.setText("Workers on this project: "+workerCounter+"");
-		lblWorkedHours.setText("Worked hours: "+project.getHours());
+		lblWorkedHours.setText("Worked hours: "+project.getHours()/2.0);
 	}
 	
 	public void updateTaskList() throws OperationNotAllowedException {
