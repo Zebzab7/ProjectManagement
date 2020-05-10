@@ -38,7 +38,7 @@ Scenario: Worker tries to find worker that does not exist
 	And that worker "PEPX" with password "1234" does not exist
 	When the worker tries to find worker with name "PEPX" in app
 	Then the error message "User does not exist" is given
-
+	
 Scenario: Worker tries to find worker whilst logged out
 	Given that the worker is logged in
 	And that worker "PEPX" with password "1234" exist in the app

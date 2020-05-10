@@ -266,7 +266,7 @@ public class ActivitySteps {
 	@Then("the worker {string} is not added to the activity")
 	public void notAddedWorker(String string) {
 	    try {
-			assertFalse(managementApp.getState().currentActivity().containsWorker(itemHolder.getWorker()));
+			assertFalse(itemHolder.getActivity().containsWorker(itemHolder.getWorker()));
 		} catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}

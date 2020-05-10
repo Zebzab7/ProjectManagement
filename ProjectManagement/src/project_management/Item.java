@@ -17,15 +17,7 @@ public class Item {
 		timeManager = new ItemTimeManager(state);
 	}
 	public void addHours(int hours) throws OperationNotAllowedException {
-		//defence
-		if (getState().currentUser() == null ) {
-			throw new OperationNotAllowedException("User login required");
-		}
-		
-		//int cUserIndex = getWorkerList().indexOf(getState().currentUser());
-		//accumulatedHours.set(cUserIndex, accumulatedHours.get(cUserIndex) + hours);
 		this.hours += hours;
-		
 	}
 	public int getHours() {
 		return hours;
@@ -42,14 +34,14 @@ public class Item {
 	public State getState() {
 		return state;
 	}
+	
 	/*
 	public boolean preConditionsMet() throws OperationNotAllowedException {
 		return preConditions;
 	}*/
-
 	public Worker findWorker (String name) {
 		for (Worker w : workers) {
-			if (w.getUsername() == name) {
+			if (w.getUsername().equals(name)) {
 				return w;
 			}
 		}
@@ -66,7 +58,7 @@ public class Item {
 		if(getState().currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
-		if(getState().currentActivity() != null || getState().currentProject() != null) {
+		if(getState().currentActivity() != null && getState().currentProject() != null) {
 			return true;
 		}
 		return false;

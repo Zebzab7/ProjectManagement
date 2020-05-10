@@ -89,46 +89,7 @@ public class Project extends Item {
 		return null;
 	}
 	
-	/*
-	public boolean addHoursToActivity(int hours, Activity activity) throws OperationNotAllowedException {
-		
-		if (!activity.preConditionsMet() || !containsWorker(getState().currentUser()) 
-				|| !activity.containsWorker(getState().currentUser())) return false;
-		
-		Activity act = findActivity(activity.getName());
-		
-		int index = getWorkerList().indexOf(findWorker(getState().currentUser().getUsername()));
-		int value = accumulatedHours.get(index);
-		accumulatedHours.set(index, value+hours);
-		
-		if ( !((workedHours + hours) < 0) && act.preConditionsMet() ) {
-			act.addHours(hours);
-			workedHours += hours;
-			return true;
-		}
-		throw new OperationNotAllowedException("Invalid input amount");
-	}*/
-	
-	/*
-	public boolean addWorkerToActivity(Worker worker, Activity activity) throws OperationNotAllowedException {
-		if (activity.addWorker(worker)) {
-			return true;
-		}
-		return false;
-	}*/
-	
-//	public boolean addWorker(Worker worker) {
-//		accumulatedHours.add(0);
-//		getWorkerList().add(worker);
-//		return true;
-//	}
-//	
-//	public boolean removeWorker(Worker worker) {
-//		accumulatedHours.remove(getWorkerList().indexOf(worker));
-//		getWorkerList().remove(worker);
-//		return true;
-//	}
-	
+
 	public boolean addActivity(Activity activity) throws OperationNotAllowedException {
 		if ( getState().currentUser() == null ) {
 			throw new OperationNotAllowedException("User login required");

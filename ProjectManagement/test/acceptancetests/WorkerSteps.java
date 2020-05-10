@@ -109,7 +109,7 @@ public class WorkerSteps {
 	@When("the worker calls for assistance")
 	public void theWorkerCallsForAssistance() {
 	    try {
-			managementApp.getState().currentActivity().requestAssistance(itemHolder.getWorker());
+			itemHolder.getActivity().requestAssistance(itemHolder.getWorker());
 		} catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -160,6 +160,8 @@ public class WorkerSteps {
 	public void theWorkerIsNotContainedInTheApp() {
 		assertFalse(managementApp.containsUser(itemHolder.getWorker().getUsername()));
 	}
+	
+	
 	
 	@Then("the worker has accumulated {int} hours of work")
 	public void workerAccumulatedHours(int accHours) {

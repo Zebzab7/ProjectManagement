@@ -24,11 +24,11 @@ import test_helpers.ItemHolder;
 public class ProjectSteps {
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
-	
 	private ItemHolder itemHolder;
-	private Worker worker, prev, temp;
+	private Worker worker;
 	private Project project;
 	
+	private Worker workerFound;
 	String projectName;
 	
 	public ProjectSteps(ManagementApp managementApp, ErrorMessageHolder errorMessage, ItemHolder stateHelper) {
@@ -67,6 +67,12 @@ public class ProjectSteps {
 		}
 		assertTrue(itemHolder.getProject().containsWorker(itemHolder.getWorker()));
 	}
+		
+	
+	@Given("worker with name {string} and password {string} is contained in the project")
+	public void workerWithNameAndPasswordIsContainedInTheProject(String name, String password) throws OperationNotAllowedException {
+		assertTrue(itemHolder.getProject().addWorker(new Worker(name, password)));
+	}
 	
 	@Given("the worker is not working on the project")
 	public void theWorkerIsNotWorkingOnTheProject() throws OperationNotAllowedException {
@@ -95,6 +101,18 @@ public class ProjectSteps {
 			itemHolder.getProject().addWorker(itemHolder.getWorker());
 		}
 		assertTrue(managementApp.getState().setProject(itemHolder.getProject()));
+	}
+	
+	@When("the worker finds the worker with name {string} in the project succesfully")
+	public void theWorkerFindsTheWorkerWithNameInTheProjectSuccesfully(String name) {
+		workerFound = itemHolder.getProject().findWorker(name);
+	    assertTrue(workerFound != null);
+	}
+	
+	@When("the worker finds the worker with name {string} in the project unsuccesfully")
+	public void theWorkerFindsTheWorkerWithNameInTheProjectUnsuccesfully(String name) {
+		workerFound = itemHolder.getProject().findWorker(name);
+		assertTrue(workerFound == null);
 	}
 	
 	@When("worker adds new project named {string}")
@@ -243,6 +261,16 @@ public class ProjectSteps {
 	@Then("the deadline is overdue")
 	public void deadlineOverdue() throws OperationNotAllowedException {
 		assertTrue(managementApp.getState().currentProject().getTimeManager().deadlineOverdue());
+	}
+	
+	@Then("the worker is found")
+	public void theWorkerIsFound() {
+		assertTrue(workerFound != null);
+	}
+	
+	@Then("the worker is not found")
+	public void theWorkerIsNotFound() {
+		assertTrue(workerFound == null);
 	}
 	
 	@Then("the deadline is not overdue")

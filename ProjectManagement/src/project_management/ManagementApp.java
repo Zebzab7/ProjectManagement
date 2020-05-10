@@ -23,7 +23,7 @@ public class ManagementApp {
 	}
 	public boolean addHours(int hours) throws OperationNotAllowedException {
 		if (!LoggedIn()) throw new OperationNotAllowedException("User login required");
-		else if (state.currentActivity() != null && state.currentProject() != null) {
+		else if (state.currentActivity() != null && LoggedIn()) {
 			state.currentActivity().addHours(hours);
 			state.currentProject().addHours(hours);
 			state.currentUser().addHours(hours, state.currentActivity());

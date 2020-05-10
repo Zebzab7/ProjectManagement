@@ -1,4 +1,4 @@
-Feature: Create fixed activities
+Feature: Fixed activities
 	Description: App setup for absent worker
 	Actors: Worker
 

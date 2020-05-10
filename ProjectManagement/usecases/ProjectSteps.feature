@@ -14,6 +14,21 @@ Scenario: Add project successfully with leader
 	When worker adds new project named "Programming 101" with "PEPE" as projectleader
 	Then the project is contained in the app
 	
+Scenario: Worker tries to find worker in project that does exist
+	Given that the worker is logged in
+	And the project with name "Programming 101" does exist
+	And the project is selected
+	And worker with name "PEPX" and password "1234" is contained in the project
+	When the worker finds the worker with name "PEPX" in the project succesfully
+	Then the worker is found
+	
+Scenario: Worker tries to find worker in project that does not exist
+	Given that the worker is logged in
+	And the project with name "Programming 101" does exist
+	And the project is selected
+	When the worker finds the worker with name "PEPX" in the project unsuccesfully
+	Then the worker is not found
+	
 Scenario: Add project that already exists with leader
 	Given that the worker is logged in
 	And the project with name "Programming 101" does exist
