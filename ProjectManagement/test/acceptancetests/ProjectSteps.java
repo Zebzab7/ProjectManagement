@@ -154,7 +154,7 @@ public class ProjectSteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-
+	
 	@When("the worker sets the start date of the project to the {int}-{int}-{int} unsuccesfully")
 	public void setStartDateTheUnsuccesfully(int year, int month, int day) {
 		try {
@@ -163,7 +163,7 @@ public class ProjectSteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-
+	
 	@When("the worker tries to find project with name {string} in app")
 	public void theWorkerTriesToFindProjectWithNameInApp(String name) {
 		try {
@@ -181,7 +181,7 @@ public class ProjectSteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-
+	
 	@Then("the start time for the project is {int}-{int}-{int}")
 	public void theStartTimeForTheProjectIs(int year, int month, int day) {
 		GregorianCalendar t = itemHolder.getProject().getTimeManager().getStartTime();

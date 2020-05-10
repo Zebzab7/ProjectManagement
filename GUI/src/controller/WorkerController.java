@@ -48,7 +48,7 @@ public class WorkerController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		managementApp = Main.getManagementApp();
-		lblWorkerID.setText("Welcome back: "+managementApp.getState().currentUser().getUsername());
+		lblWorkerID.setText("Welcome back: "+managementApp.getUser().currentUser().getUsername());
 		updateProjectList();
 		updateUserList();
 		

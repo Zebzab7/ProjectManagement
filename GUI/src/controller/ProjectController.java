@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 import softwareHuset.ManagementApp;
 import softwareHuset.OperationNotAllowedException;
 import softwareHuset.Project;
-import softwareHuset.Activity;
+import softwareHuset.Task;
 import softwareHuset.Worker;
 
 public class ProjectController implements Initializable {
@@ -63,10 +63,10 @@ public class ProjectController implements Initializable {
 	
 //	ActionEvents
 	public void CreateTask(ActionEvent event) throws OperationNotAllowedException {
-		if(projectLeader.getUsername() == managementApp.getState().currentUser().getUsername()) {
+		if(projectLeader.getUsername() == managementApp.getUser().currentUser().getUsername()) {
 			String name = taskName.getText();
 			String ET = taskET.getText();
-			project.createActivity(name, ET);
+			project.createTask(name, ET);
 			updateTaskList();
 		}
 	}
@@ -111,7 +111,7 @@ public class ProjectController implements Initializable {
 		if(projectLeader != null) {
 			lblProjectLeader.setText("Project Leader: "+projectLeader.getUsername());
 			
-			if(projectLeader.getUsername() == managementApp.getState().currentUser().getUsername()) {
+			if(projectLeader.getUsername() == managementApp.getUser().currentUser().getUsername()) {
 				createTask.setDisable(false);
 				taskName.setDisable(false);
 				taskET.setDisable(false);
@@ -132,8 +132,8 @@ public class ProjectController implements Initializable {
 	
 	public void updateTaskList() throws OperationNotAllowedException {
 		listView1.getItems().clear();
-		for(Activity activiy : project.getActivityList()) {
-			listView1.getItems().add(activiy.getName());
+		for(Task task : project.getTaskList()) {
+			listView1.getItems().add(task.getName());
 		}
 		
 		

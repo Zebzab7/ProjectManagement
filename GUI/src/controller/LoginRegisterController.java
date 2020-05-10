@@ -16,7 +16,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import softwareHuset.ManagementApp;
-import softwareHuset.State;
+import softwareHuset.User;
 
 public class LoginRegisterController implements Initializable {
 	@FXML
@@ -36,7 +36,7 @@ public class LoginRegisterController implements Initializable {
 	
 	private String username;
 	private String password;
-	private State state;
+	private User user;
 	private ManagementApp managementApp;
 	private boolean loginRegister = true;
 	
