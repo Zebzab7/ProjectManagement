@@ -33,9 +33,16 @@ public class WorkerSteps {
 	
 	@Given("that worker {string} with password {string} exist")
 	public void thatWorkerWithPasswordExist(String name, String password) throws Exception {
-		itemHolder.setWorker(new Worker(name, password));
-		managementApp.addWorker(itemHolder.getWorker());
-	    assertTrue(managementApp.containsUser(name));
+		assertTrue(itemHolder.setWorker(new Worker(name, password)));
+	}
+	
+	@Given("that worker {string} with password {string} exist in the app")
+	public void thatWorkerWithPasswordExistInTheApp(String name, String pass) throws Exception {
+		itemHolder.setWorker(new Worker(name, pass));
+		if (!managementApp.containsUser(name)) {
+			managementApp.addWorker(itemHolder.getWorker());
+		}
+		assertTrue(managementApp.containsUser(name));
 	}
 	
 	@Given("the worker is not the projectleader")
@@ -50,16 +57,13 @@ public class WorkerSteps {
 	
 	@Given("the worker has amassed {int} hours for each activity")
 	public void amassedHoursPerActivity(int hours) throws OperationNotAllowedException {
-		System.out.println("CURRENT USER AA LIST SIZE: " + managementApp.getState().currentUser().getAssignedActivities().size());
 	    
 		for(int i = 0; i < managementApp.getState().currentUser().getAssignedActivities().size(); i++) {
 			managementApp.getState().setActivity(managementApp.getState().currentUser().getAssignedActivities().get(i));
 			managementApp.getState().setProject(itemHolder.getProject());
-			System.out.println(managementApp.getState().currentUser().getAssignedActivities().get(i).getName());
 	    	managementApp.addHours(hours);
 	    }
 	    
-	    System.out.println("CURRENT USER TIME WORKED: " + managementApp.getState().currentUser().workedHours());
 	}
 	
 	@Given("that the worker is working on {int} activities")
@@ -83,6 +87,25 @@ public class WorkerSteps {
 		itemHolder.getWorker().setHelpStatus(false);
 	}
 	
+	@When("the worker named {string} with password {string} is added to the app")
+	public void theWorkerNamedWithPasswordIsAddedToTheApp(String name, String pass) throws Exception {
+		try {
+			assertTrue(managementApp.addWorker(itemHolder.getWorker()));
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@When("the worker is removed from the app")
+	public void theWorkerIsRemovedFromTheApp() throws OperationNotAllowedException {
+		try {
+			assertTrue(managementApp.removeUser(itemHolder.getWorker()));
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+		
+	}
+	
 	@When("the worker calls for assistance")
 	public void theWorkerCallsForAssistance() {
 	    try {
@@ -97,6 +120,15 @@ public class WorkerSteps {
 		try {
 		    managementApp.createUser(name, password);
 		    itemHolder.setWorker(managementApp.findWorker(name));
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@When("the worker tries to find worker with name {string} in app")
+	public void theWorkerTriesToFindWorkerWithNameInApp(String name) throws Exception {
+		try {
+			managementApp.findWorker(name);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -122,6 +154,11 @@ public class WorkerSteps {
 	@Then("the worker is contained in app")
 	public void theWorkerIsContainedInApp() {
 	    assertTrue(managementApp.containsUser(itemHolder.getWorker().getUsername()));
+	}
+	
+	@Then("the worker is not contained in the app")
+	public void theWorkerIsNotContainedInTheApp() {
+		assertFalse(managementApp.containsUser(itemHolder.getWorker().getUsername()));
 	}
 	
 	@Then("the worker has accumulated {int} hours of work")

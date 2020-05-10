@@ -55,8 +55,9 @@ public class ItemHolder {
 		this.activity = activity;
 		return true;
 	}
-	public void setWorker(Worker worker) {
+	public boolean setWorker(Worker worker) {
 		this.worker = worker;
+		return true;
 	}
 	public void setFixedActivity(FixedActivity fixedActivity) {
 		this.fixedActivity = fixedActivity;

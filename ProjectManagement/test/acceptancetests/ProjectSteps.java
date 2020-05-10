@@ -137,11 +137,25 @@ public class ProjectSteps {
 		}
 	}
 	
+	@When("the worker removes the project from the app")
+	public void theWorkerRemovesTheProjectFromTheApp() throws OperationNotAllowedException {
+		assertTrue(managementApp.removeProject(itemHolder.getProject()));
+	}
+	
 	@When("the worker sets the end date of the project to the {int}-{int}-{int} unsuccesfully")
 	public void theWorkerSetsTheEndDateOfTheProjectToTheUnsuccesfully(int year, int month, int day) {
 		try {
 			assertFalse(itemHolder.getProject().getTimeManager().setEndTime(year, month, day, project));
 		} catch(Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@When("the worker tries to find project with name {string} in app")
+	public void theWorkerTriesToFindProjectWithNameInApp(String name) {
+		try {
+			managementApp.findProject(name);
+		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
@@ -181,6 +195,11 @@ public class ProjectSteps {
 	@Then("the project is contained in the app")
 	public void theProjectIsContainedInTheApp() throws OperationNotAllowedException {
 	    assertTrue(managementApp.containsProject(projectName));
+	}
+	
+	@Then("the project is not contained in the app")
+	public void theProjectIsNotContainedInTheApp() throws OperationNotAllowedException {
+		assertFalse(managementApp.containsProject(itemHolder.getProject().getName()));
 	}
 	
 	@Then("the start and end week of the given month of the project are week {int} and week {int}")

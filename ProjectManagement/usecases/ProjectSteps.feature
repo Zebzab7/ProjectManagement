@@ -31,3 +31,15 @@ Scenario: Worker not logged in
 	And the project with name "Programming 101" does not exist
 	When worker adds new project named "Programming 101"
 	Then the error message "User login required" is given
+	
+Scenario: Remove project from app
+	Given that the worker is logged in
+	And the project with name "Programming 101" does exist
+	When the worker removes the project from the app
+	Then the project is not contained in the app
+	
+Scenario: Worker tries to find project that doesn't exist
+	Given that the worker is logged in
+	And the project with name "Programming 101" does not exist
+	When the worker tries to find project with name "Programming 101" in app
+	Then the error message "Project does not exist" is given

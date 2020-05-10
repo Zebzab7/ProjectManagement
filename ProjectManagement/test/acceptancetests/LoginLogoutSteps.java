@@ -68,6 +68,11 @@ public class LoginLogoutSteps {
 	    managementApp.Login(name, password);
 	}
 	
+	@When("the worker logs out")
+	public void theWorkerLogsOut() {
+		assertTrue(managementApp.Logout());
+	}
+	
 	@Then("the worker login succeeds")
 	public void theWorkerLoginSucceeds() throws Exception{
 	    assertTrue(managementApp.Login(name, password));
@@ -91,6 +96,11 @@ public class LoginLogoutSteps {
 	
 	@Then("the worker is not logged in")
 	public void theWorkerIsNotLoggedIn() throws Exception {
+		assertFalse(managementApp.LoggedIn());
+	}
+	
+	@Then("no one is logged in")
+	public void noOneIsLoggedIn() {
 		assertFalse(managementApp.LoggedIn());
 	}
 }
