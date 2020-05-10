@@ -91,7 +91,7 @@ public class ProjectSteps {
 		}
 		
 		itemHolder.logOutTemp();
-		assertEquals(itemHolder.getProject().getProjectLeader(), itemHolder.getWorker());
+		assertTrue(itemHolder.getProject().isProjectLeader(itemHolder.getWorker()));
 	}
 	
 	@Given("the project is selected")
@@ -284,7 +284,21 @@ public class ProjectSteps {
 	public void hasNoProjectleader() {
 		assertFalse(managementApp.getState().currentProject().hasProjectLeader());
 	}
-
+	
+	@Then("the worker can find the activity")
+	public void findActivity() {
+		Activity a =managementApp.getState().currentProject().findActivity(itemHolder.getActivity().getName());
+		System.out.println("ACTIVITY: " + a);
+		assertTrue(a != null);
+	}
+	
+	@Then("the worker can not find the activity")
+	public void cantFindActivity() {
+		Activity a = managementApp.getState().currentProject().findActivity(itemHolder.getActivity().getName());
+		System.out.println("ACTIVITY - NOT: " + a);
+		assertFalse(a != null);
+	}
+	
 	@Then("there are currently {int} activities in the project")
 	public void numberOfActivities(int number) {
 		assertEquals(managementApp.getState().currentProject().getActivityList().size(),number);

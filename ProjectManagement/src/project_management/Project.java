@@ -96,4 +96,19 @@ public class Project extends Item {
 		throw new OperationNotAllowedException("The activity already exists in the project");
 	}
 	
+	public boolean removeActivity(Activity activity) throws OperationNotAllowedException {
+		if ( getState().currentUser() == null ) {
+			throw new OperationNotAllowedException("User login required");
+		}
+		if (getState().currentActivity() != null) throw new OperationNotAllowedException("User is in an activity");
+		if (containsActivity(activity.getName())) {
+			for(Worker w : super.getWorkerList()) {
+				w.removeActivity(activity);
+			}
+			activities.remove(activity);
+			return true;
+		}
+		throw new OperationNotAllowedException("The activity is not contained in the project");
+	}
+	
 }

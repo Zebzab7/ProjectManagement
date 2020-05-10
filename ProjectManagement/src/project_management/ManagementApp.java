@@ -57,6 +57,10 @@ public class ManagementApp {
 	}
 	public boolean removeProject(Project project) throws OperationNotAllowedException {
 		if (!LoggedIn()) throw new OperationNotAllowedException("User login required");
+		if (state.currentProject() != null || state.currentActivity() != null) throw new OperationNotAllowedException("User is outside of homepage");
+		for(Worker w : project.getWorkerList()) {
+			w.getAssignedProjects().remove(project);
+		}
 		projects.remove(project);
 		return true;
 	}

@@ -52,6 +52,7 @@ Scenario: Worker not logged in
 Scenario: Remove project from app
 	Given that the worker is logged in
 	And the project with name "Programming 101" does exist
+	And worker with name "PEPX" and password "1234" is contained in the project
 	When the worker removes the project from the app
 	Then the project is not contained in the app
 
@@ -61,6 +62,21 @@ Scenario: Remove project from app unsuccessfully
 	When the worker logs out
 	And the worker removes the project from the app
 	Then the error message "User login required" is given
+	
+Scenario: Remove project from app when in project
+	Given that the worker is logged in
+	And the project with name "Programming 101" does exist
+	And the project is selected
+	And the worker removes the project from the app
+	Then the error message "User is outside of homepage" is given
+
+Scenario: Remove project from app when in activity
+	Given that the worker is logged in
+	And the project with name "Programming 101" does exist
+	And the activity with name "Loops" is in the project
+	And the activity is selected
+	And the worker removes the project from the app
+	Then the error message "User is outside of homepage" is given
 	
 Scenario: Worker tries to find project that doesn't exist
 	Given that the worker is logged in

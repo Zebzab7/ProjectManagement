@@ -154,11 +154,7 @@ public class ActivitySteps {
 	
 	@When("the worker adds {int} work hours to the activity succesfully")
 	public void theWorkerAddsWorkHoursToTheActivitySuccesfully(int hours) throws OperationNotAllowedException {
-		try {
 			assertTrue(managementApp.addHours(hours));
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
 	}
 	
 	@When("the worker adds {int} work hours to the activity unsuccesfully")
@@ -223,6 +219,15 @@ public class ActivitySteps {
 		}
 	}
 	
+	@When("the worker removes the activity")
+	public void workerRemovesActivity() {
+	    try {
+			managementApp.getState().currentProject().removeActivity(itemHolder.getActivity());
+		} catch (OperationNotAllowedException e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
 	@Then("the activity has a total of {int} work hours")
 	public void theActivityHasATotalOfWorkHours(int hours) {
 		assertEquals(itemHolder.getActivity().getHours(), hours);
@@ -253,7 +258,11 @@ public class ActivitySteps {
 	
 	@Then("the activity is contained in the project")
 	public void theActivityIsContainedInTheProject() throws OperationNotAllowedException {
-	    assertTrue(itemHolder.getProject().containsActivity(activityName));
+	    assertTrue(itemHolder.getProject().containsActivity(itemHolder.getActivity().getName()));
+	}
+	@Then("the activity is not contained in the project")
+	public void activityNotContained() {
+	    assertFalse(itemHolder.getProject().containsActivity(itemHolder.getActivity().getName()));
 	}
 	@Then("the worker {string} is added to the activity")
 	public void addedWorker(String string) {

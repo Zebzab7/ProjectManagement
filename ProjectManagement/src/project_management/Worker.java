@@ -74,4 +74,17 @@ public class Worker {
 		return false;
 	}
 	
+	public void addActivity(Activity activity) {
+		if(!assignedActivities.contains(activity)) {
+			assignedActivities.add(activity);
+			workHoursOnActivities.add(0);
+		}
+	}
+	public void removeActivity(Activity activity) {
+		if(assignedActivities.contains(activity)) {
+			workHoursOnActivities.remove(assignedActivities.indexOf(activity));
+			assignedActivities.remove(activity);
+		}
+	}
+	
 }
