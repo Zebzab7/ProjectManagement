@@ -1,4 +1,4 @@
-Feature: Dates and deadlines
+Feature: Dates and deadlines for projects
 
 Scenario: Set start date for project
 	Given that the worker is logged in
