@@ -3,7 +3,6 @@ package controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import application.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,8 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import softwareHuset.ManagementApp;
-import softwareHuset.State;
+import project_management.ManagementApp;
+import runner_class.Main;
 
 public class LoginRegisterController implements Initializable {
 	@FXML
@@ -36,7 +35,6 @@ public class LoginRegisterController implements Initializable {
 	
 	private String username;
 	private String password;
-	private State state;
 	private ManagementApp managementApp;
 	private boolean loginRegister = true;
 	
@@ -49,11 +47,9 @@ public class LoginRegisterController implements Initializable {
 		this.username = txtUsername.getText();
 		this.password = txtPassword.getText();
 		
-		managementApp.Logout();
 		if(!managementApp.LoggedIn()) {
 			if(loginRegister) {
 				if(managementApp.Login(username, password)) {
-					
 					lblStatus1.setText("Login succees");
 					((Node)event.getSource()).getScene().getWindow().hide();
 					
@@ -62,8 +58,8 @@ public class LoginRegisterController implements Initializable {
 						primaryStage.setTitle("Worker");
 						FXMLLoader loader = new FXMLLoader();
 						Parent root = loader.load(getClass().getResource("../view/Worker.fxml").openStream());
-						Scene scene = new Scene(root,530,500);
-						scene.getStylesheets().add(getClass().getResource("../application/application.css").toExternalForm());
+						Scene scene = new Scene(root,759.0,460.0);
+						scene.getStylesheets().add(getClass().getResource("../runner_class/application.css").toExternalForm());
 						primaryStage.setScene(scene);
 						primaryStage.show();
 					} catch(Exception e) {
@@ -73,7 +69,7 @@ public class LoginRegisterController implements Initializable {
 					lblStatus1.setText("Login failed");
 				}
 			} else {
-				if(managementApp.CreateUser(txtUsername.getText(), txtPassword.getText())) {
+				if(managementApp.createUser(txtUsername.getText(), txtPassword.getText())) {
 					reset();
 					lblStatus1.setText("User registeret successfully");
 					

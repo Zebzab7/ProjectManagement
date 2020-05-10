@@ -3,7 +3,6 @@ package controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import application.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,11 +15,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import softwareHuset.ManagementApp;
-import softwareHuset.OperationNotAllowedException;
-import softwareHuset.Project;
-import softwareHuset.Activity;
-import softwareHuset.Worker;
+import project_management.Activity;
+import project_management.ManagementApp;
+import project_management.OperationNotAllowedException;
+import project_management.Project;
+import project_management.Worker;
+import runner_class.Main;
 
 public class ProjectController implements Initializable {
 	@FXML
@@ -30,56 +30,99 @@ public class ProjectController implements Initializable {
 	@FXML
 	private Label lblProjectLeader;
 	@FXML
+	private Label lblWorkedHours;
+	@FXML
 	private ListView<String> listView1;
 	@FXML
 	private ListView<String> listView2;
 	@FXML
-	private Button createTask;
+	private Button createActivity;
 	@FXML
-	private TextField taskName;
+	private TextField activityName;
 	@FXML
-	private TextField taskET;
+	private TextField activityET;
+	@FXML
+	private Label lblStatus;
 	
 	private ManagementApp managementApp;
 	private Project project;
 	private Worker projectLeader;
 	private int workerCounter;
+	private Activity selectedActivity;
 	
 //	Initialize
+	public void init() {
+		updateLabels();
+		updateWorkerList();
+		
+		try {
+			updateTaskList();
+		} catch (OperationNotAllowedException e) {
+			e.printStackTrace();
+		}
+	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		managementApp = Main.getManagementApp();
-	}
-	
-	public void setProject(Project p) throws OperationNotAllowedException {
-		this.project = p;
-		this.projectLeader = p.getProjectLeader();
-		this.workerCounter = p.getWorkerList().size();
+		project = managementApp.getState().currentProject();
+		projectLeader = project.getProjectLeader();
+		workerCounter = project.getWorkerList().size();
 		
-		updateLabels();
-		updateWorkerList();
-		updateTaskList();
+		init();
+		
+		listView1.getSelectionModel().selectedItemProperty().addListener((v, oldVal, newVal) -> {
+			selectedActivity = project.findActivity(newVal);
+		});
 	}
 	
 //	ActionEvents
-	public void CreateTask(ActionEvent event) throws OperationNotAllowedException {
+	public void ViewActivity(ActionEvent event) {
+		if(selectedActivity != null) {
+			try {
+				if(selectedActivity.findWorker(managementApp.getState().currentUser().getUsername()) == null) {
+					selectedActivity.addWorker(managementApp.getState().currentUser());
+					managementApp.getState().currentUser().addAssignedActivity(selectedActivity);
+				}
+				managementApp.getState().setActivity(selectedActivity);
+				
+				((Node)event.getSource()).getScene().getWindow().hide();
+				Stage primaryStage = new Stage();
+				primaryStage.setTitle("Activity");
+				FXMLLoader loader = new FXMLLoader();
+				Parent root = loader.load(getClass().getResource("../view/Activity.fxml").openStream());
+				ActivityController activityController = (ActivityController) loader.getController();
+				activityController.initialize(selectedActivity);
+				Scene scene = new Scene(root,500,500);
+				scene.getStylesheets().add(getClass().getResource("../runner_class/application.css").toExternalForm());
+				primaryStage.setScene(scene);
+				primaryStage.show();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			lblStatus.setText("Please select activity");
+		}
+	}
+	
+	public void CreateActivity(ActionEvent event) throws OperationNotAllowedException {
 		if(projectLeader.getUsername() == managementApp.getState().currentUser().getUsername()) {
-			String name = taskName.getText();
-			String ET = taskET.getText();
-			project.createActivity(name, ET);
+			String name = activityName.getText();
+			String estimate = activityET.getText();
+			int ET = Integer.parseInt(estimate);
+			project.addActivity(new Activity(name, managementApp.getState()));
 			updateTaskList();
 		}
 	}
 	
 	public void GoBack(ActionEvent event) {
-		try {
+		try {		
 			((Node)event.getSource()).getScene().getWindow().hide();
 			Stage primaryStage = new Stage();
 			primaryStage.setTitle("Worker");
 			FXMLLoader loader = new FXMLLoader();
 			Parent root = loader.load(getClass().getResource("../view/Worker.fxml").openStream());
-			Scene scene = new Scene(root,530,500);
-			scene.getStylesheets().add(getClass().getResource("../application/application.css").toExternalForm());
+			Scene scene = new Scene(root,759,460);
+			scene.getStylesheets().add(getClass().getResource("../runner_class/application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
@@ -96,7 +139,7 @@ public class ProjectController implements Initializable {
 				FXMLLoader loader = new FXMLLoader();
 				Parent root = loader.load(getClass().getResource("../view/LoginRegister.fxml").openStream());
 				Scene scene = new Scene(root,400,400);
-				scene.getStylesheets().add(getClass().getResource("../application/application.css").toExternalForm());
+				scene.getStylesheets().add(getClass().getResource("../runner_class/application.css").toExternalForm());
 				primaryStage.setScene(scene);
 				primaryStage.show();
 			}
@@ -112,31 +155,30 @@ public class ProjectController implements Initializable {
 			lblProjectLeader.setText("Project Leader: "+projectLeader.getUsername());
 			
 			if(projectLeader.getUsername() == managementApp.getState().currentUser().getUsername()) {
-				createTask.setDisable(false);
-				taskName.setDisable(false);
-				taskET.setDisable(false);
+				createActivity.setDisable(false);
+				activityName.setDisable(false);
+				activityET.setDisable(false);
 			} else {
-				createTask.setDisable(true);
-				taskName.setDisable(true);
-				taskET.setDisable(true);
+				createActivity.setDisable(true);
+				activityName.setDisable(true);
+				activityET.setDisable(true);
 			}
 		} else {
 			lblProjectLeader.setText("Project Leader: not defined");
-			createTask.setDisable(true);
-			taskName.setDisable(true);
-			taskET.setDisable(true);
+			createActivity.setDisable(true);
+			activityName.setDisable(true);
+			activityET.setDisable(true);
 		}
 		
 		lblWorkerCounter.setText("Workers on this project: "+workerCounter+"");
+		lblWorkedHours.setText("Worked hours: "+project.getHours());
 	}
 	
 	public void updateTaskList() throws OperationNotAllowedException {
 		listView1.getItems().clear();
-		for(Activity activiy : project.getActivityList()) {
-			listView1.getItems().add(activiy.getName());
+		for(Activity task : project.getActivityList()) {
+			listView1.getItems().add(task.getName());
 		}
-		
-		
 	}
 	
 	public void updateWorkerList() {
