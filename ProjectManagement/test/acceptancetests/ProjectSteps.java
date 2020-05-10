@@ -26,7 +26,6 @@ public class ProjectSteps {
 	private ErrorMessageHolder errorMessage;
 	private ItemHolder itemHolder;
 	private Worker worker;
-	private Project project;
 	
 	private Worker workerFound;
 	String projectName;
@@ -52,7 +51,6 @@ public class ProjectSteps {
 				assertTrue(managementApp.addProject(itemHolder.getProject()));
 			}
 			assertTrue(managementApp.containsProject(name));
-			project = itemHolder.getProject();
 			this.projectName = name;
 			itemHolder.logOutTemp();
 	    } catch (OperationNotAllowedException e) {
@@ -77,8 +75,10 @@ public class ProjectSteps {
 	@Given("the worker is not working on the project")
 	public void theWorkerIsNotWorkingOnTheProject() throws OperationNotAllowedException {
 		worker = itemHolder.getWorker();
-		if ( project.containsWorker(worker) ) project.removeWorker(worker);
-	    assertFalse(project.containsWorker(worker));
+		if ( itemHolder.getProject().containsWorker(managementApp.getState().currentUser()) ) {
+			itemHolder.getProject().removeWorker(worker);
+		}
+	    assertFalse(itemHolder.getProject().containsWorker(worker));
 	}
 	
 	@Given("the worker is the projectleader")
@@ -118,9 +118,9 @@ public class ProjectSteps {
 	@When("worker adds new project named {string}")
 	public void workerAddsNewProject(String name) throws Exception {
 		try {
-			projectName = name;
 			assertTrue(managementApp.addProject(new Project(name, managementApp.getState())));
-		    project = managementApp.findProject(name);
+		    managementApp.getState().setProject(managementApp.findProject(name));
+			projectName = name;
 		} catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -129,9 +129,9 @@ public class ProjectSteps {
 	@When("worker adds new project named {string} with {string} as projectleader")
 	public void workerAddsNewProjectNamedWithAsProjectleader(String name, String projectLeader) {
 	    try {
-	    	projectName =  name;
 	    	managementApp.addProject(new Project(name, managementApp.getState(), managementApp.findWorker(projectLeader)));
-	 	    project = managementApp.findProject(name);
+	    	managementApp.getState().setProject(managementApp.findProject(name));
+	    	projectName = name;
 	    } catch (Exception e) {
 	    	errorMessage.setErrorMessage(e.getMessage());
 	    }
@@ -139,20 +139,14 @@ public class ProjectSteps {
 	
 	@When("the worker sets the start date of the project to the {int}-{int}-{int} succesfully")
 	public void theWorkerSetsTheStartDateOfTheProjectToThe(int year, int month, int day) throws Exception {
-		try {
-			assertTrue(project.getTimeManager().setStartTime(year, month, day, project));
-		} catch(Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
+		assertTrue(managementApp.getState().currentProject().getTimeManager().
+				   setStartTime(year, month, day, managementApp.getState().currentProject()));
 	}
 	
 	@When("the worker sets the end date of the project to the {int}-{int}-{int} succesfully")
 	public void theWorkerSetsTheEndDateOfTheProjectToTheSuccesfully(int year, int month, int day) throws Exception {
-		try {
-			assertTrue(project.getTimeManager().setEndTime(year, month, day, project));
-		} catch(Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
+		assertTrue(managementApp.getState().currentProject().getTimeManager().
+				   setEndTime(year, month, day, managementApp.getState().currentProject()));
 	}
 	
 	@When("the worker removes the project from the app")
@@ -167,8 +161,10 @@ public class ProjectSteps {
 	@When("the worker sets the end date of the project to the {int}-{int}-{int} unsuccesfully")
 	public void setEndDateUnsuccesfully(int year, int month, int day) {
 		try {
-			assertFalse(itemHolder.getProject().getTimeManager().setEndTime(year, month, day, project));
+			assertFalse(managementApp.getState().currentProject().getTimeManager().
+						setEndTime(year, month, day, managementApp.getState().currentProject()));
 		} catch(Exception e) {
+			System.out.println("HERE: " + e.getMessage());
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
@@ -176,7 +172,8 @@ public class ProjectSteps {
 	@When("the worker sets the start date of the project to the {int}-{int}-{int} unsuccesfully")
 	public void setStartDateTheUnsuccesfully(int year, int month, int day) {
 		try {
-			assertFalse(itemHolder.getProject().getTimeManager().setStartTime(year, month, day, project));
+			assertFalse(managementApp.getState().currentProject().getTimeManager().
+						setStartTime(year, month, day, managementApp.getState().currentProject()));
 		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -218,7 +215,7 @@ public class ProjectSteps {
 	
 	@Then("the worker has a total of {int} individual work hours")
 	public void theWorkerHasATotalOfIndividualWorkHours(int hours) {
-	    assertEquals(project.getWorkersAccumulatedHours(managementApp.getState().currentUser()), hours);
+		assertEquals(managementApp.getState().currentProject().getWorkersAccumulatedHours(managementApp.getState().currentUser()), hours);
 	}
 	
 	@Then("the worker has a total of {int} work hours contributed to project {string}")
@@ -244,8 +241,8 @@ public class ProjectSteps {
 	
 	@Then("the start and end week of the given month of the project are week {int} and week {int}")
 	public void weekRepresentation(int startWeek, int endWeek) {
-		assertEquals(project.getTimeManager().getStartWeek(), startWeek);
-		assertEquals(project.getTimeManager().getEndWeek(), endWeek);
+		assertEquals(managementApp.getState().currentProject().getTimeManager().getStartWeek(), startWeek);
+		assertEquals(managementApp.getState().currentProject().getTimeManager().getEndWeek(), endWeek);
 	}
 	
 	@Then("the project contains time specifications")
@@ -276,6 +273,21 @@ public class ProjectSteps {
 	@Then("the deadline is not overdue")
 	public void deadlineNotOverdue() throws OperationNotAllowedException {
 		assertFalse(managementApp.getState().currentProject().getTimeManager().deadlineOverdue());
+	}
+	
+	@Then("the project has a projectleader")
+	public void hasProjectleader() {
+		assertTrue(managementApp.getState().currentProject().hasProjectLeader());
+	}
+	
+	@Then("the project has no projectleader")
+	public void hasNoProjectleader() {
+		assertFalse(managementApp.getState().currentProject().hasProjectLeader());
+	}
+
+	@Then("there are currently {int} activities in the project")
+	public void numberOfActivities(int number) {
+		assertEquals(managementApp.getState().currentProject().getActivityList().size(),number);
 	}
 	
 }
