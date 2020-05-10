@@ -52,7 +52,7 @@ Scenario: Worker is added to app successfully
 	When the worker named "PEPE" with password "1234" is added to the app
  	Then the worker is contained in app
  
-Scenario: Worker is not available:
+Scenario: Worker is not available
 	Given that the worker is logged in
 	And that the worker is working on 20 activities
 	And the project with name "Programming 101" does exist

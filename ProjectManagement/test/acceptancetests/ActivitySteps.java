@@ -32,6 +32,14 @@ public class ActivitySteps {
 		this.errorMessage = errorMessage;
 		itemHolder.setState(managementApp.getState());
 	}
+	
+	@Given("the worker is working on a project")
+	public void theWorkerIsWorkingOnAProject() throws Exception {
+	    if (!managementApp.containsProject(itemHolder.getProject().getName())) {
+	    	managementApp.addProject(itemHolder.getProject());
+	    }
+	    assertTrue(itemHolder.getProject().addWorker(itemHolder.getWorker()));
+	}
 
 	@Given("the worker is the project leader")
 	public void theWorkerIsTheProjectLeader() {
@@ -227,19 +235,6 @@ public class ActivitySteps {
 		assertEquals(itemHolder.getWorker().getHoursOnActivity(managementApp.getState().currentActivity()), hours);
 	}
 	
-	@Then("the activity is contained in the project")
-	public void theActivityIsContainedInTheProject() throws OperationNotAllowedException {
-	    assertTrue(itemHolder.getProject().containsActivity(activityName));
-	}
-	@Then("the worker {string} is added to the activity")
-	public void addedWorker(String string) {
-	    try {
-			assertTrue(managementApp.getState().currentActivity().containsWorker(itemHolder.getWorker()));
-		} catch (OperationNotAllowedException e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
-	
 	@Then("the start time for the activity is {int}-{int}-{int}")
 	public void theStartTimeForTheActivityIs(int year, int month, int day) {
 		GregorianCalendar t = itemHolder.getActivity().getTimeManager().getStartTime();
@@ -256,6 +251,18 @@ public class ActivitySteps {
 		assertEquals(day, t.get(GregorianCalendar.DATE));
 	}
 	
+	@Then("the activity is contained in the project")
+	public void theActivityIsContainedInTheProject() throws OperationNotAllowedException {
+	    assertTrue(itemHolder.getProject().containsActivity(activityName));
+	}
+	@Then("the worker {string} is added to the activity")
+	public void addedWorker(String string) {
+	    try {
+			assertTrue(managementApp.getState().currentActivity().containsWorker(itemHolder.getWorker()));
+		} catch (OperationNotAllowedException e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
 	@Then("the worker {string} is not added to the activity")
 	public void notAddedWorker(String string) {
 	    try {
@@ -264,7 +271,6 @@ public class ActivitySteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-	
 	@Then("the start and end week of the given month of the activity are week {int} and week {int}")
 	public void theStartAndEndWeekOfTheGivenMonthOfTheActivityAreWeekAndWeek(int startWeek, int endWeek) {
 		assertEquals(itemHolder.getActivity().getTimeManager().getStartWeek(), startWeek);

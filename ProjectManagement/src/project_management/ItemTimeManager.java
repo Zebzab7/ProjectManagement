@@ -7,10 +7,8 @@ public class ItemTimeManager {
 	private ArrayList<Worker> absentees = new ArrayList<Worker>();
 	
 	private State state;
-	private GregorianCalendar startTime = new GregorianCalendar();
-	private GregorianCalendar endTime = new GregorianCalendar();
-	private boolean startTimeSpecified = false;
-	private boolean endTimeSpecified = false;
+	private GregorianCalendar startTime = null;
+	private GregorianCalendar endTime = null;
 	private GregorianCalendar currentTime, absentee;
 	
 	/*
@@ -47,37 +45,29 @@ public class ItemTimeManager {
 	
 	public boolean setStartTime(int year, int month, int day, Item object) throws OperationNotAllowedException {
 		if(object.TimepreConditionsMet()) {
-			startTime.set(year, month - 1, day);
-			if (endTimeSpecified && startTime.after(endTime)) {
+			startTime = new GregorianCalendar(year, month - 1, day);
+			if (endTime != null && startTime.after(endTime)) {
 				throw new OperationNotAllowedException("Deadline is invalid");
 			}
-			startTimeSpecified = true;
-			return true;
 		}
-		else {
-			return false;
-		}
+		return true;
 	}
 	
 	public boolean setEndTime(int year, int month, int day, Item object) throws OperationNotAllowedException {
 		if(object.TimepreConditionsMet()) {
-			endTime.set(year, month - 1, day);
-			if (startTimeSpecified && startTime.after(endTime)) {
+			endTime = new GregorianCalendar(year, month - 1, day);
+			if (startTime != null && startTime.after(endTime)) {
 				throw new OperationNotAllowedException("Deadline is invalid");
 			}
-			endTimeSpecified = true;
-			return true;
 		}
-		else {
-			return false;
-		}
+		return true;
 	}
 	
 	/*
 	 * Returns true if start and end times have been specified, false otherwise
 	 */
 	public boolean containsTimeSpecifications() {
-		if(endTimeSpecified != false && startTimeSpecified != false) {
+		if(endTime != null && startTime != null) {
 			//System.out.println(this.endTime.getTime());
 			return true;
 		}
@@ -86,35 +76,39 @@ public class ItemTimeManager {
 	/*
 	 * Returns true if a start time for the project has been set, false otherwise
 	 */
-	public boolean startTimeSet() {
-		if(startTimeSpecified != false) {
-			return true;
-		}
-		return false;
-	}
-	/*
-	 * Returns true if an end time for the project has been set, false otherwise
-	 */
-	public boolean endTimeSet() {
-		if(endTimeSpecified != false) {
-			return true;
-		}
-		return false;
-	}
+//	public boolean startTimeSet() {
+//		if(startTimeSpecified != false) {
+//			return true;
+//		}
+//		return false;
+//	}
+//	/*
+//	 * Returns true if an end time for the project has been set, false otherwise
+//	 */
+//	public boolean endTimeSet() {
+//		if(endTimeSpecified != false) {
+//			return true;
+//		}
+//		return false;
+//	}
 	/*
 	 * Returns true if the project is overdue, false otherwise
 	 * Will cause an exception if no deadline has been set
 	 */
-	public boolean deadlineOverdue() {
-		if(this.startTime != null && this.endTime != null) {
+	public boolean deadlineOverdue() throws OperationNotAllowedException {
+		System.out.println("Deadline");
+		if(this.endTime != null) {
 			this.currentTime = new GregorianCalendar();
-			if(endTime.after(currentTime)) {
+			if(currentTime.after(endTime)) {
+				System.out.println("is overdue");
 				return true;
 			}
+			System.out.println("is not overdue");
 			return false;
 		}
 		else {
-			throw new IllegalArgumentException("Deadline must be instantiated");
+			System.out.println("FAIL");
+			throw new OperationNotAllowedException("Deadline must be instantiated");
 		}
 	}
 	

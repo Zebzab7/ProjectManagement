@@ -147,9 +147,18 @@ public class ProjectSteps {
 	}
 	
 	@When("the worker sets the end date of the project to the {int}-{int}-{int} unsuccesfully")
-	public void theWorkerSetsTheEndDateOfTheProjectToTheUnsuccesfully(int year, int month, int day) {
+	public void setEndDateUnsuccesfully(int year, int month, int day) {
 		try {
 			assertFalse(itemHolder.getProject().getTimeManager().setEndTime(year, month, day, project));
+		} catch(Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@When("the worker sets the start date of the project to the {int}-{int}-{int} unsuccesfully")
+	public void setStartDateTheUnsuccesfully(int year, int month, int day) {
+		try {
+			assertFalse(itemHolder.getProject().getTimeManager().setStartTime(year, month, day, project));
 		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -160,6 +169,15 @@ public class ProjectSteps {
 		try {
 			managementApp.findProject(name);
 		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@When("the deadline is checked")
+	public void deadlineCheck() {
+		try {
+			managementApp.getState().currentProject().getTimeManager().deadlineOverdue();
+		} catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
@@ -210,6 +228,26 @@ public class ProjectSteps {
 	public void weekRepresentation(int startWeek, int endWeek) {
 		assertEquals(project.getTimeManager().getStartWeek(), startWeek);
 		assertEquals(project.getTimeManager().getEndWeek(), endWeek);
+	}
+	
+	@Then("the project contains time specifications")
+	public void containsTimeSpecifications() {
+		assertTrue(managementApp.getState().currentProject().getTimeManager().containsTimeSpecifications());
+	}
+	
+	@Then("the project does not contain time specifications")
+	public void doesNotContainTimeSpecifications() {
+		assertFalse(managementApp.getState().currentProject().getTimeManager().containsTimeSpecifications());
+	}
+	
+	@Then("the deadline is overdue")
+	public void deadlineOverdue() throws OperationNotAllowedException {
+		assertTrue(managementApp.getState().currentProject().getTimeManager().deadlineOverdue());
+	}
+	
+	@Then("the deadline is not overdue")
+	public void deadlineNotOverdue() throws OperationNotAllowedException {
+		assertFalse(managementApp.getState().currentProject().getTimeManager().deadlineOverdue());
 	}
 	
 }
