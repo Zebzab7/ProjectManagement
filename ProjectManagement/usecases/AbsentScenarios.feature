@@ -56,3 +56,14 @@ Scenario: Worker has multiple fixed activities and is not absent
 	And the workers return date is on the 2020-12-28
 	Then the worker has 2 fixed activities
 	And the worker is not absent
+
+Scenario: Worker has fixed activity and is in the timeframe
+	Given that the worker is logged in
+	And the fixed activity with the worker called "SUMMER HOLIDAY" does exist
+	When the workers leave date is on the 2020-5-5
+	And the workers return date is on the 2020-6-15
+	And the worker creates a fixed activity called "CHRISTMAS HOLIDAY"
+	And the workers leave date is on the 2020-12-12
+	And the workers return date is on the 2020-12-28
+	Then the worker has 2 fixed activities
+	And the worker is absent

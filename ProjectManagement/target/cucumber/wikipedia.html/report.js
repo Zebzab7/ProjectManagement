@@ -449,6 +449,101 @@ formatter.match({
 formatter.result({
   "status": "passed"
 });
+formatter.scenario({
+  "name": "Worker has fixed activity and is in the timeframe",
+  "description": "",
+  "keyword": "Scenario"
+});
+formatter.step({
+  "name": "that the worker is logged in",
+  "keyword": "Given "
+});
+formatter.match({
+  "location": "acceptancetests.LoginLogoutSteps.thatTheWorkerIsLoggedIn()"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the fixed activity with the worker called \"SUMMER HOLIDAY\" does exist",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptancetests.FixedActivitySteps.fixedActivityExists(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the workers leave date is on the 2020-5-5",
+  "keyword": "When "
+});
+formatter.match({
+  "location": "acceptancetests.FixedActivitySteps.setLeaveDate(int,int,int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the workers return date is on the 2020-6-15",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptancetests.FixedActivitySteps.setReturnDate(int,int,int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker creates a fixed activity called \"CHRISTMAS HOLIDAY\"",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptancetests.FixedActivitySteps.createFixedActivity(java.lang.String)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the workers leave date is on the 2020-12-12",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptancetests.FixedActivitySteps.setLeaveDate(int,int,int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the workers return date is on the 2020-12-28",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptancetests.FixedActivitySteps.setReturnDate(int,int,int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker has 2 fixed activities",
+  "keyword": "Then "
+});
+formatter.match({
+  "location": "acceptancetests.FixedActivitySteps.theWorkerHasFixedActivities(int)"
+});
+formatter.result({
+  "status": "passed"
+});
+formatter.step({
+  "name": "the worker is absent",
+  "keyword": "And "
+});
+formatter.match({
+  "location": "acceptancetests.FixedActivitySteps.workerIsAbsent()"
+});
+formatter.result({
+  "status": "passed"
+});
 formatter.uri("file:usecases/ActivitySteps.feature");
 formatter.feature({
   "name": "Activity",

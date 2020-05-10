@@ -26,10 +26,10 @@ public class AbsenceManager {
 		return true;
 	}
 	
-	public void removeTimeSpecifications() {
-		startTime = null;
-		endTime = null;
-	}
+//	public void removeTimeSpecifications() {
+//		startTime = null;
+//		endTime = null;
+//	}
 	
 	public boolean hasStarted() {
 		if(endTime == null) {

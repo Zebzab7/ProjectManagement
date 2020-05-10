@@ -54,19 +54,21 @@ public class Worker {
 		return workHoursOnActivities;
 	}
 	
+	public void setHelpStatus(boolean status) {
+		this.help=status;
+	}
+	
 	public boolean isAvailable() {
-		if(assignedActivities.size() < 20 && !isAbsent()) {
+		if(assignedActivities.size() <= 20 && !isAbsent()) {
 			return true;
 		}
 		return false;
 	}
 	public boolean grantAssistance() {
-		if(isAvailable()) {
-			help = true;
-			return help;
+		if(isAvailable() && help == true) {
+			return true;
 		}
-		help = false;
-		return help;
+		return false;
 	}
 	public boolean isAbsent() {
 		for(FixedActivity f : assignedFixedActivities) {
