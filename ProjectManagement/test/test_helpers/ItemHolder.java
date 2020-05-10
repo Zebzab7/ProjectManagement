@@ -17,7 +17,9 @@ public class ItemHolder {
 	public ItemHolder (State state) {
 		this.state = state;
 	}
-	
+	public State getState() {
+		return state;
+	}
 	public Worker getWorker() {
 		if (worker == null) {
 			worker = exampleWorker();
@@ -53,8 +55,9 @@ public class ItemHolder {
 		this.activity = activity;
 		return true;
 	}
-	public void setWorker(Worker worker) {
+	public boolean setWorker(Worker worker) {
 		this.worker = worker;
+		return true;
 	}
 	public void setFixedActivity(FixedActivity fixedActivity) {
 		this.fixedActivity = fixedActivity;
@@ -73,7 +76,7 @@ public class ItemHolder {
 		return activity;
 	}
 	private FixedActivity exampleFixedActivity() {
-		fixedActivity = new FixedActivity("fixedActivity101", state, state.currentUser());
+		fixedActivity = new FixedActivity("fixedActivity101", state.currentUser());
 		return fixedActivity;
 	}
 	
@@ -82,9 +85,7 @@ public class ItemHolder {
 	 * perform certain operations in the management app
 	 */
 	public void logInTemp() {
-		if (state.currentUser() != null) 
-		prev = new Worker(state.currentUser().getUsername(), state.currentUser().getPassword());
-		else prev = null;
+		prev = state.currentUser();
 		temp = new Worker("Temp", "1234");
 		state.setUser(temp);
 	}

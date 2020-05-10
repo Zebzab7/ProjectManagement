@@ -1,15 +1,15 @@
 package project_management;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 
 public class Worker {
 	private ArrayList<Activity> assignedActivities = new ArrayList<Activity>();
+	private ArrayList<Integer> workHoursOnActivities = new ArrayList<Integer>();
 	private ArrayList<Project> assignedProjects = new ArrayList<Project>();
 	private ArrayList<FixedActivity> assignedFixedActivities = new ArrayList<FixedActivity>();
 	private String username;
 	private String password;
-	private int workedHours;
+	private int workedHours = 0;
 	private boolean help;
 	
 	public Worker(String username, String password) {
@@ -17,20 +17,23 @@ public class Worker {
 		this.password = password;
 	}
 	
-	public boolean addHours(int hours) {
+	public int getHoursOnActivity(Activity activity) {
+		return workHoursOnActivities.get(assignedActivities.indexOf(activity));
+	}	
+	public boolean addHours(int hours, Activity activity) {
+		int addHours = workHoursOnActivities.get(assignedActivities.indexOf(activity)) + hours;
+		workHoursOnActivities.set(assignedActivities.indexOf(activity), addHours);
 		workedHours += hours;
 		return true;
 	}
-
+	public int workedHours() {
+		return workedHours;
+	}
 	public String getUsername() {
 		return username;
 	}
 	public String getPassword() {
 		return password;
-	}
-	
-	public ArrayList<FixedActivity> getAssignedFixedActivityList() {
-		return assignedFixedActivities;
 	}
 	
 	public ArrayList<Project> getAssignedProjects() {
@@ -39,34 +42,15 @@ public class Worker {
 	public ArrayList<Activity> getAssignedActivities() {
 		return assignedActivities;
 	}
-	
-	public boolean isAbsent() {
-		for(FixedActivity f : assignedFixedActivities) {
-			if(f.getAbsenceManager().hasStarted()) {
-				return true;
-			}
-		}
-		return false;
+	public ArrayList<FixedActivity> getAssignedFixedActivityList() {
+		return assignedFixedActivities;
+	}
+	public ArrayList<Integer> getWorkedHoursOnActivities() {
+		return workHoursOnActivities;
 	}
 	
-	public void addProject(Project project) {
-		assignedProjects.add(project);
-	}
-	public void addActivity(Activity activity) {
-		assignedActivities.add(activity);
-	}
-	public void addFixedActivity(FixedActivity fActivity) {
-		assignedFixedActivities.add(fActivity);
-	}
-	
-	public void removeProject(Project project) {
-		assignedProjects.remove(project);
-	}
-	public void removeActivity(Activity activity) {
-		assignedActivities.remove(activity);
-	}
-	public void removeFixedActivity(FixedActivity fActivity) {
-		assignedFixedActivities.remove(fActivity);
+	public void setHelpStatus(boolean status) {
+		this.help=status;
 	}
 	
 	public boolean isAvailable() {
@@ -76,12 +60,18 @@ public class Worker {
 		return false;
 	}
 	public boolean grantAssistance() {
-		if(isAvailable()) {
-			help = true;
-			return help;
+		if(isAvailable() && help == true) {
+			return true;
 		}
-		help = false;
-		return help;
+		return false;
+	}
+	public boolean isAbsent() {
+		for(FixedActivity f : assignedFixedActivities) {
+			if(f.getAbsenceManager().hasStarted()) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

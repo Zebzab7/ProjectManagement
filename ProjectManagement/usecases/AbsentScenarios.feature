@@ -34,13 +34,13 @@ Scenario: Worker goes on holiday
 	
 Scenario: Worker has returned
 	Given that the worker is logged in
-	And the fixed activity with the worker called "HOLIDAY" does exist
+	And that the fixed activity with the worker called "HOLIDAY" does exist
 	When the workers return date is on the 2020-4-24
 	Then the worker has returned
 	
 Scenario: Worker has multiple fixed activities and is absent
 	Given that the worker is logged in
-	And the fixed activity with the worker called "HOLIDAY" does exist
+	And that the fixed activity with the worker called "HOLIDAY" does exist
 	When the worker creates a fixed activity called "SICK"
 	And the workers return date is on the 2020-5-12
 	Then the worker has 2 fixed activities
@@ -48,7 +48,7 @@ Scenario: Worker has multiple fixed activities and is absent
 
 Scenario: Worker has multiple fixed activities and is not absent
 	Given that the worker is logged in
-	And the fixed activity with the worker called "SUMMER HOLIDAY" does exist
+	And that the fixed activity with the worker called "SUMMER HOLIDAY" does exist
 	When the workers leave date is on the 2020-7-5
 	And the workers return date is on the 2020-8-3
 	And the worker creates a fixed activity called "CHRISTMAS HOLIDAY"
@@ -56,3 +56,52 @@ Scenario: Worker has multiple fixed activities and is not absent
 	And the workers return date is on the 2020-12-28
 	Then the worker has 2 fixed activities
 	And the worker is not absent
+
+Scenario: Worker has fixed activity and is in the timeframe
+	Given that the worker is logged in
+	And that the fixed activity with the worker called "SUMMER HOLIDAY" does exist
+	When the workers leave date is on the 2020-5-5
+	And the workers return date is on the 2020-6-15
+	And the worker creates a fixed activity called "CHRISTMAS HOLIDAY"
+	And the workers leave date is on the 2020-12-12
+	And the workers return date is on the 2020-12-28
+	Then the worker has 2 fixed activities
+	And the worker is absent
+	
+Scenario: Leave and return date set
+	Given that the worker is logged in
+	And that the fixed activity with the worker called "SUMMER HOLIDAY" does exist
+	When the workers leave date is on the 2020-5-5
+	And the workers return date is on the 2020-6-15
+	Then the workers leave date is set
+	And the workers return date is set
+
+Scenario: Fixed activity not created
+	Given that the worker is logged in
+	And that the fixed activity with the worker called "HOLIDAY" does not exist
+	When the worker tries to find his fixed activity called "HOLIDAY"
+	Then the error message "Fixed activity does not exist" is given
+	
+Scenario: User tries to find fixed activity when not logged in
+	Given that worker "PEPE" with password "1234" exist
+	And that no one is logged in
+	When the worker tries to find his fixed activity called "HOLIDAY"
+	Then the error message "User login required" is given
+
+Scenario: User tries to add already existing fixed activity
+	Given that the worker is logged in
+	And that the fixed activity with the worker called "SUMMER HOLIDAY" does exist
+	When the worker creates a fixed activity called "SUMMER HOLIDAY"
+	Then the error message "Fixed activity already exists" is given
+	
+Scenario: User tries to add fixed activity whilst logged out
+	Given that no one is logged in
+	When the worker creates a fixed activity called "SUMMER HOLIDAY"
+	Then the error message "User login required" is given
+
+Scenario: User removes fixed activity whilst logged out
+	Given that the worker is logged in
+	And that the fixed activity with the worker called "SUMMER HOLIDAY" does exist
+	When the worker logs out
+	And the worker tries to remove the fixed activity
+	Then the error message "User login required" is given

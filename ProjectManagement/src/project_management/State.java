@@ -21,18 +21,17 @@ public class State {
 	public void setUser(Worker user) {
 		cUser = user;
 	}
-	public void setProject(Project project) {
-		cProject.unselect();
-		project.select();
+	public boolean setProject(Project project) {
 		cProject = project;
+		return true;
 	}
-	public void setActivity(Activity activity) {
-		cActivity.unselect();
-		activity.select();
-		this.cActivity = activity;
+	public boolean setActivity(Activity activity) {
+		cActivity = activity;
+		return true;
 	}
-	public void setFixedActivity(FixedActivity fixedActivity) {
+	public boolean setFixedActivity(FixedActivity fixedActivity) {
 		this.cFixedActivity = fixedActivity;
+		return true;
 	}
 
 }
