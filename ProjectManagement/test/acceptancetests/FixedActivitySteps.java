@@ -37,7 +37,7 @@ public class FixedActivitySteps {
 	@Given("the fixed activity with the worker called {string} does exist")
 	public void fixedActivityExists(String fixedActivity) throws OperationNotAllowedException {
 		
-		managementApp.createFixedActivity(new FixedActivity(fixedActivity, managementApp.getState(), itemHolder.getWorker()));
+		managementApp.createFixedActivity(new FixedActivity(fixedActivity, itemHolder.getWorker()));
 		managementApp.getState().setFixedActivity(managementApp.findFixedActivity(fixedActivity));
 		itemHolder.setFixedActivity(managementApp.findFixedActivity(fixedActivity));
 		
@@ -46,7 +46,7 @@ public class FixedActivitySteps {
 	
 	@When("the worker creates a fixed activity called {string}")
 	public void createFixedActivity(String fixedActivity) throws OperationNotAllowedException {
-		managementApp.createFixedActivity(new FixedActivity(fixedActivity,managementApp.getState(),
+		managementApp.createFixedActivity(new FixedActivity(fixedActivity,
 															managementApp.getState().currentUser()));
 		
 		managementApp.getState().setFixedActivity(managementApp.findFixedActivity(fixedActivity));

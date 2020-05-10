@@ -6,7 +6,6 @@ public class FixedActivity {
 	private Worker absentee;
 	private AbsenceManager absenceManager;
 	private String name;
-	private State state;
 	
 	public AbsenceManager getAbsenceManager() {
 		return absenceManager;
@@ -18,9 +17,8 @@ public class FixedActivity {
 		return absentee;
 	}
 	
-	public FixedActivity(String name, State state, Worker absentee) {
+	public FixedActivity(String name, Worker absentee) {
 		this.name = name;
-		this.state = state;
 		this.absentee = absentee;
 		absenceManager = new AbsenceManager();
 	}
