@@ -1,4 +1,4 @@
-Feature: Dates and deadlines
+Feature: Dates and deadlines for projects
 
 Scenario: Set start date for project
 	Given that the worker is logged in
@@ -10,9 +10,9 @@ Scenario: Set start date for project
     
 Scenario: Set deadline successfully
 	Given that the worker is logged in
-    And the project with name "Programming 101" does exist
-    And the project is selected
-    And the worker is the projectleader
+  And the project with name "Programming 101" does exist
+  And the project is selected
+  And the worker is the projectleader
 	When the worker sets the start date of the project to the 2020-5-12 succesfully
 	And the worker sets the end date of the project to the 2020-6-22 succesfully
 	Then the start time for the project is 2020-5-12
@@ -77,8 +77,8 @@ Scenario: Deadline is overdue
 	And the project is selected
 	And the worker is the projectleader
 	When the worker sets the start date of the project to the 2020-4-22 succesfully
-  And the worker sets the end date of the project to the 2020-5-8 succesfully
-  Then the deadline is overdue
+    And the worker sets the end date of the project to the 2020-5-8 succesfully
+    Then the deadline is overdue
 
 Scenario: Deadline not set
 	Given that the worker is logged in

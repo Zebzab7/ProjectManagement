@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Project extends Item {
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
-	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
 	
 	private int expectedTime;
 	
@@ -21,9 +20,6 @@ public class Project extends Item {
 		this.projectLeader = projectLeader;
 	}
 	
-	public ArrayList<Integer> getAccumulatedHoursList() {
-		return accumulatedHours;
-	}
 	public ArrayList<Activity> getActivityList() {
 		return activities;
 	}
@@ -55,6 +51,7 @@ public class Project extends Item {
 			return true;
 			
 		}
+		System.out.println("RETURNED FALSE");
 		return false;
 		
 	}

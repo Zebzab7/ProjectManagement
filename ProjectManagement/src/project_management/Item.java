@@ -91,10 +91,7 @@ public class Item {
 		workers.add(worker);
 		
 		if(this instanceof Project) worker.getAssignedProjects().add(state.currentProject());
-		if(this instanceof Activity) {
-			worker.getAssignedActivities().add(state.currentActivity());
-			worker.getWorkedHoursOnActivities().add(0);			
-		}
+		if(this instanceof Activity) worker.addActivity(state.currentActivity());
 		
 		return true;
 	}
@@ -104,7 +101,7 @@ public class Item {
 		workers.remove(worker);
 		
 		if(this instanceof Project) worker.getAssignedProjects().remove(state.currentProject());
-		if(this instanceof Activity) worker.getAssignedActivities().remove(state.currentActivity());
+		if(this instanceof Activity) worker.removeActivity(state.currentActivity());
 		
 		return true;
 	}

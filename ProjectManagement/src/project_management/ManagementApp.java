@@ -133,6 +133,7 @@ public class ManagementApp {
 		throw new OperationNotAllowedException("Fixed activity does not exist");
 	}
 	public boolean addProject(Project project) throws OperationNotAllowedException {
+		if (!LoggedIn()) throw new OperationNotAllowedException("User login required");
 		if ( containsProject(project.getName()) ) throw new OperationNotAllowedException("Project already exist");
 		projects.add(project);
 		return true;

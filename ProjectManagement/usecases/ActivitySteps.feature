@@ -5,11 +5,19 @@ Feature: Activity
 Scenario: Create activity successfully
 	Given that the worker is logged in
 	And the project with name "Programming 101" does exist
- 	And the worker is the project leader
  	And the activity with name "Loops" is not in the project
+ 	And the project is selected
  	When worker creates new activity with name "Loops" and ET 10 hours
  	And worker adds the activity to the project
  	Then the activity is contained in the project
+ 	And the worker can find the activity
+
+Scenario: cannot find activity
+	Given that the worker is logged in
+	And the project with name "Programming 101" does exist
+ 	And the project is selected
+ 	And the activity with name "Loops" is not in the project
+ 	Then the worker can not find the activity
 
 Scenario: Activity name exist
 	Given that the worker is logged in
