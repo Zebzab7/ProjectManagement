@@ -37,6 +37,13 @@ Scenario: Remove project from app
 	And the project with name "Programming 101" does exist
 	When the worker removes the project from the app
 	Then the project is not contained in the app
+
+Scenario: Remove project from app unsuccessfully
+	Given that the worker is logged in
+	And the project with name "Programming 101" does exist
+	When the worker logs out
+	And the worker removes the project from the app
+	Then the error message "User login required" is given
 	
 Scenario: Worker tries to find project that doesn't exist
 	Given that the worker is logged in

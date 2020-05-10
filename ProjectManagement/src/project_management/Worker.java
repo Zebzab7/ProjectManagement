@@ -18,20 +18,14 @@ public class Worker {
 	}
 	
 	public int getHoursOnActivity(Activity activity) {
-		System.out.println("!!!!!!");
-		System.out.println(assignedActivities.contains(activity));
 		return workHoursOnActivities.get(assignedActivities.indexOf(activity));
 	}	
 	public boolean addHours(int hours, Activity activity) {
-		System.out.println("add hours on activity from worker: " + this);
-		System.out.println(assignedActivities.size());
-		workHoursOnActivities.set(assignedActivities.indexOf(activity), hours);
+		int addHours = workHoursOnActivities.get(assignedActivities.indexOf(activity)) + hours;
+		workHoursOnActivities.set(assignedActivities.indexOf(activity), addHours);
 		workedHours += hours;
 		return true;
 	}
-//	public int getHours() {
-//		return workedHours;
-//	}
 	public int workedHours() {
 		return workedHours;
 	}

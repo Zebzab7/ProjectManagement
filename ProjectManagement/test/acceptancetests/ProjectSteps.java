@@ -138,8 +138,12 @@ public class ProjectSteps {
 	}
 	
 	@When("the worker removes the project from the app")
-	public void theWorkerRemovesTheProjectFromTheApp() throws OperationNotAllowedException {
-		assertTrue(managementApp.removeProject(itemHolder.getProject()));
+	public void theWorkerRemovesTheProjectFromTheApp() {
+		try {
+			assertTrue(managementApp.removeProject(itemHolder.getProject()));
+		} catch (OperationNotAllowedException e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
 	}
 	
 	@When("the worker sets the end date of the project to the {int}-{int}-{int} unsuccesfully")

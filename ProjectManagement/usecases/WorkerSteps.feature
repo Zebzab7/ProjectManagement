@@ -25,12 +25,26 @@ Scenario: Worker is removed from the app succesfully
 	And that worker "PEPE" with password "1234" exist in the app
 	When the worker is removed from the app
 	Then the worker is not contained in the app
+
+Scenario: Worker is removed from the app unsuccesfully
+	Given that the worker is logged in
+	And that worker "PEPE" with password "1234" exist in the app
+	When the worker logs out
+	When the worker is removed from the app
+	Then the error message "User login required" is given
 	
-Scenario: Worker tries to find worker that doesn't exist
+Scenario: Worker tries to find worker that does not exist
 	Given that the worker is logged in
 	And that worker "PEPX" with password "1234" does not exist
 	When the worker tries to find worker with name "PEPX" in app
 	Then the error message "User does not exist" is given
+
+Scenario: Worker tries to find worker whilst logged out
+	Given that the worker is logged in
+	And that worker "PEPX" with password "1234" exist in the app
+	When the worker logs out
+	And the worker tries to find worker with name "PEPX" in app
+	Then the error message "User login required" is given
 
 Scenario: Worker is added to app successfully
  	Given that the worker is logged in
