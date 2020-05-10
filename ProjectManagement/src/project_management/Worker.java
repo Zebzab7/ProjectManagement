@@ -24,13 +24,14 @@ public class Worker {
 	}	
 	public boolean addHours(int hours, Activity activity) {
 		System.out.println("add hours on activity from worker: " + this);
+		System.out.println(assignedActivities.size());
 		workHoursOnActivities.set(assignedActivities.indexOf(activity), hours);
 		workedHours += hours;
 		return true;
 	}
-	public int getHours() {
-		return workedHours;
-	}
+//	public int getHours() {
+//		return workedHours;
+//	}
 	public int workedHours() {
 		return workedHours;
 	}
@@ -59,7 +60,7 @@ public class Worker {
 	}
 	
 	public boolean isAvailable() {
-		if(assignedActivities.size() <= 20 && !isAbsent()) {
+		if(assignedActivities.size() < 20 && !isAbsent()) {
 			return true;
 		}
 		return false;

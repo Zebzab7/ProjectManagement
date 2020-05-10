@@ -75,7 +75,7 @@ public class ItemHolder {
 		return activity;
 	}
 	private FixedActivity exampleFixedActivity() {
-		fixedActivity = new FixedActivity("fixedActivity101", state, state.currentUser());
+		fixedActivity = new FixedActivity("fixedActivity101", state.currentUser());
 		return fixedActivity;
 	}
 	

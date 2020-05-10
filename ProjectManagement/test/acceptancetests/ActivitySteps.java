@@ -114,15 +114,8 @@ public class ActivitySteps {
 	
 	@When("the worker is added to the activity")
 	public void addWorkerToActivity() throws OperationNotAllowedException {
-		System.out.println("EndTime: " + managementApp.getState().currentFixedActivity().getAbsenceManager().getEndTime().getTime());
-		System.out.println(managementApp.getState().currentFixedActivity().getAbsenceManager().getStartTime() == null);
-		System.out.print("Worker is absent: ");
-		System.out.println(managementApp.getState().currentUser().isAbsent());
 		try{
 			itemHolder.getActivity().addWorker(managementApp.getState().currentUser());
-			System.out.println("Activity, itemHolder: " + itemHolder.getActivity().getName());
-			System.out.println("Worker fA list size, mApp: " + managementApp.getState().currentUser().getAssignedFixedActivityList().toString());
-			System.out.println("Worker added: " + itemHolder.getActivity().containsWorker(managementApp.getState().currentUser()));
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -214,5 +207,21 @@ public class ActivitySteps {
 	@Then("the activity is contained in the project")
 	public void theActivityIsContainedInTheProject() throws OperationNotAllowedException {
 	    assertTrue(itemHolder.getProject().containsActivity(activityName));
+	}
+	@Then("the worker {string} is added to the activity")
+	public void addedWorker(String string) {
+	    try {
+			assertTrue(managementApp.getState().currentActivity().containsWorker(itemHolder.getWorker()));
+		} catch (OperationNotAllowedException e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	@Then("the worker {string} is not added to the activity")
+	public void notAddedWorker(String string) {
+	    try {
+			assertFalse(managementApp.getState().currentActivity().containsWorker(itemHolder.getWorker()));
+		} catch (OperationNotAllowedException e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
 	}
 }

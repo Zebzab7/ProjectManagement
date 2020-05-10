@@ -84,7 +84,7 @@ public class Item {
 		if(worker.isAbsent() && !(this instanceof Project)) {
 			throw new OperationNotAllowedException("Worker is absent");
 		}
-		if(!worker.isAvailable()) {
+		if(!worker.isAvailable() && (this instanceof Activity)) {
 			throw new OperationNotAllowedException("Worker is not available");
 		}
 		accumulatedHours.add(0);
@@ -93,7 +93,7 @@ public class Item {
 		if(this instanceof Project) worker.getAssignedProjects().add(state.currentProject());
 		if(this instanceof Activity) {
 			worker.getAssignedActivities().add(state.currentActivity());
-			worker.getWorkedHoursOnActivities().add(0);
+			worker.getWorkedHoursOnActivities().add(0);			
 		}
 		
 		return true;

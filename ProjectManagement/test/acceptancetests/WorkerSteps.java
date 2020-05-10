@@ -48,11 +48,26 @@ public class WorkerSteps {
 		assertFalse(managementApp.containsUser(name));
 	}
 	
+	@Given("the worker has amassed {int} hours for each activity")
+	public void amassedHoursPerActivity(int hours) throws OperationNotAllowedException {
+		System.out.println("CURRENT USER AA LIST SIZE: " + managementApp.getState().currentUser().getAssignedActivities().size());
+	    
+		for(int i = 0; i < managementApp.getState().currentUser().getAssignedActivities().size(); i++) {
+			managementApp.getState().setActivity(managementApp.getState().currentUser().getAssignedActivities().get(i));
+			managementApp.getState().setProject(itemHolder.getProject());
+			System.out.println(managementApp.getState().currentUser().getAssignedActivities().get(i).getName());
+	    	managementApp.addHours(hours);
+	    }
+	    
+	    System.out.println("CURRENT USER TIME WORKED: " + managementApp.getState().currentUser().workedHours());
+	}
+	
 	@Given("that the worker is working on {int} activities")
 	public void thatTheWorkerIsWorkingOnProjects(int count) {
 	    for(int i = 0; i < count; i++) {
 	    	if(managementApp.getState().currentUser().getAssignedActivities().size()<= count) {
-	    		managementApp.getState().currentUser().getAssignedActivities().add(new Activity("Programmingtask 10" + count, managementApp.getState()));
+	    		managementApp.getState().currentUser().getAssignedActivities().add(new Activity("Programmingtask 10" + i, managementApp.getState()));
+	    		managementApp.getState().currentUser().getWorkedHoursOnActivities().add(0);
 	    	}
 	    }
 	    assertEquals(managementApp.getState().currentUser().getAssignedActivities().size(), count);
@@ -108,11 +123,10 @@ public class WorkerSteps {
 	public void theWorkerIsContainedInApp() {
 	    assertTrue(managementApp.containsUser(itemHolder.getWorker().getUsername()));
 	}
-
-	@Then("the worker {string} is added to the activity")
-	public void theWorkerIsAddedToTheActivity(String string) {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new io.cucumber.java.PendingException();
+	
+	@Then("the worker has accumulated {int} hours of work")
+	public void workerAccumulatedHours(int accHours) {
+	   assertEquals(managementApp.getState().currentUser().workedHours(), accHours);
 	}
 	
 }

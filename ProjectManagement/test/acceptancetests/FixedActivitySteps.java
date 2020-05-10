@@ -99,6 +99,15 @@ public class FixedActivitySteps {
 		assertTrue(managementApp.getState().currentUser().isAvailable());
 	}
 	
+	@Then("the workers leave date is set")
+	public void leaveDateSet() {
+		assertTrue(managementApp.getState().currentFixedActivity().getAbsenceManager().getStartTime() != null);
+	}
+	
+	@Then("the workers return date is set")
+	public void returnDateSet() {
+		assertTrue(managementApp.getState().currentFixedActivity().getAbsenceManager().getEndTime() != null);
+	}
 	
 	
 }
