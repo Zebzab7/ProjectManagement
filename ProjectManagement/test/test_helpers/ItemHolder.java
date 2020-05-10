@@ -1,6 +1,7 @@
 package test_helpers;
 
 import project_management.Activity;
+import project_management.FixedActivity;
 import project_management.Project;
 import project_management.State;
 import project_management.Worker;
@@ -9,6 +10,7 @@ public class ItemHolder {
 	private State state;
 	private Project project;
 	private Activity activity;
+	private FixedActivity fixedActivity;
 	private Worker worker, prev;
 	private Worker temp;
 	
@@ -16,9 +18,6 @@ public class ItemHolder {
 		this.state = state;
 	}
 	public State getState() {
-		if (state == null) {
-			state = new State();
-		}
 		return state;
 	}
 	public Worker getWorker() {
@@ -39,6 +38,12 @@ public class ItemHolder {
 		}
 		return activity;
 	}
+	public FixedActivity getFixedActivity() {
+		if(fixedActivity == null) {
+			fixedActivity = exampleFixedActivity();
+		}
+		return fixedActivity;
+	}
 	
 	public void setState(State state) {
 		this.state = state;
@@ -50,8 +55,12 @@ public class ItemHolder {
 		this.activity = activity;
 		return true;
 	}
-	public void setWorker(Worker worker) {
+	public boolean setWorker(Worker worker) {
 		this.worker = worker;
+		return true;
+	}
+	public void setFixedActivity(FixedActivity fixedActivity) {
+		this.fixedActivity = fixedActivity;
 	}
 	
 	private Worker exampleWorker() {
@@ -66,17 +75,17 @@ public class ItemHolder {
 		activity = new Activity("Activity101", state);
 		return activity;
 	}
+	private FixedActivity exampleFixedActivity() {
+		fixedActivity = new FixedActivity("fixedActivity101", state, state.currentUser());
+		return fixedActivity;
+	}
 	
 	/*
 	 * Methods used for logging a temporary user in order to
 	 * perform certain operations in the management app
 	 */
 	public void logInTemp() {
-		if (state.currentUser() != null) {
-			prev = state.currentUser();
-		}
-		else prev = null;
-		
+		prev = state.currentUser();
 		temp = new Worker("Temp", "1234");
 		state.setUser(temp);
 	}

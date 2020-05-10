@@ -15,26 +15,27 @@ public class Activity extends Item {
 		this.expectedTime = ET;
 	}
 	
-	public ArrayList<Integer> getAccumlatedHoursList() {
-		return accumulatedHours;
-	}
-	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
-		accumulatedHours.add(0);
-		getWorkerList().add(worker);
-		worker.addActivity(this);
-		return true;
-	}
-	
-	public boolean removeWorker(Worker worker) {
-		accumulatedHours.remove(getWorkerList().indexOf(worker));
-		getWorkerList().remove(worker);
-		return true;
+	public void addHours(int hours) throws OperationNotAllowedException {
+		System.out.println("adding hours to activity: "+ hours);
+		//defence
+		/*if (getState().currentUser() == null ) {
+			throw new OperationNotAllowedException("User login required");
+		}*/
+		super.addHours(hours);
 	}
 	
-	public int workerContributedHours(Worker worker) {
-		int index = getWorkerList().indexOf(findWorker(worker.getUsername()));
-		return accumulatedHours.get(index);
-	}
+//	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
+//		accumulatedHours.add(0);
+//		getWorkerList().add(worker);
+//		worker.addActivity(this);
+//		return true;
+//	}
+//	
+//	public boolean removeWorker(Worker worker) {
+//		accumulatedHours.remove(getWorkerList().indexOf(worker));
+//		getWorkerList().remove(worker);
+//		return true;
+//	}
 
 	public boolean TimepreConditionsMet() throws OperationNotAllowedException {
 		if (getState().currentActivity() == this && super.TimepreConditionsMet()) {

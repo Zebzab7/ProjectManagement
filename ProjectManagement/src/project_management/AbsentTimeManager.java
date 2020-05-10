@@ -13,6 +13,4 @@ public class AbsentTimeManager extends ItemTimeManager {
 	public GregorianCalendar getReturnDate(Worker worker) {
 		return super.getEndTime();
 	}
-	
-	
 }

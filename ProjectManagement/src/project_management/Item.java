@@ -6,6 +6,7 @@ public class Item {
 	private String name;
 	private State state;
 	private ItemTimeManager timeManager;
+	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
 	private boolean preConditions = false;
 	private int hours = 0;
@@ -15,10 +16,15 @@ public class Item {
 		this.state = state;
 		timeManager = new ItemTimeManager(state);
 	}
-	public void addHours(int hours)throws OperationNotAllowedException {
-		if (preConditionsMet()) {
-			this.hours += hours;
+	public void addHours(int hours) throws OperationNotAllowedException {
+		//defence
+		if (getState().currentUser() == null ) {
+			throw new OperationNotAllowedException("User login required");
 		}
+		
+		//int cUserIndex = getWorkerList().indexOf(getState().currentUser());
+		//accumulatedHours.set(cUserIndex, accumulatedHours.get(cUserIndex) + hours);
+		this.hours += hours;
 		
 	}
 	public int getHours() {
@@ -56,7 +62,6 @@ public class Item {
 		return true;
 	}
 	
-	
 	public boolean preConditionsMet() throws OperationNotAllowedException {
 		if(getState().currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
@@ -76,17 +81,31 @@ public class Item {
 	}
 	
 	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
-//		if(absenteeCheck.workerIsAbsent(worker)) {
-//			throw new Exception("Worker is absent");
-//		}
+		if(worker.isAbsent() && !(this instanceof Project)) {
+			throw new OperationNotAllowedException("Worker is absent");
+		}
+		if(!worker.isAvailable()) {
+			throw new OperationNotAllowedException("Worker is not available");
+		}
+		accumulatedHours.add(0);
 		workers.add(worker);
+		
+		if(this instanceof Project) worker.getAssignedProjects().add(state.currentProject());
+		if(this instanceof Activity) {
+			worker.getAssignedActivities().add(state.currentActivity());
+			worker.getWorkedHoursOnActivities().add(0);
+		}
+		
 		return true;
-//		accumulatedHours.add(initialHours);
 	}
 	
 	public boolean removeWorker(Worker worker) {
-//		accumulatedHours.remove(workers.indexOf(worker));
+		accumulatedHours.remove(getWorkerList().indexOf(worker));
 		workers.remove(worker);
+		
+		if(this instanceof Project) worker.getAssignedProjects().remove(state.currentProject());
+		if(this instanceof Activity) worker.getAssignedActivities().remove(state.currentActivity());
+		
 		return true;
 	}
 }

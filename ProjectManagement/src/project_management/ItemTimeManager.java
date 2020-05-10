@@ -46,7 +46,7 @@ public class ItemTimeManager {
 	 */ 
 	
 	public boolean setStartTime(int year, int month, int day, Item object) throws OperationNotAllowedException {
-		if(object.preConditionsMet()) {
+		if(object.TimepreConditionsMet()) {
 			startTime.set(year, month - 1, day);
 			if (endTimeSpecified && startTime.after(endTime)) {
 				throw new OperationNotAllowedException("Deadline is invalid");

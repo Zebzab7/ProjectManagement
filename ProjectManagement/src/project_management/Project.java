@@ -33,12 +33,12 @@ public class Project extends Item {
 	public Worker getProjectLeader() {
 		return projectLeader;
 	}
+	
 	public int getWorkersAccumulatedHours(Worker worker) {
 		int hours = 0;
 		for (Activity a : worker.getAssignedActivities()) {
 			if (activities.contains(a)) {
-				hours += worker.getHoursOnTask(a);
-
+				hours += worker.getHoursOnActivity(a);
 			}
 		}
 		return hours;
@@ -49,7 +49,7 @@ public class Project extends Item {
 			if (!containsWorker(getState().currentUser())) {
 				throw new OperationNotAllowedException("User is not assigned to the project");
 			}
-			if (getProjectLeader() == getState().currentUser()) {
+			if (getProjectLeader() != getState().currentUser()) {
 				   throw new OperationNotAllowedException("User is not the project leader");
 			}
 			return true;
@@ -63,6 +63,11 @@ public class Project extends Item {
 	 */
 	public boolean hasProjectLeader() {
 		if (projectLeader != null) return true;
+		return false;
+	}
+	
+	public boolean isProjectLeader(Worker worker) {
+		if ( worker.equals(projectLeader) ) return true;
 		return false;
 	}
 	
@@ -112,17 +117,17 @@ public class Project extends Item {
 		return false;
 	}*/
 	
-	public boolean addWorker(Worker worker) {
-		accumulatedHours.add(0);
-		getWorkerList().add(worker);
-		return true;
-	}
-	
-	public boolean removeWorker(Worker worker) {
-		accumulatedHours.remove(getWorkerList().indexOf(worker));
-		getWorkerList().remove(worker);
-		return true;
-	}
+//	public boolean addWorker(Worker worker) {
+//		accumulatedHours.add(0);
+//		getWorkerList().add(worker);
+//		return true;
+//	}
+//	
+//	public boolean removeWorker(Worker worker) {
+//		accumulatedHours.remove(getWorkerList().indexOf(worker));
+//		getWorkerList().remove(worker);
+//		return true;
+//	}
 	
 	public boolean addActivity(Activity activity) throws OperationNotAllowedException {
 		if ( getState().currentUser() == null ) {

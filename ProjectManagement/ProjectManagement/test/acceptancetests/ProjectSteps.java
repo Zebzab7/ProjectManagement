@@ -108,11 +108,6 @@ public class ProjectSteps {
 		}
 	}
 	
-	@When("the worker removes the project from the app")
-	public void theWorkerRemovesTheProjectFromTheApp() throws OperationNotAllowedException {
-		assertTrue(managementApp.removeProject(itemHolder.getProject()));
-	}
-	
 	@When("worker adds new project named {string} with {string} as projectleader")
 	public void workerAddsNewProjectNamedWithAsProjectleader(String name, String projectLeader) {
 	    try {
@@ -129,15 +124,6 @@ public class ProjectSteps {
 		try {
 			assertTrue(project.getTimeManager().setStartTime(year, month, day, project));
 		} catch(Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
-	}
-	
-	@When("the worker tries to find project with name {string} in app")
-	public void theWorkerTriesToFindProjectWithNameInApp(String name) {
-		try {
-			managementApp.findProject(name);
-		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
@@ -195,11 +181,6 @@ public class ProjectSteps {
 	@Then("the project is contained in the app")
 	public void theProjectIsContainedInTheApp() throws OperationNotAllowedException {
 	    assertTrue(managementApp.containsProject(projectName));
-	}
-	
-	@Then("the project is not contained in the app")
-	public void theProjectIsNotContainedInTheApp() throws OperationNotAllowedException {
-		assertFalse(managementApp.containsProject(itemHolder.getProject().getName()));
 	}
 	
 	@Then("the start and end week of the given month of the project are week {int} and week {int}")
