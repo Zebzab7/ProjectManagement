@@ -9,6 +9,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import io.cucumber.java.en.Given;
@@ -30,14 +31,6 @@ public class ActivitySteps {
 		this.itemHolder = stateHelper;
 		this.errorMessage = errorMessage;
 		itemHolder.setState(managementApp.getState());
-	}
-	
-	@Given("the worker is working on a project")
-	public void theWorkerIsWorkingOnAProject() throws Exception {
-	    if (!managementApp.containsProject(itemHolder.getProject().getName())) {
-	    	managementApp.addProject(itemHolder.getProject());
-	    }
-	    assertTrue(itemHolder.getProject().addWorker(itemHolder.getWorker()));
 	}
 
 	@Given("the worker is the project leader")
@@ -109,6 +102,9 @@ public class ActivitySteps {
 	
 	@Given("the worker is not working on the activity")
 	public void theWorkerIsNotWorkingOnTheActivity() throws OperationNotAllowedException {
+		if (itemHolder.getActivity().containsWorker(itemHolder.getWorker())) {
+			itemHolder.getActivity().removeWorker(itemHolder.getWorker());
+		}
 		assertFalse(itemHolder.getActivity().containsWorker(itemHolder.getWorker()));
 	}
 	
@@ -117,6 +113,33 @@ public class ActivitySteps {
 		try{
 			itemHolder.getActivity().addWorker(managementApp.getState().currentUser());
 		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@When("the worker sets the start date of the activity to the {int}-{int}-{int} succesfully")
+	public void theWorkerSetsTheStartDateOfTheActivityToTheSuccesfully(int year, int month, int day) {
+		try {
+			assertTrue(itemHolder.getActivity().getTimeManager().setStartTime(year, month, day, itemHolder.getActivity()));
+		} catch(Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@When("the worker sets the end date of the activity to the {int}-{int}-{int} succesfully")
+	public void theWorkerSetsTheEndDateOfTheActivityToTheSuccesfully(int year, int month, int day) {
+		try {
+			assertTrue(itemHolder.getActivity().getTimeManager().setEndTime(year, month, day, itemHolder.getActivity()));
+		} catch(Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@When("the worker sets the end date of the activity to the {int}-{int}-{int} unsuccesfully")
+	public void theWorkerSetsTheEndDateOfTheActivityToTheUnsuccesfully(int year, int month, int day) {
+		try {
+			assertFalse(itemHolder.getActivity().getTimeManager().setEndTime(year, month, day, itemHolder.getActivity()));
+		} catch(Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
@@ -216,6 +239,23 @@ public class ActivitySteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
+	
+	@Then("the start time for the activity is {int}-{int}-{int}")
+	public void theStartTimeForTheActivityIs(int year, int month, int day) {
+		GregorianCalendar t = itemHolder.getActivity().getTimeManager().getStartTime();
+		assertEquals(year, t.get(GregorianCalendar.YEAR));
+		assertEquals(month - 1, t.get(GregorianCalendar.MONTH));
+		assertEquals(day, t.get(GregorianCalendar.DATE));
+	}
+	
+	@Then("the end time for the activity is {int}-{int}-{int}")
+	public void theEndTimeForTheActivityIs(int year, int month, int day) {
+		GregorianCalendar t = itemHolder.getActivity().getTimeManager().getEndTime();
+		assertEquals(year, t.get(GregorianCalendar.YEAR));
+		assertEquals(month - 1, t.get(GregorianCalendar.MONTH));
+		assertEquals(day, t.get(GregorianCalendar.DATE));
+	}
+	
 	@Then("the worker {string} is not added to the activity")
 	public void notAddedWorker(String string) {
 	    try {
@@ -223,5 +263,11 @@ public class ActivitySteps {
 		} catch (OperationNotAllowedException e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
+	}
+	
+	@Then("the start and end week of the given month of the activity are week {int} and week {int}")
+	public void theStartAndEndWeekOfTheGivenMonthOfTheActivityAreWeekAndWeek(int startWeek, int endWeek) {
+		assertEquals(itemHolder.getActivity().getTimeManager().getStartWeek(), startWeek);
+		assertEquals(itemHolder.getActivity().getTimeManager().getEndWeek(), endWeek);
 	}
 }
