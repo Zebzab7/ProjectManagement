@@ -1,7 +1,7 @@
 package project_management;
 
 import java.util.ArrayList;
-
+import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
 
 public class ManagementApp {
@@ -95,17 +95,22 @@ public class ManagementApp {
 	}
 	public boolean createUser(String username, String password) throws Exception {
 		if (!containsUser(username)) {
-			if (users.add(new Worker(username, password))) {
-				return true;
+			if(username.length() > 4) {
+				throw new Exception("Username contains too many characters");
 			}
+			users.add(new Worker(username, password));
+			return true;
 		}
 		throw new Exception("User already exist");
 	}
 	public boolean addWorker(Worker worker) throws Exception {
+		
 		if (!containsUser(worker.getUsername())) {
-			if (users.add(new Worker(worker.getUsername(), worker.getPassword()))) {
-				return true;
+			if(worker.getUsername().length() > 4) {
+				throw new Exception("Username contains too many characters");
 			}
+			users.add(new Worker(worker.getUsername(), worker.getPassword()));
+			return true;
 		}
 		throw new Exception("User already exist");
 	}
@@ -138,6 +143,7 @@ public class ManagementApp {
 	}
 	public boolean addProject(Project project) throws OperationNotAllowedException {
 		if ( containsProject(project.getName()) ) throw new OperationNotAllowedException("Project already exist");
+		
 		projects.add(project);
 		return true;
 	}
@@ -150,5 +156,28 @@ public class ManagementApp {
 		fixedActivities.add(fActivity);
 		state.currentUser().getAssignedFixedActivityList().add(fActivity);
 		return true;
+	}
+	private String generateProjectID(Project project) {
+GregorianCalendar projectDate = new GregorianCalendar();
+		
+		String month = "" + projectDate.get(GregorianCalendar.MONTH);
+		String year = String.valueOf(projectDate.get(GregorianCalendar.YEAR)).substring(2);
+		String project = "0" + projects.size();
+		if(projects.size() >= 9 && projects.size() <= 99) {
+			project = "" + projects.size();
+		}
+		if(projects.size() > 99) {
+			int count = 0;
+			for(int i = 0; i < projects.size(); i++) {
+				count++;
+			}
+			project = String.valueOf(projects.size()).substring(count - 2);
+		}
+		
+		if(projectDate.get(GregorianCalendar.MONTH) < 10) {
+			month = "0" + projectDate.get(GregorianCalendar.MONTH);
+		}
+		
+		return "" + month + year + project;
 	}
 }
