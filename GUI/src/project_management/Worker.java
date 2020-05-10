@@ -73,7 +73,21 @@ public class Worker {
 		}
 		return false;
 	}
-
+	
+	public void addActivity(Activity activity) {
+		if(!assignedActivities.contains(activity)) {
+			assignedActivities.add(activity);
+			workHoursOnActivities.add(0);
+		}
+	}
+	public void removeActivity(Activity activity) {
+		if(assignedActivities.contains(activity)) {
+			workHoursOnActivities.remove(assignedActivities.indexOf(activity));
+			assignedActivities.remove(activity);
+		}
+	}
+	
+//	ADDED METHODS IN WORKER
 	public boolean addAssignedActivity(Activity a) {
 		if(assignedActivities.contains(a)) {
 			return false;
@@ -81,7 +95,7 @@ public class Worker {
 		return assignedActivities.add(a);
 	}
 
-	public boolean addAssignedProject(Project p) {												/////HER
+	public boolean addAssignedProject(Project p) {												
 		
 		if(assignedProjects.contains(p)) {
 			return false;

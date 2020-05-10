@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Project extends Item {
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
-	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
 	
 	private int expectedTime;
 	
@@ -19,10 +18,6 @@ public class Project extends Item {
 	public Project(String name, State state, Worker projectLeader) {
 		super(name, state);
 		this.projectLeader = projectLeader;
-	}
-	
-	public ArrayList<Integer> getAccumulatedHoursList() {
-		return accumulatedHours;
 	}
 	public ArrayList<Activity> getActivityList() {
 		return activities;
@@ -89,46 +84,7 @@ public class Project extends Item {
 		return null;
 	}
 	
-	/*
-	public boolean addHoursToActivity(int hours, Activity activity) throws OperationNotAllowedException {
-		
-		if (!activity.preConditionsMet() || !containsWorker(getState().currentUser()) 
-				|| !activity.containsWorker(getState().currentUser())) return false;
-		
-		Activity act = findActivity(activity.getName());
-		
-		int index = getWorkerList().indexOf(findWorker(getState().currentUser().getUsername()));
-		int value = accumulatedHours.get(index);
-		accumulatedHours.set(index, value+hours);
-		
-		if ( !((workedHours + hours) < 0) && act.preConditionsMet() ) {
-			act.addHours(hours);
-			workedHours += hours;
-			return true;
-		}
-		throw new OperationNotAllowedException("Invalid input amount");
-	}*/
-	
-	/*
-	public boolean addWorkerToActivity(Worker worker, Activity activity) throws OperationNotAllowedException {
-		if (activity.addWorker(worker)) {
-			return true;
-		}
-		return false;
-	}*/
-	
-//	public boolean addWorker(Worker worker) {
-//		accumulatedHours.add(0);
-//		getWorkerList().add(worker);
-//		return true;
-//	}
-//	
-//	public boolean removeWorker(Worker worker) {
-//		accumulatedHours.remove(getWorkerList().indexOf(worker));
-//		getWorkerList().remove(worker);
-//		return true;
-//	}
-	
+
 	public boolean addActivity(Activity activity) throws OperationNotAllowedException {
 		if ( getState().currentUser() == null ) {
 			throw new OperationNotAllowedException("User login required");
@@ -138,6 +94,21 @@ public class Project extends Item {
 			return true;
 		}
 		throw new OperationNotAllowedException("The activity already exists in the project");
+	}
+	
+	public boolean removeActivity(Activity activity) throws OperationNotAllowedException {
+		if ( getState().currentUser() == null ) {
+			throw new OperationNotAllowedException("User login required");
+		}
+		if (getState().currentActivity() != null) throw new OperationNotAllowedException("User is in an activity");
+		if (containsActivity(activity.getName())) {
+			for(Worker w : super.getWorkerList()) {
+				w.removeActivity(activity);
+			}
+			activities.remove(activity);
+			return true;
+		}
+		throw new OperationNotAllowedException("The activity is not contained in the project");
 	}
 	
 }

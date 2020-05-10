@@ -23,7 +23,7 @@ public class ManagementApp {
 	}
 	public boolean addHours(int hours) throws OperationNotAllowedException {
 		if (!LoggedIn()) throw new OperationNotAllowedException("User login required");
-		else if (state.currentActivity() != null && state.currentProject() != null) {
+		else if (state.currentActivity() != null && LoggedIn()) {
 			state.currentActivity().addHours(hours);
 			state.currentProject().addHours(hours);
 			state.currentUser().addHours(hours, state.currentActivity());
@@ -57,6 +57,10 @@ public class ManagementApp {
 	}
 	public boolean removeProject(Project project) throws OperationNotAllowedException {
 		if (!LoggedIn()) throw new OperationNotAllowedException("User login required");
+		if (state.currentProject() != null || state.currentActivity() != null) throw new OperationNotAllowedException("User is outside of homepage");
+		for(Worker w : project.getWorkerList()) {
+			w.getAssignedProjects().remove(project);
+		}
 		projects.remove(project);
 		return true;
 	}
@@ -147,7 +151,8 @@ public class ManagementApp {
 		state.currentUser().getAssignedFixedActivityList().add(fActivity);
 		return true;
 	}
-
+	
+//	ADDED METHODS IN MANAGEMENT APP
 	public void addWorkerToProject(Worker worker, Project project) throws Exception{
 		if (state.currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");

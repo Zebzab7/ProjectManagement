@@ -33,7 +33,5 @@ public class Activity extends Item {
 			addWorker(worker);
 		}
 	}
-
-	
 	
 }

@@ -73,30 +73,12 @@ public class ItemTimeManager {
 		}
 		return false;
 	}
-	/*
-	 * Returns true if a start time for the project has been set, false otherwise
-	 */
-//	public boolean startTimeSet() {
-//		if(startTimeSpecified != false) {
-//			return true;
-//		}
-//		return false;
-//	}
-//	/*
-//	 * Returns true if an end time for the project has been set, false otherwise
-//	 */
-//	public boolean endTimeSet() {
-//		if(endTimeSpecified != false) {
-//			return true;
-//		}
-//		return false;
-//	}
+
 	/*
 	 * Returns true if the project is overdue, false otherwise
 	 * Will cause an exception if no deadline has been set
 	 */
 	public boolean deadlineOverdue() throws OperationNotAllowedException {
-		System.out.println("Deadline");
 		if(this.endTime != null) {
 			this.currentTime = new GregorianCalendar();
 			if(currentTime.after(endTime)) {

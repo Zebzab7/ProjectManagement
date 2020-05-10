@@ -73,6 +73,14 @@ public class WorkerController implements Initializable {
 		} catch(Exception e) {
 			
 		}
+		try {
+			ArrayList<Project> assignedProjects = managementApp.getState().currentUser().getAssignedProjects();
+			for(Project p : assignedProjects) {
+				listView2.getItems().add(p.getName());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		updateListView3();
 	}
 	@Override
@@ -169,9 +177,14 @@ public class WorkerController implements Initializable {
 	
 	public void AddUserToProject(ActionEvent e) throws Exception {
 		if(selectedProject != null) {
-			managementApp.addWorkerToProject(managementApp.getState().currentUser(), selectedProject);
-			listView2.getItems().add(selectedProject.getName());
-			lblStatus.setText("You are now working on project "+selectedProject.getName());
+			if(!selectedProject.containsWorker(managementApp.getState().currentUser())) {
+				managementApp.addWorkerToProject(managementApp.getState().currentUser(), selectedProject);
+				System.out.println(selectedProject.getWorkerList());
+				updateListView2();
+				listView2.getItems().add(selectedProject.getName());
+				lblStatus.setText("You are now working on project "+selectedProject.getName());
+			}
+			
 		}
 		
 	}
@@ -205,7 +218,6 @@ public class WorkerController implements Initializable {
 	}
 	
 //	Methods
-	
 	private void updateListView1() {
 		listView1.getItems().clear();
 		ArrayList<Project> projects = managementApp.getProjects();
@@ -216,15 +228,6 @@ public class WorkerController implements Initializable {
 	
 	private void updateListView2() {
 		listView2.getItems().clear();
-		
-		try {
-			ArrayList<Project> assignedProjects = managementApp.getState().currentUser().getAssignedProjects();
-			for(Project p : assignedProjects) {
-				listView2.getItems().add(p.getName());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	private void updateListView3() {

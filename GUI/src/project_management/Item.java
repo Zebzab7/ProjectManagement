@@ -17,29 +17,8 @@ public class Item {
 		timeManager = new ItemTimeManager(state);
 	}
 	public void addHours(int hours) throws OperationNotAllowedException {
-		//defence
-		if (getState().currentUser() == null ) {
-			throw new OperationNotAllowedException("User login required");
-		}
-		
-		//int cUserIndex = getWorkerList().indexOf(getState().currentUser());
-		//accumulatedHours.set(cUserIndex, accumulatedHours.get(cUserIndex) + hours);
 		this.hours += hours;
-		
 	}
-	
-	public ArrayList<Integer> getAccumulatedHours() {
-		return accumulatedHours;
-	}
-	
-	public void addHoursToWorker(int hours) {
-		for(int i = 0; i < workers.size(); i++) {
-			if(workers.get(i).getUsername().equals(state.currentUser().getUsername())) {
-				accumulatedHours.set(i, accumulatedHours.get(i) + hours);
-			}
-		}
-	}
-	
 	public int getHours() {
 		return hours;
 	}
@@ -55,14 +34,14 @@ public class Item {
 	public State getState() {
 		return state;
 	}
+	
 	/*
 	public boolean preConditionsMet() throws OperationNotAllowedException {
 		return preConditions;
 	}*/
-
 	public Worker findWorker (String name) {
 		for (Worker w : workers) {
-			if (w.getUsername() == name) {
+			if (w.getUsername().equals(name)) {
 				return w;
 			}
 		}
@@ -79,7 +58,7 @@ public class Item {
 		if(getState().currentUser() == null) {
 			throw new OperationNotAllowedException("User login required");
 		}
-		if(getState().currentActivity() != null || getState().currentProject() != null) {
+		if(getState().currentActivity() != null && getState().currentProject() != null) {
 			return true;
 		}
 		return false;
@@ -94,17 +73,17 @@ public class Item {
 	}
 	
 	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
-		if(worker.isAbsent() && !(this instanceof Project)) {
+		if(worker.isAbsent() && !(this instanceof Project)) {									//1
 			throw new OperationNotAllowedException("Worker is absent");
 		}
-		if(!worker.isAvailable() && (this instanceof Activity)) {
+		if(!worker.isAvailable() && (this instanceof Activity)) {								//2
 			throw new OperationNotAllowedException("Worker is not available");
 		}
 		accumulatedHours.add(0);
 		workers.add(worker);
 		
-		if(this instanceof Project) worker.getAssignedProjects().add(state.currentProject());
-		if(this instanceof Activity) {
+		if(this instanceof Project) worker.getAssignedProjects().add(state.currentProject());	//3
+		if(this instanceof Activity) {															//4
 			worker.getAssignedActivities().add(state.currentActivity());
 			worker.getWorkedHoursOnActivities().add(0);			
 		}
@@ -120,5 +99,18 @@ public class Item {
 		if(this instanceof Activity) worker.getAssignedActivities().remove(state.currentActivity());
 		
 		return true;
+	}
+	
+//	ADDED METHODS IN ITEM
+	public ArrayList<Integer> getAccumulatedHours() {
+		return accumulatedHours;
+	}
+	
+	public void addHoursToWorker(int hours) {
+		for(int i = 0; i < workers.size(); i++) {
+			if(workers.get(i).getUsername().equals(state.currentUser().getUsername())) {
+				accumulatedHours.set(i, accumulatedHours.get(i) + hours);
+			}
+		}
 	}
 }
