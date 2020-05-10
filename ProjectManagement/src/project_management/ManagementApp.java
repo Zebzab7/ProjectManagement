@@ -101,7 +101,7 @@ public class ManagementApp {
 	}
 	public boolean containsFixedActivity(String name, String absentee) {
 		for(FixedActivity f : fixedActivities) {
-			if(f.getName().equals(name) && f.getAbsentee().getUsername().contentEquals(absentee)) {
+			if(f.getName().equals(name) && f.getAbsentee().getUsername().equals(absentee)) {
 				return true;
 			}
 		}

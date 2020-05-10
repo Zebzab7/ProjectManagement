@@ -81,27 +81,20 @@ public class Item {
 	}
 	
 	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
-		System.out.println("Worker is absent:" + worker.isAbsent());
 		if(worker.isAbsent() && !(this instanceof Project)) {
 			throw new OperationNotAllowedException("Worker is absent");
+		}
+		if(!worker.isAvailable()) {
+			throw new OperationNotAllowedException("Worker is not available");
 		}
 		accumulatedHours.add(0);
 		workers.add(worker);
 		
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println("CURRENT ACTIVITY == null: ");
-		System.out.println(state.currentActivity() == null);
-		
 		if(this instanceof Project) worker.getAssignedProjects().add(state.currentProject());
 		if(this instanceof Activity) {
-			System.out.println("ADDED WORKER DETAILS");
 			worker.getAssignedActivities().add(state.currentActivity());
 			worker.getWorkedHoursOnActivities().add(0);
 		}
-		System.out.println("WORKED ACTIVITIES: " + worker.getAssignedActivities().toString());
 		
 		return true;
 	}

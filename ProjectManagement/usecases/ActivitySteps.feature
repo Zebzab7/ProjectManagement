@@ -35,6 +35,8 @@ Scenario: Worker asks for assistance successfully
 	And the project is selected
 	And the activity is selected
 	And that worker "RONALD" with password "HELP" exist
+	And the worker is working on the project
+	And the worker is not working on the activity
 	And the worker is eligable for help
 	When the worker calls for assistance
 	Then the worker "RONALD" is added to the activity
@@ -50,6 +52,11 @@ Scenario: Worker asks for assistance unsuccessfully
 	When the worker calls for assistance
 	Then the worker "RONALD" is added to the activity
 
-Scenario: Worker is available:
+Scenario: Worker is not available:
 	Given that the worker is logged in
-	And 
+	And that the worker is working on 20 projects
+	And the project with name "Programming 101" does exist
+	And the activity with name "Loops" is in the project
+	And the project is selected
+	When the worker is added to the activity
+	Then the error message "Worker is not available" is given

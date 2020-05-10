@@ -48,6 +48,35 @@ public class WorkerSteps {
 		assertFalse(managementApp.containsUser(name));
 	}
 	
+	@Given("that the worker is working on {int} activities")
+	public void thatTheWorkerIsWorkingOnProjects(int count) {
+	    for(int i = 0; i < count; i++) {
+	    	if(managementApp.getState().currentUser().getAssignedActivities().size()<= count) {
+	    		managementApp.getState().currentUser().getAssignedActivities().add(new Activity("Programmingtask 10" + count, managementApp.getState()));
+	    	}
+	    }
+	    assertEquals(managementApp.getState().currentUser().getAssignedActivities().size(), count);
+	}
+	
+	@Given("the worker is eligable for help")
+	public void theWorkerIsEligableForHelp() {
+	    itemHolder.getWorker().setHelpStatus(true);
+	}
+	
+	@Given("the worker is not eligable for help")
+	public void theWorkerIsNotEligableForHelp() {
+		itemHolder.getWorker().setHelpStatus(false);
+	}
+	
+	@When("the worker calls for assistance")
+	public void theWorkerCallsForAssistance() {
+	    try {
+			managementApp.getState().currentActivity().requestAssistance(itemHolder.getWorker());
+		} catch (OperationNotAllowedException e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
 	@When("the worker named {string} with password {string} is created")
 	public void theWorkerNamedWithPasswordIsCreated(String name, String password) throws Exception {
 		try {
@@ -79,4 +108,11 @@ public class WorkerSteps {
 	public void theWorkerIsContainedInApp() {
 	    assertTrue(managementApp.containsUser(itemHolder.getWorker().getUsername()));
 	}
+
+	@Then("the worker {string} is added to the activity")
+	public void theWorkerIsAddedToTheActivity(String string) {
+	    // Write code here that turns the phrase above into concrete actions
+	    throw new io.cucumber.java.PendingException();
+	}
+	
 }
