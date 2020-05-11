@@ -28,9 +28,6 @@ public class ManagementApp {
 		instance = null;
 	}
 	
-	public ArrayList<Worker> getUsers() {
-		return users;
-	}
 	public State getState() {
 		return state;
 	}
@@ -44,8 +41,10 @@ public class ManagementApp {
 		}
 		return true; 
 	}
-	public boolean addHours(int hours) throws OperationNotAllowedException {
-		if (!LoggedIn()) throw new OperationNotAllowedException("User login required");
+	
+	public boolean addHours(int hours) throws Exception {
+		
+		if (!LoggedIn()) throw new Exception("User login required");
 		else if (state.currentActivity() != null && LoggedIn()) {
 			state.currentActivity().addHours(hours);
 			state.currentProject().addHours(hours);
@@ -66,7 +65,7 @@ public class ManagementApp {
 				return true;
 			}
 		}
-		throw new OperationNotAllowedException("Worker does not exist");
+		throw new Exception("Worker does not exist");
 	}
 	
 	public boolean Logout() {
@@ -74,21 +73,21 @@ public class ManagementApp {
 		return true;
 	}
 	public boolean removeUser(Worker worker) throws Exception {
-		if (!LoggedIn()) throw new OperationNotAllowedException("User login required");
+		if (!LoggedIn()) throw new Exception("User login required");
 		users.remove(findWorker(worker.getUsername()));
 		return true;
 	}
-	public boolean removeProject(Project project) throws OperationNotAllowedException {
-		if (!LoggedIn()) throw new OperationNotAllowedException("User login required");
-		if (state.currentProject() != null || state.currentActivity() != null) throw new OperationNotAllowedException("User is outside of homepage");
+	public boolean removeProject(Project project) throws Exception {
+		if (!LoggedIn()) throw new Exception("User login required");
+		if (state.currentProject() != null || state.currentActivity() != null) throw new Exception("User is outside of homepage");
 		for(Worker w : project.getWorkerList()) {
 			w.getAssignedProjects().remove(project);
 		}
 		projects.remove(project);
 		return true;
 	}
-	public void removeFixedActivity(FixedActivity fActivity) throws OperationNotAllowedException {
-		if (!LoggedIn()) throw new OperationNotAllowedException("User login required");
+	public void removeFixedActivity(FixedActivity fActivity) throws Exception {
+		if (!LoggedIn()) throw new Exception("User login required");
 		fixedActivities.remove(fActivity);
 		state.currentUser().getAssignedFixedActivityList().remove(fActivity);
 	}
@@ -100,7 +99,7 @@ public class ManagementApp {
 		}
 		return false;
 	}
-	public boolean containsProject(String name) throws OperationNotAllowedException {
+	public boolean containsProject(String name) throws Exception {
 		for (Project p : projects) {
 			if (p.getName().equals(name)) {
 				return true;
@@ -132,49 +131,49 @@ public class ManagementApp {
 			if(worker.getUsername().length() > 4) {
 				throw new Exception("Username contains too many characters");
 			}
-			users.add(worker);
+			users.add(new Worker(worker.getUsername(), worker.getPassword()));
 			return true;
 		}
 		throw new Exception("User already exist");
 	}
 	public Worker findWorker(String name) throws Exception {
-		if (!LoggedIn()) throw new OperationNotAllowedException("User login required");
+		if (!LoggedIn()) throw new Exception("User login required");
 		for (Worker w : users) {
 			if (w.getUsername().equals(name)){
 				return w;
 			}
 		}
-		throw new OperationNotAllowedException("User does not exist");
+		throw new Exception("User does not exist");
 	}
 	public Project findProject(String projectName) throws Exception{
-		if (!LoggedIn()) throw new OperationNotAllowedException("User login required");
+		if (!LoggedIn()) throw new Exception("User login required");
 		for (Project project : projects) {
 			if (project.getName().equals(projectName)){
 				return project;
 			}
 		}
-		throw new OperationNotAllowedException("Project does not exist");
+		throw new Exception("Project does not exist");
 	}
-	public FixedActivity findFixedActivity(String fActivityName) throws OperationNotAllowedException{
-		if (!LoggedIn()) throw new OperationNotAllowedException("User login required");
+	public FixedActivity findFixedActivity(String fActivityName) throws Exception{
+		if (!LoggedIn()) throw new Exception("User login required");
 		for (FixedActivity f : fixedActivities) {
 			if (f.getName().equals(fActivityName)){
 				return f;
 			}
 		}
-		throw new OperationNotAllowedException("Fixed activity does not exist");
+		throw new Exception("Fixed activity does not exist");
 	}
-	public boolean addProject(Project project) throws OperationNotAllowedException {
-		if ( containsProject(project.getName()) ) throw new OperationNotAllowedException("Project already exist");
+	public boolean addProject(Project project) throws Exception {
+		if ( containsProject(project.getName()) ) throw new Exception("Project already exist");
 		projects.add(project);
 		project.setID(generateProjectID());
 		return true;
 	}
 	
-	public boolean createFixedActivity(FixedActivity fActivity) throws OperationNotAllowedException {
-		if (!LoggedIn()) throw new OperationNotAllowedException("User login required");
+	public boolean createFixedActivity(FixedActivity fActivity) throws Exception {
+		if (!LoggedIn()) throw new Exception("User login required");
 		if(containsFixedActivity(fActivity.getName(),state.currentUser().getUsername())) {
-			throw new OperationNotAllowedException("Fixed activity already exists");
+			throw new Exception("Fixed activity already exists");
 		}
 		fixedActivities.add(fActivity);
 		state.currentUser().getAssignedFixedActivityList().add(fActivity);

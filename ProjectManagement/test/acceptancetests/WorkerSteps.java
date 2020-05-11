@@ -56,7 +56,7 @@ public class WorkerSteps {
 	}
 	
 	@Given("the worker has amassed {int} hours for each activity")
-	public void amassedHoursPerActivity(int hours) throws OperationNotAllowedException {
+	public void amassedHoursPerActivity(int hours) throws Exception {
 	    
 		for(int i = 0; i < managementApp.getState().currentUser().getAssignedActivities().size(); i++) {
 			managementApp.getState().setActivity(managementApp.getState().currentUser().getAssignedActivities().get(i));
@@ -97,7 +97,7 @@ public class WorkerSteps {
 	}
 	
 	@When("the worker is removed from the app")
-	public void theWorkerIsRemovedFromTheApp() throws OperationNotAllowedException {
+	public void theWorkerIsRemovedFromTheApp() throws Exception {
 		try {
 			assertTrue(managementApp.removeUser(itemHolder.getWorker()));
 		} catch (Exception e) {
@@ -110,7 +110,7 @@ public class WorkerSteps {
 	public void theWorkerCallsForAssistance() {
 	    try {
 			itemHolder.getActivity().requestAssistance(itemHolder.getWorker());
-		} catch (OperationNotAllowedException e) {
+		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}

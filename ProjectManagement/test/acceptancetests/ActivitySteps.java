@@ -47,25 +47,25 @@ public class ActivitySteps {
 	}
 
 	@Given("the activity with name {string} is not in the project")
-	public void theActivityWithNameIsNotInTheProject(String name) throws OperationNotAllowedException {
+	public void theActivityWithNameIsNotInTheProject(String name) throws Exception {
 	    assertFalse(itemHolder.getProject().containsActivity(name));
 	}
 	
 	@Given("the activity with name {string} is in the project")
-	public void theActivityWithNameIsInTheProject(String name) throws OperationNotAllowedException {
+	public void theActivityWithNameIsInTheProject(String name) throws Exception {
 	   try {
 		   if (!itemHolder.getProject().containsActivity(name)) {
 			   itemHolder.setActivity(new Activity(name));
 			   itemHolder.getProject().addActivity(itemHolder.getActivity());
 		   }
 		   assertTrue(itemHolder.getProject().containsActivity(name));
-	    } catch (OperationNotAllowedException e) {
+	    } catch (Exception e) {
 			 errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
 	
 	@Given("the project has an activity named {string}")
-	public void theProjectHasAnActivityNamed(String name) throws OperationNotAllowedException {
+	public void theProjectHasAnActivityNamed(String name) throws Exception {
 		itemHolder.logInTemp();
 		if (!itemHolder.getProject().containsActivity(name)) {
 			itemHolder.setActivity(new Activity(name));
@@ -76,7 +76,7 @@ public class ActivitySteps {
 	}
 	
 	@Given("the activity has no work hours")
-	public void theActivityHasNoWorkHours() throws OperationNotAllowedException {
+	public void theActivityHasNoWorkHours() throws Exception {
 		try {
 			itemHolder.logInTemp();
 			itemHolder.getProject().addWorker(itemHolder.getTemp());
@@ -92,7 +92,7 @@ public class ActivitySteps {
 	}
 	
 	@Given("the activity is selected")
-	public void theActivityIsSelected() throws OperationNotAllowedException {
+	public void theActivityIsSelected() throws Exception {
 		if ( itemHolder.getActivity() != null && !itemHolder.getActivity().containsWorker(itemHolder.getWorker()) ) {
 			managementApp.getState().setActivity(itemHolder.getActivity());
 			itemHolder.getActivity().addWorker(itemHolder.getWorker());
@@ -101,7 +101,7 @@ public class ActivitySteps {
 	}
 	
 	@Given("the worker is working on the activity")
-	public void theWorkerIsWorkingOnTheActivity() throws OperationNotAllowedException {
+	public void theWorkerIsWorkingOnTheActivity() throws Exception {
 		if(!itemHolder.getActivity().containsWorker(itemHolder.getWorker())) {
 			itemHolder.getActivity().addWorker(itemHolder.getWorker());
 		}
@@ -109,7 +109,7 @@ public class ActivitySteps {
 	}
 	
 	@Given("the worker is not working on the activity")
-	public void theWorkerIsNotWorkingOnTheActivity() throws OperationNotAllowedException {
+	public void theWorkerIsNotWorkingOnTheActivity() throws Exception {
 		if (itemHolder.getActivity().containsWorker(itemHolder.getWorker())) {
 			itemHolder.getActivity().removeWorker(itemHolder.getWorker());
 		}
@@ -117,7 +117,7 @@ public class ActivitySteps {
 	}
 	
 	@When("the worker is added to the activity")
-	public void addWorkerToActivity() throws OperationNotAllowedException {
+	public void addWorkerToActivity() throws Exception {
 		try{
 			itemHolder.getActivity().addWorker(managementApp.getState().currentUser());
 		} catch (Exception e) {
@@ -153,12 +153,12 @@ public class ActivitySteps {
 	}
 	
 	@When("the worker adds {int} work hours to the activity succesfully")
-	public void theWorkerAddsWorkHoursToTheActivitySuccesfully(int hours) throws OperationNotAllowedException {
+	public void theWorkerAddsWorkHoursToTheActivitySuccesfully(int hours) throws Exception {
 			assertTrue(managementApp.addHours(hours));
 	}
 	
 	@When("the worker adds {int} work hours to the activity unsuccesfully")
-	public void theWorkerAddsWorkHoursToTheActivityUnsuccesfully(int hours) throws OperationNotAllowedException {
+	public void theWorkerAddsWorkHoursToTheActivityUnsuccesfully(int hours) throws Exception {
 		try {
 			assertFalse(managementApp.addHours(hours));
 		} catch (Exception e) {
@@ -181,7 +181,7 @@ public class ActivitySteps {
 	}
 	
 	@When("another worker adds {int} work hours to the activity successfully")
-	public void anotherWorkerAddsWorkHoursToTheActivitySuccessfully(int hours) throws OperationNotAllowedException {
+	public void anotherWorkerAddsWorkHoursToTheActivitySuccessfully(int hours) throws Exception {
 		try {
 			itemHolder.logInTemp();
 			if (!itemHolder.getProject().containsWorker(itemHolder.getTemp())) {
@@ -211,7 +211,7 @@ public class ActivitySteps {
 	}
 	
 	@When("worker adds the activity to the project")
-	public void workerAddsTheActivityToTheProject() throws OperationNotAllowedException {
+	public void workerAddsTheActivityToTheProject() throws Exception {
 		try {
 			assertTrue(itemHolder.getProject().addActivity(itemHolder.getActivity()));
 		} catch (Exception e) {
@@ -223,7 +223,7 @@ public class ActivitySteps {
 	public void workerRemovesActivity() {
 	    try {
 			managementApp.getState().currentProject().removeActivity(itemHolder.getActivity());
-		} catch (OperationNotAllowedException e) {
+		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
@@ -257,7 +257,7 @@ public class ActivitySteps {
 	}
 	
 	@Then("the activity is contained in the project")
-	public void theActivityIsContainedInTheProject() throws OperationNotAllowedException {
+	public void theActivityIsContainedInTheProject() throws Exception {
 	    assertTrue(itemHolder.getProject().containsActivity(itemHolder.getActivity().getName()));
 	}
 	@Then("the activity is not contained in the project")
@@ -268,7 +268,7 @@ public class ActivitySteps {
 	public void addedWorker(String string) {
 	    try {
 			assertTrue(managementApp.getState().currentActivity().containsWorker(itemHolder.getWorker()));
-		} catch (OperationNotAllowedException e) {
+		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
@@ -276,7 +276,7 @@ public class ActivitySteps {
 	public void notAddedWorker(String string) {
 	    try {
 			assertFalse(itemHolder.getActivity().containsWorker(itemHolder.getWorker()));
-		} catch (OperationNotAllowedException e) {
+		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}

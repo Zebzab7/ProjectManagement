@@ -15,7 +15,7 @@ public class Item {
 		this.name = name;
 		timeManager = new ItemTimeManager();
 	}
-	public void addHours(int hours) throws OperationNotAllowedException {
+	public void addHours(int hours) throws Exception {
 		this.hours += hours;
 	}
 	public int getHours() {
@@ -46,23 +46,23 @@ public class Item {
 		}
 		return null;
 	}
-	public boolean TimepreConditionsMet() throws OperationNotAllowedException {
+	public boolean TimepreConditionsMet() throws Exception {
 		if (getState().currentUser() == null ) {
-			throw new OperationNotAllowedException("User login required");
+			throw new Exception("User login required");
 		}
 		return true;
 	}
 	
-	public boolean preConditionsMet() throws OperationNotAllowedException {
+	public boolean preConditionsMet() throws Exception {
 		if(getState().currentUser() == null) {
-			throw new OperationNotAllowedException("User login required");
+			throw new Exception("User login required");
 		}
 		if(getState().currentActivity() != null && getState().currentProject() != null) {
 			return true;
 		}
 		return false;
 	}
-	public boolean containsWorker(Worker worker) throws OperationNotAllowedException {
+	public boolean containsWorker(Worker worker) throws Exception {
 		for (Worker w : workers) {
 			if (w.getUsername().equals(worker.getUsername())) {
 				return true;
@@ -71,12 +71,12 @@ public class Item {
 		return false;
 	}
 	
-	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
+	public boolean addWorker(Worker worker) throws Exception {
 		if(worker.isAbsent() && !(this instanceof Project)) {
-			throw new OperationNotAllowedException("Worker is absent");
+			throw new Exception("Worker is absent");
 		}
 		if(!worker.isAvailable() && (this instanceof Activity)) {
-			throw new OperationNotAllowedException("Worker is not available");
+			throw new Exception("Worker is not available");
 		}
 		accumulatedHours.add(0);
 		workers.add(worker);

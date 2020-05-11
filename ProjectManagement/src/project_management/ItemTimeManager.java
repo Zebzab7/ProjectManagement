@@ -42,21 +42,23 @@ public class ItemTimeManager {
 	 *  	- Time must be valid 
 	 */ 
 	
-	public boolean setStartTime(int year, int month, int day, Item object) throws OperationNotAllowedException {
+	public boolean setStartTime(int year, int month, int day, Item object) throws Exception {
 		if(object.TimepreConditionsMet()) {
 			startTime = new GregorianCalendar(year, month - 1, day);
 			if (endTime != null && startTime.after(endTime)) {
-				throw new OperationNotAllowedException("Deadline is invalid");
+				startTime = null;
+				throw new Exception("Deadline is invalid");
 			}
 		}
 		return true;
 	}
 	
-	public boolean setEndTime(int year, int month, int day, Item object) throws OperationNotAllowedException {
+	public boolean setEndTime(int year, int month, int day, Item object) throws Exception {
 		if(object.TimepreConditionsMet()) {
 			endTime = new GregorianCalendar(year, month - 1, day);
 			if (startTime != null && startTime.after(endTime)) {
-				throw new OperationNotAllowedException("Deadline is invalid");
+				endTime = null;
+				throw new Exception("Deadline is invalid");
 			}
 		}
 		return true;
@@ -77,19 +79,16 @@ public class ItemTimeManager {
 	 * Returns true if the project is overdue, false otherwise
 	 * Will cause an exception if no deadline has been set
 	 */
-	public boolean deadlineOverdue() throws OperationNotAllowedException {
+	public boolean deadlineOverdue() throws Exception {
 		if(this.endTime != null) {
 			this.currentTime = new GregorianCalendar();
 			if(currentTime.after(endTime)) {
-				System.out.println("is overdue");
 				return true;
 			}
-			System.out.println("is not overdue");
 			return false;
 		}
 		else {
-			System.out.println("FAIL");
-			throw new OperationNotAllowedException("Deadline must be instantiated");
+			throw new Exception("Deadline must be instantiated");
 		}
 	}
 	
