@@ -10,9 +10,13 @@ public class ManagementApp {
 	private ArrayList<String> workerHours = new ArrayList<String>();
 	private ArrayList<FixedActivity> fixedActivities = new ArrayList<FixedActivity>();
 	private State state = new State();
+	private int ID = 0;
 	
 	public State getState() {
 		return state;
+	}
+	public ArrayList<Project> getProjects() {
+		return projects;
 	}
 	
 	public boolean LoggedIn() {
@@ -143,8 +147,8 @@ public class ManagementApp {
 	}
 	public boolean addProject(Project project) throws OperationNotAllowedException {
 		if ( containsProject(project.getName()) ) throw new OperationNotAllowedException("Project already exist");
-		
 		projects.add(project);
+		project.setID(generateProjectID());
 		return true;
 	}
 	
@@ -157,27 +161,27 @@ public class ManagementApp {
 		state.currentUser().getAssignedFixedActivityList().add(fActivity);
 		return true;
 	}
-	private String generateProjectID(Project project) {
-GregorianCalendar projectDate = new GregorianCalendar();
+	private String generateProjectID() {
+		GregorianCalendar projectDate = new GregorianCalendar();
 		
 		String month = "" + projectDate.get(GregorianCalendar.MONTH);
 		String year = String.valueOf(projectDate.get(GregorianCalendar.YEAR)).substring(2);
-		String project = "0" + projects.size();
-		if(projects.size() >= 9 && projects.size() <= 99) {
-			project = "" + projects.size();
+		String projectNumber = "0" + ID;
+		
+		if(ID > 99) {
+			ID = 0;
+			projectNumber = "0" + ID;
 		}
-		if(projects.size() > 99) {
-			int count = 0;
-			for(int i = 0; i < projects.size(); i++) {
-				count++;
-			}
-			project = String.valueOf(projects.size()).substring(count - 2);
+		else if(ID > 9 && ID <= 99) {
+			projectNumber = "" + ID;
 		}
 		
 		if(projectDate.get(GregorianCalendar.MONTH) < 10) {
 			month = "0" + projectDate.get(GregorianCalendar.MONTH);
 		}
 		
-		return "" + month + year + project;
+		ID++;
+		
+		return "" + month + year + projectNumber;
 	}
 }

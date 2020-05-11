@@ -98,3 +98,10 @@ Scenario: Multiple activities in project
 	And the activity with name "Loops" is in the project
 	And the activity with name "Loops2" is in the project
 	Then there are currently 2 activities in the project
+	
+Scenario: Get project ID
+	Given that the worker is logged in
+	And that there are currently 102 projects in the app
+	And the project with name "Programming 646" does exist
+	And the project is selected
+	Then the last two digits of the projects ID is "02"

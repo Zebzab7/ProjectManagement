@@ -14,6 +14,18 @@ Scenario: Worker is created but already exists
 	When the worker named "PEPE" with password "1234" is created
  	Then the error message "User already exist" is given
  	
+Scenario: Worker has faulty username
+ 	Given that the worker is logged in
+	And that worker "THOMAS" with password "1234" does not exist
+	When the worker named "THOMAS" with password "1234" is created
+ 	Then the error message "Username contains too many characters" is given
+ 	
+Scenario: Worker has faulty username
+ 	Given that the worker is logged in
+	And that worker "THOMAS" with password "1234" does not exist
+	When the worker named "THOMAS" with password "1234" is added to the app
+ 	Then the error message "User already exist" is given
+
 Scenario: Worker is succesfully created
 	Given that the worker is logged in 
 	And that worker "PEPX" with password "1234" does not exist

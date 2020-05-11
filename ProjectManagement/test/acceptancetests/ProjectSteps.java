@@ -103,6 +103,15 @@ public class ProjectSteps {
 		assertTrue(managementApp.getState().setProject(itemHolder.getProject()));
 	}
 	
+	@Given("that there are currently {int} projects in the app")
+	public void numberOfProjects(int number) throws OperationNotAllowedException {
+		for(int i = 0; i < number; i++) {
+			if(managementApp.getProjects().size() <= number) {
+	    		managementApp.addProject(new Project("Programming 10" + i, managementApp.getState()));
+	    	}
+		}
+	}
+	
 	@When("the worker finds the worker with name {string} in the project succesfully")
 	public void theWorkerFindsTheWorkerWithNameInTheProjectSuccesfully(String name) {
 		workerFound = itemHolder.getProject().findWorker(name);
@@ -302,6 +311,13 @@ public class ProjectSteps {
 	@Then("there are currently {int} activities in the project")
 	public void numberOfActivities(int number) {
 		assertEquals(managementApp.getState().currentProject().getActivityList().size(),number);
+	}
+	
+	@Then("the last two digits of the projects ID is {string}")
+	public void CheckID(String ID) {
+		System.out.println("ID:");
+		System.out.println(managementApp.getState().currentProject().getID());
+		assertTrue(managementApp.getState().currentProject().getID().substring(4).equals(ID));
 	}
 	
 }
