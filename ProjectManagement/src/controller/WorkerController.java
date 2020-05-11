@@ -50,10 +50,10 @@ public class WorkerController implements Initializable {
 	
 //	Initialize
 	public void addExampleProjects() throws OperationNotAllowedException {
-		managementApp.addProject(new Project("Example project1"));
-		managementApp.addProject(new Project("Example project2"));
-		managementApp.addProject(new Project("Example project3"));
-		managementApp.addProject(new Project("Example project4"));
+//		managementApp.addProject(new Project("Example project1"));
+//		managementApp.addProject(new Project("Example project2"));
+//		managementApp.addProject(new Project("Example project3"));
+//		managementApp.addProject(new Project("Example project4"));
 	}
 	private void init() {
 		lblWorkerID.setText("Welcome back: "+managementApp.getState().currentUser().getUsername());
@@ -72,6 +72,14 @@ public class WorkerController implements Initializable {
 			updateListView2();
 		} catch(Exception e) {
 			
+		}
+		try {
+			ArrayList<Project> assignedProjects = managementApp.getState().currentUser().getAssignedProjects();
+			for(Project p : assignedProjects) {
+				listView2.getItems().add(p.getName());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		updateListView3();
 	}
@@ -105,6 +113,10 @@ public class WorkerController implements Initializable {
 				} else {
 					lblAssignedProject.setText("Select assigned project");
 				}
+				
+//				updateListView2();
+				
+				
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -165,12 +177,14 @@ public class WorkerController implements Initializable {
 	
 	public void AddUserToProject(ActionEvent e) throws Exception {
 		if(selectedProject != null) {
-			//managementApp.addWorkerToProject(managementApp.getState().currentUser(), selectedProject);
-			selectedProject.addWorker(managementApp.getState().currentUser());
+			if(!selectedProject.containsWorker(managementApp.getState().currentUser())) {
+				selectedProject.addWorker(managementApp.getState().currentUser());
+				System.out.println(selectedProject.getWorkerList());
+				updateListView2();
+				listView2.getItems().add(selectedProject.getName());
+				lblStatus.setText("You are now working on project "+selectedProject.getName());
+			}
 			
-			
-			listView2.getItems().add(selectedProject.getName());
-			lblStatus.setText("You are now working on project "+selectedProject.getName());
 		}
 		
 	}
@@ -204,7 +218,6 @@ public class WorkerController implements Initializable {
 	}
 	
 //	Methods
-	
 	private void updateListView1() {
 		listView1.getItems().clear();
 		ArrayList<Project> projects = managementApp.getProjects();
@@ -215,17 +228,6 @@ public class WorkerController implements Initializable {
 	
 	private void updateListView2() {
 		listView2.getItems().clear();
-		
-		ArrayList<Project> assignedProjects = null;
-		try {
-			//assignedProjects = managementApp.currentAssignedProjects(managementApp.getState().currentUser());
-			assignedProjects = managementApp.getProjects();
-			for(Project p : assignedProjects) {
-				listView2.getItems().add(p.getName());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	private void updateListView3() {

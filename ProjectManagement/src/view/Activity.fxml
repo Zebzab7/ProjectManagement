@@ -2,9 +2,9 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ActivityController">
@@ -20,9 +20,10 @@
             <TableColumn fx:id="hours" prefWidth="95.0" text="hours" />
         </columns>
       </TableView>
-      <TextField fx:id="txtHours" layoutX="298.0" layoutY="136.0" promptText="enter number" />
-      <Label layoutX="296.0" layoutY="107.0" text="Add time in ½ hour intervals" />
+      <Label layoutX="296.0" layoutY="107.0" text="Enter how long you worked:" />
       <Button layoutX="296.0" layoutY="174.0" mnemonicParsing="false" onAction="#LogTime" text="Log time" />
       <Button layoutX="414.0" layoutY="9.0" mnemonicParsing="false" onAction="#LogOut" text="Log out" />
+      <Slider fx:id="slider" blockIncrement="1.0" layoutX="298.0" layoutY="150.0" majorTickUnit="1.0" max="20.0" minorTickCount="0" prefHeight="18.0" prefWidth="187.0" showTickMarks="true" snapToTicks="true" />
+      <Label fx:id="lblSlider" layoutX="296.0" layoutY="128.0" text="Hours: 0" />
    </children>
 </AnchorPane>

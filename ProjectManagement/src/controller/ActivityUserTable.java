@@ -1,18 +1,19 @@
 package controller;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class ActivityUserTable {
 	private final SimpleIntegerProperty id;
 	private final SimpleStringProperty name;
-	private final SimpleIntegerProperty hours;
+	private final SimpleDoubleProperty hours;
 	
-	public ActivityUserTable(Integer id, String name, Integer hours) {
+	public ActivityUserTable(Integer id, String name, double d) {
 		super();
 		this.id = new SimpleIntegerProperty(id);
 		this.name = new SimpleStringProperty(name);
-		this.hours = new SimpleIntegerProperty(hours);
+		this.hours = new SimpleDoubleProperty(d);
 	}
 
 	public Integer getId() {
@@ -23,7 +24,7 @@ public class ActivityUserTable {
 		return name.get();
 	}
 
-	public Integer getHours() {
+	public double getHours() {
 		return hours.get();
 	}
 }

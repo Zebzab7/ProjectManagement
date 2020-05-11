@@ -81,6 +81,7 @@ public class ProjectController implements Initializable {
 			try {
 				if(selectedActivity.findWorker(managementApp.getState().currentUser().getUsername()) == null) {
 					selectedActivity.addWorker(managementApp.getState().currentUser());
+					managementApp.getState().currentUser().addActivity(selectedActivity);
 				}
 				managementApp.getState().setActivity(selectedActivity);
 				
@@ -170,7 +171,7 @@ public class ProjectController implements Initializable {
 		}
 		
 		lblWorkerCounter.setText("Workers on this project: "+workerCounter+"");
-		lblWorkedHours.setText("Worked hours: "+project.getHours());
+		lblWorkedHours.setText("Worked hours: "+project.getHours()/2.0);
 	}
 	
 	public void updateTaskList() throws OperationNotAllowedException {

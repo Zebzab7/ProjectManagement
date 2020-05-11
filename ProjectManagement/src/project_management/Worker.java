@@ -87,4 +87,14 @@ public class Worker {
 		}
 	}
 	
+//	METHODS FOR GUI
+
+	public boolean addAssignedProject(Project p) {												
+		
+		if(assignedProjects.contains(p)) {
+			return false;
+		}
+		return assignedProjects.add(p);
+	}
+	
 }

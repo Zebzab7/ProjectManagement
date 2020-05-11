@@ -96,4 +96,15 @@ public class Item {
 		
 		return true;
 	}
+	public ArrayList<Integer> getAccumulatedHours() {
+		return accumulatedHours;
+	}
+	
+	public void addHoursToWorker(int hours) {
+		for(int i = 0; i < workers.size(); i++) {
+			if(workers.get(i).getUsername().equals(state.currentUser().getUsername())) {
+				accumulatedHours.set(i, accumulatedHours.get(i) + hours);
+			}
+		}
+	}
 }
