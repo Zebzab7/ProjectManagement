@@ -1,7 +1,7 @@
 package project_management;
 
 import java.util.ArrayList;
-
+import java.util.GregorianCalendar;
 import java.util.stream.Collectors;
 
 public class ManagementApp {
@@ -9,10 +9,30 @@ public class ManagementApp {
 	private ArrayList<Worker> users = new ArrayList<Worker>();
 	private ArrayList<String> workerHours = new ArrayList<String>();
 	private ArrayList<FixedActivity> fixedActivities = new ArrayList<FixedActivity>();
-	private State state = new State();
+	private State state = State.getInstance();
+	private int ID = 0;
+	
+	private static ManagementApp instance;
+	private ManagementApp() {
+	}
+	
+	public static ManagementApp getInstance() {
+		if (instance == null) {
+			instance = new ManagementApp();
+		}
+		return instance;
+	}
+	
+	//used for cucumber reset
+	public static void deleteInstance() {
+		instance = null;
+	}
 	
 	public State getState() {
 		return state;
+	}
+	public ArrayList<Project> getProjects() {
+		return projects;
 	}
 	
 	public boolean LoggedIn() {
@@ -95,17 +115,22 @@ public class ManagementApp {
 	}
 	public boolean createUser(String username, String password) throws Exception {
 		if (!containsUser(username)) {
-			if (users.add(new Worker(username, password))) {
-				return true;
+			if(username.length() > 4) {
+				throw new Exception("Username contains too many characters");
 			}
+			users.add(new Worker(username, password));
+			return true;
 		}
 		throw new Exception("User already exist");
 	}
 	public boolean addWorker(Worker worker) throws Exception {
+		
 		if (!containsUser(worker.getUsername())) {
-			if (users.add(new Worker(worker.getUsername(), worker.getPassword()))) {
-				return true;
+			if(worker.getUsername().length() > 4) {
+				throw new Exception("Username contains too many characters");
 			}
+			users.add(new Worker(worker.getUsername(), worker.getPassword()));
+			return true;
 		}
 		throw new Exception("User already exist");
 	}
@@ -139,6 +164,7 @@ public class ManagementApp {
 	public boolean addProject(Project project) throws OperationNotAllowedException {
 		if ( containsProject(project.getName()) ) throw new OperationNotAllowedException("Project already exist");
 		projects.add(project);
+		project.setID(generateProjectID());
 		return true;
 	}
 	
@@ -151,6 +177,29 @@ public class ManagementApp {
 		state.currentUser().getAssignedFixedActivityList().add(fActivity);
 		return true;
 	}
+	private String generateProjectID() {
+		GregorianCalendar projectDate = new GregorianCalendar();
+		
+		String month = "" + projectDate.get(GregorianCalendar.MONTH);
+		String year = String.valueOf(projectDate.get(GregorianCalendar.YEAR)).substring(2);
+		String projectNumber = "0" + ID;
+		
+		if(ID > 99) {
+			ID = 0;
+			projectNumber = "0" + ID;
+		}
+		else if(ID > 9 && ID <= 99) {
+			projectNumber = "" + ID;
+		}
+		
+		if(projectDate.get(GregorianCalendar.MONTH) < 10) {
+			month = "0" + projectDate.get(GregorianCalendar.MONTH);
+		}
+		
+		ID++;
+		
+		return "" + month + year + projectNumber;
+	}
 	
 //	ADDED METHODS IN MANAGEMENT APP
 	public void addWorkerToProject(Worker worker, Project project) throws Exception{
@@ -159,10 +208,6 @@ public class ManagementApp {
 		}
 		state.currentUser().addAssignedProject(project);
 		project.getWorkerList().add(worker);
-	}
-
-	public ArrayList<Project> getProjects() {
-		return projects;
 	}
 
 	public ArrayList<Worker> getUsers() {

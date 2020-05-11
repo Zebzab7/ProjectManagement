@@ -4,17 +4,16 @@ import java.util.ArrayList;
 
 public class Item {
 	private String name;
-	private State state;
+	private State state = State.getInstance();
 	private ItemTimeManager timeManager;
 	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
 	private boolean preConditions = false;
 	private int hours = 0;
 	
-	public Item(String name, State state) {
+	public Item(String name) {
 		this.name = name;
-		this.state = state;
-		timeManager = new ItemTimeManager(state);
+		timeManager = new ItemTimeManager();
 	}
 	public void addHours(int hours) throws OperationNotAllowedException {
 		this.hours += hours;
@@ -73,20 +72,17 @@ public class Item {
 	}
 	
 	public boolean addWorker(Worker worker) throws OperationNotAllowedException {
-		if(worker.isAbsent() && !(this instanceof Project)) {									//1
+		if(worker.isAbsent() && !(this instanceof Project)) {
 			throw new OperationNotAllowedException("Worker is absent");
 		}
-		if(!worker.isAvailable() && (this instanceof Activity)) {								//2
+		if(!worker.isAvailable() && (this instanceof Activity)) {
 			throw new OperationNotAllowedException("Worker is not available");
 		}
 		accumulatedHours.add(0);
 		workers.add(worker);
 		
-		if(this instanceof Project) worker.getAssignedProjects().add(state.currentProject());	//3
-		if(this instanceof Activity) {															//4
-			worker.getAssignedActivities().add(state.currentActivity());
-			worker.getWorkedHoursOnActivities().add(0);			
-		}
+		if(this instanceof Project) worker.getAssignedProjects().add(state.currentProject());
+		if(this instanceof Activity) worker.addActivity(state.currentActivity());
 		
 		return true;
 	}
@@ -96,12 +92,10 @@ public class Item {
 		workers.remove(worker);
 		
 		if(this instanceof Project) worker.getAssignedProjects().remove(state.currentProject());
-		if(this instanceof Activity) worker.getAssignedActivities().remove(state.currentActivity());
+		if(this instanceof Activity) worker.removeActivity(state.currentActivity());
 		
 		return true;
 	}
-	
-//	ADDED METHODS IN ITEM
 	public ArrayList<Integer> getAccumulatedHours() {
 		return accumulatedHours;
 	}

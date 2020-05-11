@@ -6,7 +6,7 @@ public class ItemTimeManager {
 	private ArrayList<GregorianCalendar> absenteesReturn = new ArrayList<GregorianCalendar>();
 	private ArrayList<Worker> absentees = new ArrayList<Worker>();
 	
-	private State state;
+	private State state = State.getInstance();
 	private GregorianCalendar startTime = null;
 	private GregorianCalendar endTime = null;
 	private GregorianCalendar currentTime, absentee;
@@ -30,8 +30,7 @@ public class ItemTimeManager {
 	/*
 	 * Constructor
 	 */
-	public ItemTimeManager(State state) {
-		this.state = state;
+	public ItemTimeManager() {
 	}
 	
 	/* 

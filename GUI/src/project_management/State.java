@@ -5,6 +5,21 @@ public class State {
 	private Project cProject;
 	private Activity cActivity;
 	private FixedActivity cFixedActivity;
+	private static State instance;
+	
+	private State() {
+	}
+	
+	public static State getInstance() {
+		if(instance == null) {
+			instance = new State();
+		}
+		return instance;
+	}
+	// used for cucumber
+	public static void deleteInstance() {
+		instance = null;
+	}
 	
 	public Worker currentUser() {
 		return cUser;
