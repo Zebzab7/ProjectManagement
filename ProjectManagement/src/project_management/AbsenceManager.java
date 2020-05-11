@@ -1,6 +1,5 @@
 package project_management;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 public class AbsenceManager {
@@ -17,11 +16,11 @@ public class AbsenceManager {
 	public AbsenceManager() {
 	}
 	
-	public boolean setStartTime(int year, int month, int day) throws OperationNotAllowedException {
+	public boolean setStartTime(int year, int month, int day) throws Exception {
 		startTime = new GregorianCalendar(year, month - 1, day);
 		return true;
 	}
-	public boolean setEndTime(int year, int month, int day) throws OperationNotAllowedException {
+	public boolean setEndTime(int year, int month, int day) throws Exception {
 		endTime = new GregorianCalendar(year, month - 1, day);
 		return true;
 	}

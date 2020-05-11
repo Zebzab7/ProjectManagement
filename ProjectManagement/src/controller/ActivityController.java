@@ -28,7 +28,6 @@ import javafx.stage.Stage;
 import project_management.Activity;
 import project_management.ItemTimeManager;
 import project_management.ManagementApp;
-import project_management.OperationNotAllowedException;
 import project_management.Project;
 import project_management.State;
 import runner_class.Main;
@@ -92,7 +91,7 @@ public class ActivityController implements Initializable {
 		});
 	}
 		
-	public void initialize(Activity a) throws OperationNotAllowedException {
+	public void initialize(Activity a) throws Exception {
 		this.managementApp = Main.getManagementApp();
 		this.activity = managementApp.getState().currentActivity();
 		this.project = managementApp.getState().currentProject();
@@ -107,7 +106,7 @@ public class ActivityController implements Initializable {
 		updateTimeLabels();
 	}
 	
-	public void SetTime(ActionEvent event) throws OperationNotAllowedException {
+	public void SetTime(ActionEvent event) throws Exception {
 		int[] start = splitTimeInput(txtTime.getText()+"/");
 		int[] end = splitTimeInput(txtTime1.getText()+"/");
 		
@@ -120,7 +119,7 @@ public class ActivityController implements Initializable {
 	}
 
 	
-	private void updateTimeLabels() throws OperationNotAllowedException {
+	private void updateTimeLabels() throws Exception {
 		ItemTimeManager t = State.getInstance().currentActivity().getTimeManager();
 		System.out.print(t.containsTimeSpecifications());
 		if(t.containsTimeSpecifications()) {

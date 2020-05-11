@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class Project extends Item {
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
 	
-	private int expectedTime;
 	private String ID;
 	
 	private Worker projectLeader;
@@ -43,13 +42,13 @@ public class Project extends Item {
 		return hours;
 	}
 	
-	public boolean TimepreConditionsMet() throws OperationNotAllowedException {
+	public boolean TimepreConditionsMet() throws Exception {
 		if (getState().currentProject() == this && super.TimepreConditionsMet()) {
 			if (!containsWorker(getState().currentUser())) {
-				throw new OperationNotAllowedException("User is not assigned to the project");
+				throw new Exception("User is not assigned to the project");
 			}
 			if (getProjectLeader() != getState().currentUser()) {
-				   throw new OperationNotAllowedException("User is not the project leader");
+				   throw new Exception("User is not the project leader");
 			}
 			return true;
 			
@@ -89,22 +88,22 @@ public class Project extends Item {
 	}
 	
 
-	public boolean addActivity(Activity activity) throws OperationNotAllowedException {
+	public boolean addActivity(Activity activity) throws Exception {
 		if ( getState().currentUser() == null ) {
-			throw new OperationNotAllowedException("User login required");
+			throw new Exception("User login required");
 		}
 		if (!containsActivity(activity.getName())) {
 			activities.add(activity);
 			return true;
 		}
-		throw new OperationNotAllowedException("The activity already exists in the project");
+		throw new Exception("The activity already exists in the project");
 	}
 	
-	public boolean removeActivity(Activity activity) throws OperationNotAllowedException {
+	public boolean removeActivity(Activity activity) throws Exception {
 		if ( getState().currentUser() == null ) {
-			throw new OperationNotAllowedException("User login required");
+			throw new Exception("User login required");
 		}
-		if (getState().currentActivity() != null) throw new OperationNotAllowedException("User is in an activity");
+		if (getState().currentActivity() != null) throw new Exception("User is in an activity");
 		if (containsActivity(activity.getName())) {
 			for(Worker w : super.getWorkerList()) {
 				w.removeActivity(activity);
@@ -112,7 +111,7 @@ public class Project extends Item {
 			activities.remove(activity);
 			return true;
 		}
-		throw new OperationNotAllowedException("The activity is not contained in the project");
+		throw new Exception("The activity is not contained in the project");
 	}
 	
 	public void setID(String string) {

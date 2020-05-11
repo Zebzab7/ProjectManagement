@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 import project_management.Activity;
 import project_management.ItemTimeManager;
 import project_management.ManagementApp;
-import project_management.OperationNotAllowedException;
 import project_management.Project;
 import project_management.State;
 import project_management.Worker;
@@ -66,14 +65,14 @@ public class ProjectController implements Initializable {
 	private Activity selectedActivity;
 	
 //	Initialize
-	public void init() throws OperationNotAllowedException {
+	public void init() throws Exception {
 		updateLabels();
 		updateWorkerList();
 		updateTimeLabels();
 		
 		try {
 			updateTaskList();
-		} catch (OperationNotAllowedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -86,7 +85,7 @@ public class ProjectController implements Initializable {
 		
 		try {
 			init();
-		} catch (OperationNotAllowedException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -96,7 +95,7 @@ public class ProjectController implements Initializable {
 		});
 	}
 	
-	public void SetTime(ActionEvent event) throws OperationNotAllowedException {
+	public void SetTime(ActionEvent event) throws Exception {
 		int[] start = splitTimeInput(txtTime.getText()+"/");
 		int[] end = splitTimeInput(txtTime1.getText()+"/");
 		
@@ -109,7 +108,7 @@ public class ProjectController implements Initializable {
 	}
 
 	
-	private void updateTimeLabels() throws OperationNotAllowedException {
+	private void updateTimeLabels() throws Exception {
 		ItemTimeManager t = State.getInstance().currentProject().getTimeManager();
 		System.out.print(t.containsTimeSpecifications());
 		if(t.containsTimeSpecifications()) {
@@ -177,7 +176,7 @@ public class ProjectController implements Initializable {
 		}
 	}
 	
-	public void CreateActivity(ActionEvent event) throws OperationNotAllowedException {
+	public void CreateActivity(ActionEvent event) throws Exception {
 		if(projectLeader.getUsername() == managementApp.getState().currentUser().getUsername()) {
 			String name = activityName.getText();
 			String estimate = activityET.getText();
@@ -247,7 +246,7 @@ public class ProjectController implements Initializable {
 		lblWorkedHours.setText("Worked hours: "+project.getHours()/2.0);
 	}
 	
-	public void updateTaskList() throws OperationNotAllowedException {
+	public void updateTaskList() throws Exception {
 		listView1.getItems().clear();
 		for(Activity task : project.getActivityList()) {
 			listView1.getItems().add(task.getName());

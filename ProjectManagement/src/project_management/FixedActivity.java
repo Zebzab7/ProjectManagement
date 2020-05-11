@@ -1,7 +1,5 @@
 package project_management;
 
-import java.util.ArrayList;
-
 public class FixedActivity {
 	private Worker absentee;
 	private AbsenceManager absenceManager;

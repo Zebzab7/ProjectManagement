@@ -34,7 +34,7 @@ public class FixedActivitySteps {
 	}
 	
 	@Given("that the fixed activity with the worker called {string} does exist")
-	public void fixedActivityExists(String fixedActivity) throws OperationNotAllowedException {
+	public void fixedActivityExists(String fixedActivity) throws Exception {
 		managementApp.createFixedActivity(new FixedActivity(fixedActivity, itemHolder.getWorker()));
 		managementApp.getState().setFixedActivity(managementApp.findFixedActivity(fixedActivity));
 		itemHolder.setFixedActivity(managementApp.findFixedActivity(fixedActivity));
@@ -54,7 +54,7 @@ public class FixedActivitySteps {
 			
 			managementApp.getState().setFixedActivity(managementApp.findFixedActivity(fixedActivity));
 			itemHolder.setFixedActivity(managementApp.findFixedActivity(fixedActivity));
-		} catch (OperationNotAllowedException e) {
+		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 		
@@ -68,12 +68,12 @@ public class FixedActivitySteps {
 //	}
 	
 	@When("the workers leave date is on the {int}-{int}-{int}")
-	public void setLeaveDate(int year, int month, int day) throws OperationNotAllowedException {
+	public void setLeaveDate(int year, int month, int day) throws Exception {
 		assertTrue(managementApp.getState().currentFixedActivity().getAbsenceManager().setStartTime(year, month, day));
 	}
 	
 	@When("the workers return date is on the {int}-{int}-{int}")
-	public void setReturnDate(int year, int month, int day) throws OperationNotAllowedException {
+	public void setReturnDate(int year, int month, int day) throws Exception {
 		assertTrue(managementApp.getState().currentFixedActivity().getAbsenceManager().setEndTime(year, month, day));
 	}
 	
@@ -81,7 +81,7 @@ public class FixedActivitySteps {
 	public void findFixedActivity(String fActivity) {
 	    try{
 	    	managementApp.findFixedActivity(fActivity);
-	    } catch(OperationNotAllowedException e) {
+	    } catch(Exception e) {
 	    	errorMessage.setErrorMessage(e.getMessage());
 	    }
 	}
@@ -89,7 +89,7 @@ public class FixedActivitySteps {
 	public void removeFixedActivity() {
 		try {
 			managementApp.removeFixedActivity(managementApp.getState().currentFixedActivity());
-		} catch (OperationNotAllowedException e) {
+		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
@@ -116,7 +116,7 @@ public class FixedActivitySteps {
 	}
 	
 	@Then("the worker has returned")
-	public void workerHasReturned() throws OperationNotAllowedException {
+	public void workerHasReturned() throws Exception {
 		managementApp.removeFixedActivity(itemHolder.getFixedActivity());
 		
 		assertTrue(managementApp.getState().currentUser().isAvailable());

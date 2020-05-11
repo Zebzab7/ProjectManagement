@@ -52,13 +52,13 @@ public class ProjectSteps {
 			assertTrue(managementApp.containsProject(name));
 			this.projectName = name;
 			itemHolder.logOutTemp();
-	    } catch (OperationNotAllowedException e) {
+	    } catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
 	
 	@Given("the worker is working on the project")
-	public void theWorkerIsWorkingOnTheProject() throws OperationNotAllowedException, Exception {
+	public void theWorkerIsWorkingOnTheProject() throws Exception, Exception {
 		if(!itemHolder.getProject().containsWorker(itemHolder.getWorker())) {
 			itemHolder.getProject().addWorker(itemHolder.getWorker());
 		}
@@ -67,12 +67,12 @@ public class ProjectSteps {
 		
 	
 	@Given("worker with name {string} and password {string} is contained in the project")
-	public void workerWithNameAndPasswordIsContainedInTheProject(String name, String password) throws OperationNotAllowedException {
+	public void workerWithNameAndPasswordIsContainedInTheProject(String name, String password) throws Exception {
 		assertTrue(itemHolder.getProject().addWorker(new Worker(name, password)));
 	}
 	
 	@Given("the worker is not working on the project")
-	public void theWorkerIsNotWorkingOnTheProject() throws OperationNotAllowedException {
+	public void theWorkerIsNotWorkingOnTheProject() throws Exception {
 		worker = itemHolder.getWorker();
 		if ( itemHolder.getProject().containsWorker(managementApp.getState().currentUser()) ) {
 			itemHolder.getProject().removeWorker(worker);
@@ -94,7 +94,7 @@ public class ProjectSteps {
 	}
 	
 	@Given("the project is selected")
-	public void theProjectIsSelected() throws OperationNotAllowedException {
+	public void theProjectIsSelected() throws Exception {
 		if ( itemHolder.getProject() != null && !itemHolder.getProject().containsWorker(itemHolder.getWorker()) ) {
 			managementApp.getState().setProject(itemHolder.getProject());
 			itemHolder.getProject().addWorker(itemHolder.getWorker());
@@ -103,7 +103,7 @@ public class ProjectSteps {
 	}
 	
 	@Given("that there are currently {int} projects in the app")
-	public void numberOfProjects(int number) throws OperationNotAllowedException {
+	public void numberOfProjects(int number) throws Exception {
 		for(int i = 0; i < number; i++) {
 			if(managementApp.getProjects().size() <= number) {
 	    		managementApp.addProject(new Project("Programming 10" + i));
@@ -129,7 +129,7 @@ public class ProjectSteps {
 			assertTrue(managementApp.addProject(new Project(name)));
 		    managementApp.getState().setProject(managementApp.findProject(name));
 			projectName = name;
-		} catch (OperationNotAllowedException e) {
+		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
@@ -161,7 +161,7 @@ public class ProjectSteps {
 	public void theWorkerRemovesTheProjectFromTheApp() {
 		try {
 			assertTrue(managementApp.removeProject(itemHolder.getProject()));
-		} catch (OperationNotAllowedException e) {
+		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
@@ -200,7 +200,7 @@ public class ProjectSteps {
 	public void deadlineCheck() {
 		try {
 			managementApp.getState().currentProject().getTimeManager().deadlineOverdue();
-		} catch (OperationNotAllowedException e) {
+		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
@@ -238,12 +238,12 @@ public class ProjectSteps {
 	}
 	
 	@Then("the project is contained in the app")
-	public void theProjectIsContainedInTheApp() throws OperationNotAllowedException {
+	public void theProjectIsContainedInTheApp() throws Exception {
 	    assertTrue(managementApp.containsProject(projectName));
 	}
 	
 	@Then("the project is not contained in the app")
-	public void theProjectIsNotContainedInTheApp() throws OperationNotAllowedException {
+	public void theProjectIsNotContainedInTheApp() throws Exception {
 		assertFalse(managementApp.containsProject(itemHolder.getProject().getName()));
 	}
 	
@@ -264,7 +264,7 @@ public class ProjectSteps {
 	}
 	
 	@Then("the deadline is overdue")
-	public void deadlineOverdue() throws OperationNotAllowedException {
+	public void deadlineOverdue() throws Exception {
 		assertTrue(managementApp.getState().currentProject().getTimeManager().deadlineOverdue());
 	}
 	
@@ -279,7 +279,7 @@ public class ProjectSteps {
 	}
 	
 	@Then("the deadline is not overdue")
-	public void deadlineNotOverdue() throws OperationNotAllowedException {
+	public void deadlineNotOverdue() throws Exception {
 		assertFalse(managementApp.getState().currentProject().getTimeManager().deadlineOverdue());
 	}
 	

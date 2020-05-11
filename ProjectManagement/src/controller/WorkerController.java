@@ -18,7 +18,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import project_management.ManagementApp;
-import project_management.OperationNotAllowedException;
 import project_management.Project;
 import project_management.State;
 import project_management.Worker;
@@ -49,7 +48,7 @@ public class WorkerController implements Initializable {
 	
 	
 //	Initialize
-	public void addExampleProjects() throws OperationNotAllowedException {
+	public void addExampleProjects() throws Exception {
 //		managementApp.addProject(new Project("Example project1"));
 //		managementApp.addProject(new Project("Example project2"));
 //		managementApp.addProject(new Project("Example project3"));
@@ -64,7 +63,7 @@ public class WorkerController implements Initializable {
 		
 		try {
 			addExampleProjects();
-		} catch (OperationNotAllowedException e2) {
+		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
 		updateListView1();
