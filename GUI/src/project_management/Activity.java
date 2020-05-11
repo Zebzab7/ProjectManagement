@@ -6,12 +6,12 @@ public class Activity extends Item {
 	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
 	private int expectedTime;
 	
-	public Activity(String name, State state) {
-		super(name, state);
+	public Activity(String name) {
+		super(name);
 	}
 	
-	public Activity(String name, State state, int ET) {
-		super(name, state);
+	public Activity(String name, int ET) {
+		super(name);
 		this.expectedTime = ET;
 	}
 	

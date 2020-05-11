@@ -87,13 +87,7 @@ public class Worker {
 		}
 	}
 	
-//	ADDED METHODS IN WORKER
-	public boolean addAssignedActivity(Activity a) {
-		if(assignedActivities.contains(a)) {
-			return false;
-		}
-		return assignedActivities.add(a);
-	}
+//	METHODS FOR GUI
 
 	public boolean addAssignedProject(Project p) {												
 		

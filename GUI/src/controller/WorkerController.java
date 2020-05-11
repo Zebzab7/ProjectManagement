@@ -50,10 +50,10 @@ public class WorkerController implements Initializable {
 	
 //	Initialize
 	public void addExampleProjects() throws OperationNotAllowedException {
-		managementApp.addProject(new Project("Example project1", managementApp.getState()));
-		managementApp.addProject(new Project("Example project2", managementApp.getState()));
-		managementApp.addProject(new Project("Example project3", managementApp.getState()));
-		managementApp.addProject(new Project("Example project4", managementApp.getState()));
+//		managementApp.addProject(new Project("Example project1"));
+//		managementApp.addProject(new Project("Example project2"));
+//		managementApp.addProject(new Project("Example project3"));
+//		managementApp.addProject(new Project("Example project4"));
 	}
 	private void init() {
 		lblWorkerID.setText("Welcome back: "+managementApp.getState().currentUser().getUsername());
@@ -152,7 +152,7 @@ public class WorkerController implements Initializable {
 		
 		if(managementApp.LoggedIn()) {
 			try {
-				if(managementApp.addProject(new Project(name,managementApp.getState()))) {
+				if(managementApp.addProject(new Project(name))) {
 					Project p = managementApp.findProject(textField1.getText());
 					listView1.getItems().add(p.getName());
 					lblStatus.setText("Project "+textField1.getText()+" added to list");

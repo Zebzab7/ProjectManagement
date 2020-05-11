@@ -12,12 +12,11 @@ public class Main extends Application {
 	private static ManagementApp managementApp;
 	
 	public static ManagementApp getManagementApp() {
-		return managementApp;
+		return managementApp.getInstance();
 	}
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		managementApp = new ManagementApp();
 		tmpExampleUsers();
 		primaryStage.setTitle("Login");
 		try {
@@ -33,12 +32,12 @@ public class Main extends Application {
 	}
 	
 	public void tmpExampleUsers() throws Exception {
-		managementApp.createUser("Adams", "1234");
-		managementApp.createUser("Baker", "1234");
-		managementApp.createUser("Clark", "1234");
-		managementApp.createUser("Davis", "1234");
-		managementApp.createUser("Evans", "1234");
-		managementApp.createUser("Frank", "1234");
+//		managementApp.createUser("Adams", "1234");
+//		managementApp.createUser("Baker", "1234");
+//		managementApp.createUser("Clark", "1234");
+//		managementApp.createUser("Davis", "1234");
+//		managementApp.createUser("Evans", "1234");
+//		managementApp.createUser("Frank", "1234");
 	}
 	
 	public static void main(String[] args) {

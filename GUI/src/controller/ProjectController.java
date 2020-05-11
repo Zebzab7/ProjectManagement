@@ -81,7 +81,7 @@ public class ProjectController implements Initializable {
 			try {
 				if(selectedActivity.findWorker(managementApp.getState().currentUser().getUsername()) == null) {
 					selectedActivity.addWorker(managementApp.getState().currentUser());
-					managementApp.getState().currentUser().addAssignedActivity(selectedActivity);
+					managementApp.getState().currentUser().addActivity(selectedActivity);
 				}
 				managementApp.getState().setActivity(selectedActivity);
 				
@@ -109,7 +109,7 @@ public class ProjectController implements Initializable {
 			String name = activityName.getText();
 			String estimate = activityET.getText();
 			int ET = Integer.parseInt(estimate);
-			project.addActivity(new Activity(name, managementApp.getState()));
+			project.addActivity(new Activity(name));
 			updateTaskList();
 		}
 	}

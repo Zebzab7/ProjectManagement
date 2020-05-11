@@ -6,17 +6,18 @@ public class Project extends Item {
 	private ArrayList<Activity> activities = new ArrayList<Activity>();
 	
 	private int expectedTime;
+	private String ID;
 	
 	private Worker projectLeader;
 	
 	/*
 	 * Constructors for creating a project either with or without an initial project leader
 	 */
-	public Project(String name, State state) {
-		super(name, state);
+	public Project(String name) {
+		super(name);
 	}
-	public Project(String name, State state, Worker projectLeader) {
-		super(name, state);
+	public Project(String name, Worker projectLeader) {
+		super(name);
 		this.projectLeader = projectLeader;
 	}
 	public ArrayList<Activity> getActivityList() {
@@ -27,6 +28,9 @@ public class Project extends Item {
 	}
 	public Worker getProjectLeader() {
 		return projectLeader;
+	}
+	public String getID() {
+		return ID;
 	}
 	
 	public int getWorkersAccumulatedHours(Worker worker) {
@@ -109,6 +113,10 @@ public class Project extends Item {
 			return true;
 		}
 		throw new OperationNotAllowedException("The activity is not contained in the project");
+	}
+	
+	public void setID(String string) {
+		ID = string;
 	}
 	
 }
