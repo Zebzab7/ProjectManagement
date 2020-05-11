@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ActivityController">
+   <children>
+      <Label fx:id="lblActivityName" layoutX="14.0" layoutY="14.0" text="Activity: #" />
+      <Label fx:id="lblWorkerCounter" layoutX="14.0" layoutY="35.0" text="Counter #" />
+      <Label fx:id="lblET" layoutX="14.0" layoutY="56.0" text="Expected time #" />
+      <Label fx:id="lblWorkedHours" layoutX="15.0" layoutY="77.0" text="Worked hours: #" />
+      <TableView fx:id="table" layoutX="15.0" layoutY="107.0" prefHeight="369.0" prefWidth="270.0">
+        <columns>
+          <TableColumn fx:id="id" prefWidth="40.0" text="id" />
+          <TableColumn fx:id="name" prefWidth="128.0" text="name" />
+            <TableColumn fx:id="hours" prefWidth="95.0" text="hours" />
+        </columns>
+      </TableView>
+      <Label layoutX="296.0" layoutY="107.0" text="Enter how long you worked:" />
+      <Button layoutX="296.0" layoutY="174.0" mnemonicParsing="false" onAction="#LogTime" text="Log time" />
+      <Button layoutX="414.0" layoutY="9.0" mnemonicParsing="false" onAction="#LogOut" text="Log out" />
+      <Slider fx:id="slider" blockIncrement="1.0" layoutX="298.0" layoutY="150.0" majorTickUnit="1.0" max="20.0" minorTickCount="0" prefHeight="18.0" prefWidth="187.0" showTickMarks="true" snapToTicks="true" />
+      <Label fx:id="lblSlider" layoutX="296.0" layoutY="128.0" text="Hours: 0" />
+      <TextField fx:id="txtTime" layoutX="296.0" layoutY="219.0" promptText="dd/mm/yyyy" />
+      <Label fx:id="lblStart" layoutX="160.0" layoutY="14.0" text="Start date: #" />
+      <Label fx:id="lblEnd" layoutX="160.0" layoutY="35.0" text="End date: #" />
+      <Label fx:id="lblOverdue" layoutX="160.0" layoutY="56.0" text="Overdue: #" />
+      <Button layoutX="298.0" layoutY="292.0" mnemonicParsing="false" onAction="#SetTime" text="Set Time" />
+      <TextField fx:id="txtTime1" layoutX="296.0" layoutY="257.0" promptText="dd/mm/yyyy" />
+   </children>
+</AnchorPane>
