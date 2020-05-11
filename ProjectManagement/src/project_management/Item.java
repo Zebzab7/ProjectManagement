@@ -71,23 +71,24 @@ public class Item {
 	}
 	
 	public boolean addWorker(Worker worker) throws Exception {
+		
 		if(worker.isAbsent() && !(this instanceof Project)) {
 			throw new Exception("Worker is absent");
 		}
 		if(!worker.isAvailable() && (this instanceof Activity)) {
 			throw new Exception("Worker is not available");
 		}
+		assert((this instanceof Activity) || (this instanceof Project));
 		accumulatedHours.add(0);
 		workers.add(worker);
 		
-		if(this instanceof Project) {
-			
-			worker.getAssignedProjects().add((Project) this);
-		}
+		if(this instanceof Project) worker.getAssignedProjects().add((Project) this);
 		if(this instanceof Activity) worker.addActivity((Activity) this);
 		
+		assert(workers.contains(worker));
 		return true;
 	}
+	
 	
 	public boolean removeWorker(Worker worker) {
 		accumulatedHours.remove(getWorkerList().indexOf(worker));

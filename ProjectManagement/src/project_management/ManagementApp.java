@@ -41,10 +41,23 @@ public class ManagementApp {
 	}
 	public boolean addHours(int hours) throws Exception {
 		if (!LoggedIn()) throw new Exception("User login required");
-		else if (state.currentActivity() != null && LoggedIn()) {
+		else if (state.currentActivity() != null && state.currentProject() != null) {
+			//preConditions
+			assert(LoggedIn() && state.currentActivity() != null && state.currentProject() != null);
+			//Contract additions
+			int preActivityHours = state.currentActivity().getHours();
+			int preProjectHours = state.currentProject().getHours();
+			int preWorkerHours = state.currentUser().workedHours();
+			
 			state.currentActivity().addHours(hours);
 			state.currentProject().addHours(hours);
 			state.currentUser().addHours(hours, state.currentActivity());
+			
+			//postConditions
+			assert(state.currentActivity().getHours() == preActivityHours + hours &&
+					state.currentProject().getHours() == preProjectHours + hours &&
+					state.currentUser().workedHours() == preWorkerHours + hours);
+			
 			return true;
 		}
 		return false;
@@ -55,9 +68,11 @@ public class ManagementApp {
 	 * Returns true if successful, false otherwise
 	 */
 	public boolean Login(String name, String password) throws Exception {
+		assert(state.currentUser() == null);
 		for (Worker worker : users) {
 			if (worker.getPassword().equals(password) && worker.getUsername().equals(name)) {
 				state.setUser(worker);
+				assert(state.currentUser().getUsername().equals(worker.getUsername()));
 				return true;
 			}
 		}

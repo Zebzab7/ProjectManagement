@@ -60,11 +60,15 @@ public class Worker {
 		return false;
 	}
 	public boolean grantAssistance() {
+		assert(this != null);
 		if(isAvailable() && help == true) {
+			assert(isAvailable());
 			return true;
 		}
 		return false;
 	}
+	
+	
 	public boolean isAbsent() {
 		for(FixedActivity f : assignedFixedActivities) {
 			if(f.getAbsenceManager().hasStarted()) {
