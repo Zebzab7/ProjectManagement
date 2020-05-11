@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import project_management.ManagementApp;
 import project_management.OperationNotAllowedException;
 import project_management.Project;
+import project_management.State;
 import project_management.Worker;
 import runner_class.Main;
 
@@ -45,7 +46,6 @@ public class WorkerController implements Initializable {
 	
 	private ManagementApp managementApp;
 	private Project selectedProject;
-	private Project selectedAssignedProject;
 	
 	
 //	Initialize
@@ -70,14 +70,6 @@ public class WorkerController implements Initializable {
 		updateListView1();
 		try {
 			updateListView2();
-		} catch(Exception e) {
-			
-		}
-		try {
-			ArrayList<Project> assignedProjects = managementApp.getState().currentUser().getAssignedProjects();
-			for(Project p : assignedProjects) {
-				listView2.getItems().add(p.getName());
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -87,7 +79,6 @@ public class WorkerController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		managementApp = Main.getManagementApp();
 		selectedProject = null;
-		selectedAssignedProject = null;
 		init();
 		
 		listView1.getSelectionModel().selectedItemProperty().addListener((v, oldVal, newVal) -> {
@@ -107,17 +98,14 @@ public class WorkerController implements Initializable {
 		
 		listView2.getSelectionModel().selectedItemProperty().addListener((v, oldVal, newVal) -> {
 			try {
-				selectedAssignedProject = managementApp.findProject(newVal);
-				if(selectedAssignedProject != null) {
-					lblAssignedProject.setText(selectedAssignedProject.getName());
+				State.getInstance().setProject(managementApp.findProject(newVal));
+				Project project = State.getInstance().currentProject();
+				
+				if(project != null) {
+					lblAssignedProject.setText(project.getName());
 				} else {
 					lblAssignedProject.setText("Select assigned project");
 				}
-				
-//				updateListView2();
-				
-				
-				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -127,8 +115,9 @@ public class WorkerController implements Initializable {
 	
 //	ActionEvents
 	public void ViewProject(ActionEvent event) throws Exception {
-		if(selectedAssignedProject != null) {
-			managementApp.getState().setProject(selectedAssignedProject);
+		Project project = State.getInstance().currentProject();
+		if(project != null) {
+			managementApp.getState().setProject(project);
 			((Node) event.getSource()).getScene().getWindow().hide();
 			
 			try {
@@ -136,7 +125,7 @@ public class WorkerController implements Initializable {
 				primaryStage.setTitle("Worker");
 				FXMLLoader loader = new FXMLLoader();
 				Parent root = loader.load(getClass().getResource("../view/Project.fxml").openStream());
-				Scene scene = new Scene(root,530,545);
+				Scene scene = new Scene(root,555,532);
 				scene.getStylesheets().add(getClass().getResource("../runner_class/application.css").toExternalForm());
 				primaryStage.setScene(scene);
 				primaryStage.show();
@@ -165,10 +154,10 @@ public class WorkerController implements Initializable {
 	}
 	
 	public void SetAsProjectLeader(ActionEvent e) throws Exception {
-		if(selectedAssignedProject != null) {
-			if(!selectedAssignedProject.hasProjectLeader()) {
-				selectedAssignedProject.setProjectLeader(managementApp.getState().currentUser());
-				lblStatus.setText("You are now leader in "+selectedAssignedProject.getName());
+		if(State.getInstance().currentProject() != null) {
+			if(!State.getInstance().currentProject().hasProjectLeader()) {
+				State.getInstance().currentProject().setProjectLeader(managementApp.getState().currentUser());
+				lblStatus.setText("You are now leader in "+State.getInstance().currentProject().getName());
 			} else {
 				lblStatus.setText("This project already has a leader");
 			}
@@ -178,10 +167,10 @@ public class WorkerController implements Initializable {
 	public void AddUserToProject(ActionEvent e) throws Exception {
 		if(selectedProject != null) {
 			if(!selectedProject.containsWorker(managementApp.getState().currentUser())) {
+				managementApp.getState().setProject(selectedProject);
 				selectedProject.addWorker(managementApp.getState().currentUser());
-				System.out.println(selectedProject.getWorkerList());
+				
 				updateListView2();
-				listView2.getItems().add(selectedProject.getName());
 				lblStatus.setText("You are now working on project "+selectedProject.getName());
 			}
 			
@@ -228,6 +217,11 @@ public class WorkerController implements Initializable {
 	
 	private void updateListView2() {
 		listView2.getItems().clear();
+		ArrayList<Project> assignedProjects = managementApp.getState().currentUser().getAssignedProjects();
+
+		for(Project p : assignedProjects) {
+			listView2.getItems().add(p.getName());
+		}
 	}
 	
 	private void updateListView3() {

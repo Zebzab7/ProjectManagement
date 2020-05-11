@@ -2,6 +2,9 @@ package controller;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
 import javafx.beans.InvalidationListener;
@@ -19,11 +22,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import project_management.Activity;
+import project_management.ItemTimeManager;
 import project_management.ManagementApp;
+import project_management.OperationNotAllowedException;
 import project_management.Project;
+import project_management.State;
 import runner_class.Main;
 
 public class ActivityController implements Initializable {
@@ -47,6 +54,17 @@ public class ActivityController implements Initializable {
 	private Slider slider;
 	@FXML
 	private Label lblSlider;
+	@FXML
+	private TextField txtTime;
+	@FXML
+	private TextField txtTime1;
+	@FXML
+	private Label lblStart;
+	@FXML
+	private Label lblEnd;
+	@FXML
+	private Label lblOverdue;
+	
 	
 	public ObservableList<ActivityUserTable> list;
 	private ArrayList<Integer> accHours;
@@ -74,7 +92,7 @@ public class ActivityController implements Initializable {
 		});
 	}
 		
-	public void initialize(Activity a) {
+	public void initialize(Activity a) throws OperationNotAllowedException {
 		this.managementApp = Main.getManagementApp();
 		this.activity = managementApp.getState().currentActivity();
 		this.project = managementApp.getState().currentProject();
@@ -85,9 +103,60 @@ public class ActivityController implements Initializable {
 		hours.setCellValueFactory(new PropertyValueFactory<ActivityUserTable, Integer>("hours"));
 		
 		updateTable();
-		
-		
 		updateLabels();
+		updateTimeLabels();
+	}
+	
+	public void SetTime(ActionEvent event) throws OperationNotAllowedException {
+		int[] start = splitTimeInput(txtTime.getText()+"/");
+		int[] end = splitTimeInput(txtTime1.getText()+"/");
+		
+		System.out.println(Arrays.toString(start));
+		System.out.println(Arrays.toString(end));
+		
+		State.getInstance().currentActivity().getTimeManager().setStartTime(start[2], start[1], start[0], State.getInstance().currentActivity());
+		State.getInstance().currentActivity().getTimeManager().setEndTime(end[2], end[1], end[0], State.getInstance().currentActivity());
+		updateTimeLabels();
+	}
+
+	
+	private void updateTimeLabels() throws OperationNotAllowedException {
+		ItemTimeManager t = State.getInstance().currentActivity().getTimeManager();
+		System.out.print(t.containsTimeSpecifications());
+		if(t.containsTimeSpecifications()) {
+			System.out.println(t.getStartTime().get(Calendar.MONTH));
+			
+			lblStart.setText("Start time: "+"week "+t.getStartWeek()+", "+getMonth(t.getStartTime().get(Calendar.MONTH)));
+			lblEnd.setText("End time: "+"week "+t.getEndWeek()+", "+getMonth(t.getEndTime().get(Calendar.MONTH)));
+			lblOverdue.setText("Overdue: "+t.deadlineOverdue());
+		} else {
+			lblStart.setText("Start time: not defined");
+			lblEnd.setText("End time: not defined");
+			lblOverdue.setText("Overdue: false");
+		}
+	}
+	
+	public String getMonth(int i) {
+		String[] months = new String[] {"January", "February", "Marts", "April", "May", "Juni","July","August","September","October","November","December"};
+		return months[i];
+	}
+	
+	public int[] splitTimeInput(String date) {
+		char[] chars = date.toCharArray();
+		String[] dayMonthYear = new String[] {"","",""};
+		int[] ddmmyy = new int[] {0,0,0};
+		int count = 0;
+		
+		for(char c:chars) {
+			if(c == '/') {
+				ddmmyy[count]=Integer.parseInt(dayMonthYear[count]);
+				count++;
+			} else {
+				dayMonthYear[count] += c;
+			}
+		}
+		
+		return ddmmyy;
 	}
 	
 //	ActionMethods

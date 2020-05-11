@@ -1,6 +1,8 @@
 package controller;
 
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -16,9 +18,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import project_management.Activity;
+import project_management.ItemTimeManager;
 import project_management.ManagementApp;
 import project_management.OperationNotAllowedException;
 import project_management.Project;
+import project_management.State;
 import project_management.Worker;
 import runner_class.Main;
 
@@ -43,6 +47,17 @@ public class ProjectController implements Initializable {
 	private TextField activityET;
 	@FXML
 	private Label lblStatus;
+	@FXML
+	private TextField txtTime;
+	@FXML
+	private TextField txtTime1;
+	@FXML
+	private Label lblStart;
+	@FXML
+	private Label lblEnd;
+	@FXML
+	private Label lblOverdue;
+	
 	
 	private ManagementApp managementApp;
 	private Project project;
@@ -51,9 +66,10 @@ public class ProjectController implements Initializable {
 	private Activity selectedActivity;
 	
 //	Initialize
-	public void init() {
+	public void init() throws OperationNotAllowedException {
 		updateLabels();
 		updateWorkerList();
+		updateTimeLabels();
 		
 		try {
 			updateTaskList();
@@ -68,11 +84,68 @@ public class ProjectController implements Initializable {
 		projectLeader = project.getProjectLeader();
 		workerCounter = project.getWorkerList().size();
 		
-		init();
+		try {
+			init();
+		} catch (OperationNotAllowedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		listView1.getSelectionModel().selectedItemProperty().addListener((v, oldVal, newVal) -> {
 			selectedActivity = project.findActivity(newVal);
 		});
+	}
+	
+	public void SetTime(ActionEvent event) throws OperationNotAllowedException {
+		int[] start = splitTimeInput(txtTime.getText()+"/");
+		int[] end = splitTimeInput(txtTime1.getText()+"/");
+		
+		System.out.println(Arrays.toString(start));
+		System.out.println(Arrays.toString(end));
+		
+		State.getInstance().currentProject().getTimeManager().setStartTime(start[2], start[1], start[0], State.getInstance().currentProject());
+		State.getInstance().currentProject().getTimeManager().setEndTime(end[2], end[1], end[0], State.getInstance().currentProject());
+		updateTimeLabels();
+	}
+
+	
+	private void updateTimeLabels() throws OperationNotAllowedException {
+		ItemTimeManager t = State.getInstance().currentProject().getTimeManager();
+		System.out.print(t.containsTimeSpecifications());
+		if(t.containsTimeSpecifications()) {
+			System.out.println(t.getStartTime().get(Calendar.MONTH));
+			
+			lblStart.setText("Start time: "+"week "+t.getStartWeek()+", "+getMonth(t.getStartTime().get(Calendar.MONTH)));
+			lblEnd.setText("End time: "+"week "+t.getEndWeek()+", "+getMonth(t.getEndTime().get(Calendar.MONTH)));
+			lblOverdue.setText("Overdue: "+t.deadlineOverdue());
+		} else {
+			lblStart.setText("Start time: not defined");
+			lblEnd.setText("End time: not defined");
+			lblOverdue.setText("Overdue: false");
+		}
+	}
+	
+	public String getMonth(int i) {
+		String[] months = new String[] {"January", "February", "Marts", "April", "May", "Juni","July","August","September","October","November","December"};
+		return months[i];
+	}
+	
+	public int[] splitTimeInput(String date) {
+		char[] chars = date.toCharArray();
+		String[] dayMonthYear = new String[] {"","",""};
+		int[] ddmmyy = new int[] {0,0,0};
+		int count = 0;
+		
+		for(char c:chars) {
+			if(c == '/') {
+				ddmmyy[count]=Integer.parseInt(dayMonthYear[count]);
+				count++;
+			} else {
+				dayMonthYear[count] += c;
+			}
+		}
+		
+		return ddmmyy;
 	}
 	
 //	ActionEvents

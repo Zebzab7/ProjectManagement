@@ -81,8 +81,11 @@ public class Item {
 		accumulatedHours.add(0);
 		workers.add(worker);
 		
-		if(this instanceof Project) worker.getAssignedProjects().add(state.currentProject());
-		if(this instanceof Activity) worker.addActivity(state.currentActivity());
+		if(this instanceof Project) {
+			
+			worker.getAssignedProjects().add((Project) this);
+		}
+		if(this instanceof Activity) worker.addActivity((Activity) this);
 		
 		return true;
 	}
