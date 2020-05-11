@@ -28,6 +28,9 @@ public class ManagementApp {
 		instance = null;
 	}
 	
+	public ArrayList<Worker> getUsers() {
+		return users;
+	}
 	public State getState() {
 		return state;
 	}
@@ -129,7 +132,7 @@ public class ManagementApp {
 			if(worker.getUsername().length() > 4) {
 				throw new Exception("Username contains too many characters");
 			}
-			users.add(new Worker(worker.getUsername(), worker.getPassword()));
+			users.add(worker);
 			return true;
 		}
 		throw new Exception("User already exist");

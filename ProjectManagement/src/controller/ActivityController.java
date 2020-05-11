@@ -51,8 +51,9 @@ public class ActivityController {
 	public void initialize(Activity a) {
 		this.managementApp = Main.getManagementApp();
 		this.activity = managementApp.getState().currentActivity();
-		this.accHours = activity.getAccumlatedHoursList();
-		 
+		
+		this.accHours = activity.getAccumulatedHours();
+		
 		id.setCellValueFactory(new PropertyValueFactory<ActivityUserTable, Integer>("id"));
 		name.setCellValueFactory(new PropertyValueFactory<ActivityUserTable, String>("name"));
 		hours.setCellValueFactory(new PropertyValueFactory<ActivityUserTable, Integer>("hours"));
@@ -103,7 +104,7 @@ public class ActivityController {
 	private void updateLabels() {
 		lblActivityName.setText("Activity: "+activity.getName());
 		lblWorkerCounter.setText("Worker count: "+workers.size()+"");
-		lblWorkedHours.setText("Worked hours: "+activity.workedHours()+"");
+		lblWorkedHours.setText("Worked hours: "+activity.getHours()+"");
 	}
 	
 

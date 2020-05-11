@@ -108,7 +108,7 @@ public class ProjectController implements Initializable {
 			String name = activityName.getText();
 			String estimate = activityET.getText();
 			int ET = Integer.parseInt(estimate);
-			project.addActivity(new Activity(name, managementApp.getState()));
+			project.addActivity(new Activity(name));
 			updateTaskList();
 		}
 	}
@@ -170,7 +170,7 @@ public class ProjectController implements Initializable {
 		}
 		
 		lblWorkerCounter.setText("Workers on this project: "+workerCounter+"");
-		lblWorkedHours.setText("Worked hours: "+project.workedHours());
+		lblWorkedHours.setText("Worked hours: "+project.getHours());
 	}
 	
 	public void updateTaskList() throws OperationNotAllowedException {

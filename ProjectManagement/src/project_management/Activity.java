@@ -9,6 +9,9 @@ public class Activity extends Item {
 	public Activity(String name) {
 		super(name);
 	}
+	public ArrayList<Integer> getAccumulatedHours(){
+		return accumulatedHours;
+	}
 	
 	public Activity(String name, int ET) {
 		super(name);
