@@ -27,11 +27,10 @@ public class LoginLogoutSteps {
 	
 	ItemHolder itemHolder;
 	
-	public LoginLogoutSteps(ManagementApp managementApp, ItemHolder helper, ErrorMessageHolder errorMessage) {
-		this.managementApp = managementApp;
+	public LoginLogoutSteps(ItemHolder helper, ErrorMessageHolder errorMessage) {
+		this.managementApp = ManagementApp.getInstance();
 		this.itemHolder = helper;
 		this.errorMessage = errorMessage;
-		itemHolder.setState(managementApp.getState());
 	}
 	
 	@Given("the name is {string} and password is {string}")

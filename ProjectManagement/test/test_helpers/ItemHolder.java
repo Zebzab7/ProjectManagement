@@ -7,15 +7,14 @@ import project_management.State;
 import project_management.Worker;
 
 public class ItemHolder {
-	private State state;
+	private State state = State.getInstance();
 	private Project project;
 	private Activity activity;
 	private FixedActivity fixedActivity;
 	private Worker worker, prev;
 	private Worker temp;
 	
-	public ItemHolder (State state) {
-		this.state = state;
+	public ItemHolder () {
 	}
 	public State getState() {
 		return state;
@@ -45,9 +44,6 @@ public class ItemHolder {
 		return fixedActivity;
 	}
 	
-	public void setState(State state) {
-		this.state = state;
-	}
 	public void setProject(Project project) {
 		this.project = project;
 	}
@@ -68,11 +64,11 @@ public class ItemHolder {
 		return worker;
 	}
 	private Project exampleProject() {
-		project = new Project("Programming 101", state);
+		project = new Project("Programming 101");
 		return project;
 	}
 	private Activity exampleActivity() {
-		activity = new Activity("Activity101", state);
+		activity = new Activity("Activity101");
 		return activity;
 	}
 	private FixedActivity exampleFixedActivity() {

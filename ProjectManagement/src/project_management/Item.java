@@ -4,17 +4,16 @@ import java.util.ArrayList;
 
 public class Item {
 	private String name;
-	private State state;
+	private State state = State.getInstance();
 	private ItemTimeManager timeManager;
 	private ArrayList<Integer> accumulatedHours = new ArrayList<Integer>();
 	private ArrayList<Worker> workers = new ArrayList<Worker>();
 	private boolean preConditions = false;
 	private int hours = 0;
 	
-	public Item(String name, State state) {
+	public Item(String name) {
 		this.name = name;
-		this.state = state;
-		timeManager = new ItemTimeManager(state);
+		timeManager = new ItemTimeManager();
 	}
 	public void addHours(int hours) throws OperationNotAllowedException {
 		this.hours += hours;

@@ -1,7 +1,9 @@
 Feature: Create workers
 	Description: Create workers to app
 	Actors: Worker
-
+Background: reset
+	Given that the managementApp has been reset
+	
 Scenario: Worker is added but already exists
  	Given that the worker is logged in
 	And that worker "PEPE" with password "1234" exist

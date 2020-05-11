@@ -1,6 +1,8 @@
 Feature: Create projects
 	Description: Create projects to app
 	Actors: Worker
+Background: reset
+	Given that the managementApp has been reset
 	
 Scenario: Add project successfully with no leader
 	Given that the worker is logged in

@@ -25,8 +25,8 @@ public class WorkerSteps {
 	private ErrorMessageHolder errorMessage;
 	private ItemHolder itemHolder;
 	
-	public WorkerSteps(ManagementApp managementApp, ErrorMessageHolder errorMessage, ItemHolder stateHelper) {
-		this.managementApp = managementApp;
+	public WorkerSteps(ErrorMessageHolder errorMessage, ItemHolder stateHelper) {
+		this.managementApp = ManagementApp.getInstance();
 		this.errorMessage = errorMessage;
 		this.itemHolder = stateHelper;
 	}
@@ -70,7 +70,7 @@ public class WorkerSteps {
 	public void thatTheWorkerIsWorkingOnProjects(int count) {
 	    for(int i = 0; i < count; i++) {
 	    	if(managementApp.getState().currentUser().getAssignedActivities().size()<= count) {
-	    		managementApp.getState().currentUser().getAssignedActivities().add(new Activity("Programmingtask 10" + i, managementApp.getState()));
+	    		managementApp.getState().currentUser().getAssignedActivities().add(new Activity("Programmingtask 10" + i));
 	    		managementApp.getState().currentUser().getWorkedHoursOnActivities().add(0);
 	    	}
 	    }

@@ -26,11 +26,11 @@ public class ActivitySteps {
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
 	
-	public ActivitySteps(ManagementApp managementApp, ItemHolder stateHelper, ErrorMessageHolder errorMessage) {
-		this.managementApp = managementApp;
+	public ActivitySteps(ItemHolder stateHelper, ErrorMessageHolder errorMessage) {
+		this.managementApp = ManagementApp.getInstance();
 		this.itemHolder = stateHelper;
 		this.errorMessage = errorMessage;
-		itemHolder.setState(managementApp.getState());
+
 	}
 	
 	@Given("the worker is working on a project")
@@ -55,7 +55,7 @@ public class ActivitySteps {
 	public void theActivityWithNameIsInTheProject(String name) throws OperationNotAllowedException {
 	   try {
 		   if (!itemHolder.getProject().containsActivity(name)) {
-			   itemHolder.setActivity(new Activity(name, managementApp.getState()));
+			   itemHolder.setActivity(new Activity(name));
 			   itemHolder.getProject().addActivity(itemHolder.getActivity());
 		   }
 		   assertTrue(itemHolder.getProject().containsActivity(name));
@@ -68,7 +68,7 @@ public class ActivitySteps {
 	public void theProjectHasAnActivityNamed(String name) throws OperationNotAllowedException {
 		itemHolder.logInTemp();
 		if (!itemHolder.getProject().containsActivity(name)) {
-			itemHolder.setActivity(new Activity(name, managementApp.getState()));
+			itemHolder.setActivity(new Activity(name));
 			itemHolder.getProject().addActivity(itemHolder.getActivity());
 		}
 		itemHolder.logOutTemp();
@@ -203,7 +203,7 @@ public class ActivitySteps {
 	public void workerCreatesNewActivityWithNameAndETHours(String name, int ET) throws Exception {
 		try {
 			activityName = name;
-			assertTrue(itemHolder.setActivity(new Activity(name, managementApp.getState(), ET)) );
+			assertTrue(itemHolder.setActivity(new Activity(name, ET)) );
 		}
 		catch (Exception e) {
 	    	errorMessage.setErrorMessage(e.getMessage());

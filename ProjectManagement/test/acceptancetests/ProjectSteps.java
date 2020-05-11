@@ -30,11 +30,10 @@ public class ProjectSteps {
 	private Worker workerFound;
 	String projectName;
 	
-	public ProjectSteps(ManagementApp managementApp, ErrorMessageHolder errorMessage, ItemHolder stateHelper) {
-		this.managementApp = managementApp;
+	public ProjectSteps(ErrorMessageHolder errorMessage, ItemHolder stateHelper) {
+		this.managementApp = ManagementApp.getInstance();
 		this.errorMessage = errorMessage;
 		this.itemHolder = stateHelper;
-		itemHolder.setState(managementApp.getState());
 	}
 	
 	@Given("the project with name {string} does not exist")
@@ -47,7 +46,7 @@ public class ProjectSteps {
 		try {
 			itemHolder.logInTemp();
 			if ( !managementApp.containsProject(name) ) {
-				itemHolder.setProject(new Project(name, managementApp.getState()));
+				itemHolder.setProject(new Project(name));
 				assertTrue(managementApp.addProject(itemHolder.getProject()));
 			}
 			assertTrue(managementApp.containsProject(name));
@@ -107,7 +106,7 @@ public class ProjectSteps {
 	public void numberOfProjects(int number) throws OperationNotAllowedException {
 		for(int i = 0; i < number; i++) {
 			if(managementApp.getProjects().size() <= number) {
-	    		managementApp.addProject(new Project("Programming 10" + i, managementApp.getState()));
+	    		managementApp.addProject(new Project("Programming 10" + i));
 	    	}
 		}
 	}
@@ -127,7 +126,7 @@ public class ProjectSteps {
 	@When("worker adds new project named {string}")
 	public void workerAddsNewProject(String name) throws Exception {
 		try {
-			assertTrue(managementApp.addProject(new Project(name, managementApp.getState())));
+			assertTrue(managementApp.addProject(new Project(name)));
 		    managementApp.getState().setProject(managementApp.findProject(name));
 			projectName = name;
 		} catch (OperationNotAllowedException e) {
@@ -138,7 +137,7 @@ public class ProjectSteps {
 	@When("worker adds new project named {string} with {string} as projectleader")
 	public void workerAddsNewProjectNamedWithAsProjectleader(String name, String projectLeader) {
 	    try {
-	    	managementApp.addProject(new Project(name, managementApp.getState(), managementApp.findWorker(projectLeader)));
+	    	managementApp.addProject(new Project(name, managementApp.findWorker(projectLeader)));
 	    	managementApp.getState().setProject(managementApp.findProject(name));
 	    	projectName = name;
 	    } catch (Exception e) {

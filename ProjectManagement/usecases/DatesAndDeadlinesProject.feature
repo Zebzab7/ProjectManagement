@@ -1,5 +1,7 @@
 Feature: Dates and deadlines for projects
-
+Background: reset
+	Given that the managementApp has been reset
+	
 Scenario: Set start date for project
 	Given that the worker is logged in
 	And the project with name "Programming 101" does exist

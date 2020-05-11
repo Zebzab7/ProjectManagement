@@ -1,7 +1,9 @@
 Feature: LoginLogout
 	Description: Log a worker in and out
 	Actors: Worker
-
+Background: reset
+	Given that the managementApp has been reset
+	
 Scenario: Worker logs out succesfully
 	Given that the worker is logged in
 	When the worker logs out

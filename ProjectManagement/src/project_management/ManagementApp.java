@@ -9,8 +9,24 @@ public class ManagementApp {
 	private ArrayList<Worker> users = new ArrayList<Worker>();
 	private ArrayList<String> workerHours = new ArrayList<String>();
 	private ArrayList<FixedActivity> fixedActivities = new ArrayList<FixedActivity>();
-	private State state = new State();
+	private State state = State.getInstance();
 	private int ID = 0;
+	
+	private static ManagementApp instance;
+	private ManagementApp() {
+	}
+	
+	public static ManagementApp getInstance() {
+		if (instance == null) {
+			instance = new ManagementApp();
+		}
+		return instance;
+	}
+	
+	//used for cucumber reset
+	public static void deleteInstance() {
+		instance = null;
+	}
 	
 	public State getState() {
 		return state;

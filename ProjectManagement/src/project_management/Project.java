@@ -13,11 +13,11 @@ public class Project extends Item {
 	/*
 	 * Constructors for creating a project either with or without an initial project leader
 	 */
-	public Project(String name, State state) {
-		super(name, state);
+	public Project(String name) {
+		super(name);
 	}
-	public Project(String name, State state, Worker projectLeader) {
-		super(name, state);
+	public Project(String name, Worker projectLeader) {
+		super(name);
 		this.projectLeader = projectLeader;
 	}
 	public ArrayList<Activity> getActivityList() {

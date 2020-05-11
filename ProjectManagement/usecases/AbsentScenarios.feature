@@ -1,7 +1,9 @@
 Feature: Fixed activities
 	Description: App setup for absent worker
 	Actors: Worker
-
+Background: reset
+	Given that the managementApp has been reset
+	
 Scenario: Create fixed activity
 	Given that worker "PEPE" with password "1234" exist
 	And that the worker is logged in

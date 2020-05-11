@@ -22,11 +22,10 @@ public class FixedActivitySteps {
 	private ManagementApp managementApp;
 	private ErrorMessageHolder errorMessage;
 	
-	public FixedActivitySteps(ManagementApp managementApp, ItemHolder itemHelper, ErrorMessageHolder errorMessage) {
-		this.managementApp = managementApp;
+	public FixedActivitySteps(ItemHolder itemHelper, ErrorMessageHolder errorMessage) {
+		this.managementApp = ManagementApp.getInstance();
 		this.itemHolder = itemHelper;
 		this.errorMessage = errorMessage;
-		itemHelper.setState(managementApp.getState());
 	}
 	
 	@Given("the fixed activity for {string} called {string} does not exist")

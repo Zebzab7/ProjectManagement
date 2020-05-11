@@ -1,7 +1,9 @@
 Feature: Add or remove hours
 	Description: Worker adds or removes hours to given activity
 	Actors: Worker
-
+Background: reset
+	Given that the managementApp has been reset
+	
 Scenario: Worker adds hours to an activity succesfully
 	Given that the worker is logged in
 	And the project with name "Programming 101" does exist

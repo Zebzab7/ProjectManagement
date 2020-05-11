@@ -1,7 +1,10 @@
 Feature: Activity
 	Description: Creation of task
 	Actors: Project leader
-	
+
+Background: reset
+	Given that the managementApp has been reset
+		
 Scenario: Create activity successfully
 	Given that the worker is logged in
 	And the project with name "Programming 101" does exist
