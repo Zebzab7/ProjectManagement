@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="WINDOWS-1252" standalone="no"?>
+<jardesc>
+    <jar path="C:/Users/simon/Desktop/softwareHuset.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/ProjectManagement1/lib/create_jar.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="true" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <folder path="/ProjectManagement1/lib"/>
+        <file path="/ProjectManagement1/pom.xml"/>
+        <javaElement handleIdentifier="=ProjectManagement1/src"/>
+        <file path="/ProjectManagement1/.gitignore"/>
+        <file path="/ProjectManagement1/.project"/>
+        <file path="/ProjectManagement1/.classpath"/>
+    </selectedElements>
+</jardesc>
