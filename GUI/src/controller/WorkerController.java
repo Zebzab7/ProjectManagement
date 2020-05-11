@@ -178,7 +178,7 @@ public class WorkerController implements Initializable {
 	public void AddUserToProject(ActionEvent e) throws Exception {
 		if(selectedProject != null) {
 			if(!selectedProject.containsWorker(managementApp.getState().currentUser())) {
-				managementApp.addWorkerToProject(managementApp.getState().currentUser(), selectedProject);
+				selectedProject.addWorker(managementApp.getState().currentUser());
 				System.out.println(selectedProject.getWorkerList());
 				updateListView2();
 				listView2.getItems().add(selectedProject.getName());

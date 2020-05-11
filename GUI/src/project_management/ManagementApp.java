@@ -202,13 +202,6 @@ public class ManagementApp {
 	}
 	
 //	ADDED METHODS IN MANAGEMENT APP
-	public void addWorkerToProject(Worker worker, Project project) throws Exception{
-		if (state.currentUser() == null) {
-			throw new OperationNotAllowedException("User login required");
-		}
-		state.currentUser().addAssignedProject(project);
-		project.getWorkerList().add(worker);
-	}
 
 	public ArrayList<Worker> getUsers() {
 		return users;
