@@ -3,13 +3,9 @@ package project_management;
 import java.util.*;
 
 public class ItemTimeManager {
-	private ArrayList<GregorianCalendar> absenteesReturn = new ArrayList<GregorianCalendar>();
-	private ArrayList<Worker> absentees = new ArrayList<Worker>();
-	
-	private State state = State.getInstance();
 	private GregorianCalendar startTime = null;
 	private GregorianCalendar endTime = null;
-	private GregorianCalendar currentTime, absentee;
+	private GregorianCalendar currentTime;
 	
 	/*
 	 * Getter methods

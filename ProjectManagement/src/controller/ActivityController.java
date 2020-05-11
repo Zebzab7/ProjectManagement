@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
 import javafx.beans.InvalidationListener;
@@ -28,7 +27,6 @@ import javafx.stage.Stage;
 import project_management.Activity;
 import project_management.ItemTimeManager;
 import project_management.ManagementApp;
-import project_management.Project;
 import project_management.State;
 import runner_class.Main;
 
@@ -67,8 +65,6 @@ public class ActivityController implements Initializable {
 	
 	public ObservableList<ActivityUserTable> list;
 	private ArrayList<Integer> accHours;
-	private Activity activity;
-	private Project project;
 	private ManagementApp managementApp;
 	private double sliderValue = 0;
 	private double lastSliderVal = 0;
@@ -93,9 +89,8 @@ public class ActivityController implements Initializable {
 		
 	public void initialize(Activity a) throws Exception {
 		this.managementApp = Main.getManagementApp();
-		this.activity = managementApp.getState().currentActivity();
-		this.project = managementApp.getState().currentProject();
-		this.accHours = activity.getAccumulatedHours();
+		managementApp.getState().currentProject();
+		this.accHours = managementApp.getState().currentActivity().getAccumulatedHours();
 		 
 		id.setCellValueFactory(new PropertyValueFactory<ActivityUserTable, Integer>("id"));
 		name.setCellValueFactory(new PropertyValueFactory<ActivityUserTable, String>("name"));
@@ -179,7 +174,7 @@ public class ActivityController implements Initializable {
 	
 	public void LogTime(ActionEvent event) {
 		try {
-			activity.addHoursToWorker((int) (sliderValue*2));
+			managementApp.getState().currentActivity().addHoursToWorker((int) (sliderValue*2));
 			managementApp.addHours((int) (sliderValue*2));
 			
 			
@@ -192,16 +187,16 @@ public class ActivityController implements Initializable {
 	private void updateTable() {
 		list = FXCollections.observableArrayList();
 		for(int i = 0; i < accHours.size(); i++) {
-			list.add(new ActivityUserTable(i,activity.getWorkerList().get(i).getUsername(),accHours.get(i)/2.0));
+			list.add(new ActivityUserTable(i,managementApp.getState().currentActivity().getWorkerList().get(i).getUsername(),accHours.get(i)/2.0));
 		}
 		
 		table.setItems(list);
 	}
 
 	private void updateLabels() {
-		lblActivityName.setText("Activity: "+activity.getName());
-		lblWorkerCounter.setText("Worker count: "+activity.getWorkerList().size());
-		lblWorkedHours.setText("Worked hours: "+activity.getHours()/2.0);
+		lblActivityName.setText("Activity: "+managementApp.getState().currentActivity().getName());
+		lblWorkerCounter.setText("Worker count: "+managementApp.getState().currentActivity().getWorkerList().size());
+		lblWorkedHours.setText("Worked hours: "+managementApp.getState().currentActivity().getHours()/2.0);
 	}
 	
 }

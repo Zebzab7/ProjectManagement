@@ -171,7 +171,6 @@ public class ActivitySteps {
 			throws Exception {
 		try {
 			Project p = managementApp.findProject(projectName);
-			Activity a = p.findActivity(activityName);
 			itemHolder.setProject(p);
 			managementApp.addHours(hours);
 		//	assertTrue(p.addHoursToActivity(hours, a));

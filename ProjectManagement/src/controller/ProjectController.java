@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import project_management.Activity;
 import project_management.ItemTimeManager;
 import project_management.ManagementApp;
+
 import project_management.Project;
 import project_management.State;
 import project_management.Worker;
@@ -179,8 +180,6 @@ public class ProjectController implements Initializable {
 	public void CreateActivity(ActionEvent event) throws Exception {
 		if(projectLeader.getUsername() == managementApp.getState().currentUser().getUsername()) {
 			String name = activityName.getText();
-			String estimate = activityET.getText();
-			int ET = Integer.parseInt(estimate);
 			project.addActivity(new Activity(name));
 			updateTaskList();
 		}

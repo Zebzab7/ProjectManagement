@@ -9,10 +9,8 @@ import project_management.ManagementApp;
 
 
 public class Main extends Application {
-	private static ManagementApp managementApp;
-	
 	public static ManagementApp getManagementApp() {
-		return managementApp.getInstance();
+		return ManagementApp.getInstance();
 	}
 	
 	@Override
